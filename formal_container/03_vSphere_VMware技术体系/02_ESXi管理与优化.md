@@ -10,7 +10,7 @@
 
 #### 1.1 硬件要求
 
-**最低硬件要求**
+**最低硬件要求**:
 
 ```yaml
 # ESXi硬件要求
@@ -36,7 +36,7 @@ Hardware_Requirements:
     features: ["Wake_on_LAN", "PXE_boot"]
 ```
 
-**硬件兼容性检查**
+**硬件兼容性检查**:
 
 ```bash
 # 硬件兼容性检查工具
@@ -58,7 +58,7 @@ ip link show
 
 #### 1.2 安装介质准备
 
-**ESXi安装选项**
+**ESXi安装选项**:
 
 ```yaml
 # 安装方式选择
@@ -80,7 +80,7 @@ Installation_Options:
 
 #### 2.1 安装步骤
 
-**ESXi安装流程**
+**ESXi安装流程**:
 
 ```text
 ESXi安装步骤:
@@ -94,7 +94,7 @@ ESXi安装步骤:
 8. 重启系统
 ```
 
-**安装配置参数**
+**安装配置参数**:
 
 ```yaml
 # 安装配置
@@ -115,7 +115,7 @@ Installation_Config:
 
 #### 2.2 初始配置
 
-**ESXi初始配置**
+**ESXi初始配置**:
 
 ```bash
 # 配置主机名
@@ -141,7 +141,7 @@ esxcli network ip route ipv4 add --gateway=192.168.1.1 --network=default
 
 #### 1.1 本地用户管理
 
-**本地用户配置**
+**本地用户配置**:
 
 ```bash
 # 创建本地用户
@@ -157,7 +157,7 @@ esxcli system account remove --id=admin
 esxcli system account list
 ```
 
-**用户权限配置**
+**用户权限配置**:
 
 ```yaml
 # 用户权限级别
@@ -174,7 +174,7 @@ User_Permissions:
 
 #### 1.2 Active Directory集成
 
-**AD集成配置**
+**AD集成配置**:
 
 ```bash
 # 配置AD域
@@ -194,7 +194,7 @@ esxcli system domain leave --username=administrator --password=password
 
 #### 2.1 虚拟交换机配置
 
-**标准虚拟交换机配置**
+**标准虚拟交换机配置**:
 
 ```bash
 # 创建虚拟交换机
@@ -210,7 +210,7 @@ esxcli network vswitch standard portgroup set --portgroup-name=VM_Network --vlan
 esxcli network vswitch standard uplink add --uplink-name=vmnic0 --vswitch-name=vSwitch1
 ```
 
-**分布式虚拟交换机配置**
+**分布式虚拟交换机配置**:
 
 ```yaml
 # vDS配置示例
@@ -234,7 +234,7 @@ Distributed_vSwitch:
 
 #### 2.2 网络性能优化
 
-**网络性能调优**
+**网络性能调优**:
 
 ```bash
 # 启用Jumbo Frames
