@@ -1,5 +1,16 @@
 # 容器技术知识体系
 
+## 项目目标
+
+- 建立覆盖 Docker / Podman / Kubernetes 的体系化知识库，贯穿原理—实现—实践—对标—选型。
+- 提供工程化落地指南（安全、运维、监控、合规），服务企业级生产环境。
+- 对齐 2025 年主流版本与标准，持续更新，形成可复用的组织级知识资产。
+
+## 适用人群与前置
+
+- 适用人群: 平台工程（Platform）、SRE、DevOps、应用研发、架构师、安全与合规人员。
+- 前置要求: 基本 Linux 操作、网络/存储基础、Git 基础；进阶章节建议具备容器与编排实战经验。
+
 ## 目录结构
 
 ```text
@@ -129,3 +140,107 @@ Container/
 - 包含丰富的实践案例
 - 支持技术认证准备
 - 提供职业发展指导
+
+## 使用方式
+
+- 按“学习路径”循序阅读；或按主题纵向检索（网络/存储/安全/编排/实践）。
+- 与 `formal_container/` 体系文档交叉参考：标准与形式化论证、矩阵对比、项目总结等。
+- 企业实践可直接复用“最佳实践”“基线清单”“Runbook”章节材料。
+
+## 版本与兼容策略（对齐至 2025）
+
+- 标准：遵循 OCI（Image/Runtime/Distribution）、CNCF 相关规范；引用最新草案时明确标注。
+- 运行时与引擎：Docker Engine（含 BuildKit）、containerd、CRI-O、Podman、crun/runc、gVisor/Kata。
+- 平台：Linux 为一等公民；Windows/macOS 通过 Desktop/虚拟化层说明差异与注意事项。
+- 文档中涉及的命令、API、配置项，若存在版本差异，将在文末“版本差异说明”标注最小兼容版本与变更要点。
+
+## 文档约定
+
+- 术语对齐 OCI/CNCF 词汇；首次出现给出中英文对照与缩写，例如：容器运行时（Container Runtime, CR）。
+- 命令行统一采用等宽字体与块级代码；涉及破坏性操作明确“风险提示”。
+- 架构图使用 ASCII 或引用 SVG/PNG 资源；若为示意图将在标题处标记。
+- 配置与策略示例均提供“最小可用样例 + 安全基线建议”。
+
+## 贡献指南
+
+1. 分支策略：feature/*、fix/*、docs/*，通过 PR 合并到 main。
+2. 提交规范：遵循 Conventional Commits（如 docs(container): add version matrix 2025）。
+3. 内容要求：
+   - 声明数据来源与版本；给出参考链接或标准编号。
+   - 图表需附原始数据或生成脚本（如适用）。
+   - 涉及安全配置需标注适用范围与潜在影响。
+4. 审校流程：至少一名 Reviewer 过审；新增章节需包含目录与小结。
+
+## 维护计划
+
+- 每季度对齐一次上游版本变更（Docker/Podman/Kubernetes/containerd/CRI-O）。
+- 关键安全公告（CVE、高危变更）将滚动更新至相关章节的“安全基线”。
+
+## 参考与对标
+
+- OCI 规范与实现文档；CNCF Landscape/白皮书。
+- Docker 官方文档、Moby 项目、BuildKit 文档。
+- Podman/containers 项目文档、Red Hat 指南。
+- Kubernetes 文档、SIG-Node 与 CRI 相关提案。
+
+## Docker 与 Podman 速查对比与选型建议
+
+| 维度 | Docker | Podman | 建议场景 |
+|---|---|---|---|
+| 架构 | 客户端 + 守护进程（dockerd + containerd） | 无守护进程，CLI 直连运行时 | 单机/开发：二者皆可；受限环境偏向 Podman |
+| Rootless | 支持（较完善） | 一等公民，生态完备 | 多租户/合规要求高：优先 Podman |
+| 网络 | 默认 bridge，生态成熟 | netavark/slirp4netns，IPv6 友好 | 复杂网络与 IPv6：Podman 更优 |
+| 构建 | BuildKit/buildx 多架构成熟 | buildah 集成，rootless 体验佳 | CI rootless：Podman+buildah |
+| 生态 | 插件、Compose、Desktop 丰富 | 与 Docker CLI 兼容，工具链轻量 | 桌面与培训：Docker Desktop |
+| 编排 | Swarm（存量） | play kube（开发/测试） | 生产编排：K8s + containerd/CRI-O |
+
+选型要点：
+
+- 开发与教学：Docker（Desktop/Compose）；需 rootless 或极简依赖：Podman。
+- 生产编排：优先 Kubernetes + containerd（或 CRI-O）；单机运维工具不强绑定引擎。
+- 高安全隔离：结合沙箱运行时（Kata/gVisor）与策略加固。
+
+## 进度追踪（2025Q3）
+
+- 01_Docker技术详解/01_Docker架构原理.md：已补充 快速上手/命令速查/Rootless/故障/FAQ。
+- 02_Podman技术详解/01_Podman架构原理.md：已补充 快速上手/命令速查/Rootless/故障/FAQ。
+- 其余小节：规划中（见下）。
+
+- 01_Docker技术详解/02~06：已创建骨架并填充关键小节（容器管理/镜像/网络/存储/安全）。
+- 02_Podman技术详解/02：已创建并补充关键小节；03~06：已补充 实操/故障/FAQ 模块。
+- 03_Kubernetes技术详解/01~06：已创建骨架并补充 实操/故障/FAQ 小节（架构/Pod 管理/服务发现/存储/网络策略/监控日志）。
+- 03_Kubernetes技术详解/01：新增 升级与回滚流程（SOP）。
+- 03_Kubernetes技术详解/06：新增 告警/事件映射表 与 Alert 规则模板。
+- 08_容器技术实践案例/01：已创建案例骨架。
+- 06_容器监控与运维/04：新增“事件-原因-处置速查表”。
+- 案例文档新增“样例数据与度量模板”。
+
+## 待补充清单（优先级从高到低）
+
+1. 01_Docker技术详解/
+   - 02_Docker容器管理.md（生命周期、健康检查、Compose V2）
+   - 03_Docker镜像技术.md（多阶段/缓存/签名/供应链）
+   - 04_Docker网络技术.md（bridge/overlay/macvlan、IPv6、CNI 对接）
+   - 05_Docker存储技术.md（overlay2/zfs、Volume/Bind、性能与一致性）
+   - 06_Docker安全机制.md（capabilities/seccomp/SELinux、rootless hardening）
+2. 02_Podman技术详解/
+   - 02_Podman容器管理.md（Pod/容器编组、systemd 集成）
+   - 03_Podman镜像技术.md（buildah/skopeo、manifest、多架构）
+   - 04_Podman网络技术.md（netavark/aardvark-dns、slirp4netns/pasta）
+   - 05_Podman存储技术.md（containers/storage 驱动与策略）
+   - 06_Podman安全机制.md（rootless 策略、策略引擎）
+3. 03_Kubernetes技术详解/
+   - 01_Kubernetes架构原理.md（控制面/节点/CRI/CNI/CSI）
+   - 02_Pod管理技术.md（Probes、资源配额、Pod 安全）
+   - 03_服务发现与负载均衡.md（Service/Ingress/Gateway API）
+   - 04_存储管理技术.md（PV/PVC/StorageClass、快照/备份）
+   - 05_网络策略与安全.md（NetworkPolicy、CNI 对比）
+   - 06_监控与日志管理.md（Metrics/Tracing/Logging）
+
+## 术语表与引用规范（新增）
+
+- 术语：首次出现给出中英文/缩写，如 容器运行时（Container Runtime, CR）。
+- 引用：标准使用编号（OCI/CNCF 草案号），外链使用 Markdown 链接并注明日期/版本。
+- 代码：命令使用等宽块；破坏性操作标注“风险提示”。
+
+说明：创建新文件前，先在此列表登记，提交信息遵循 docs(container): 前缀。
