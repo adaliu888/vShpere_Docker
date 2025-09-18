@@ -254,7 +254,7 @@ esxcli network vswitch standard policy failover set --vswitch-name=vSwitch1 --no
 
 #### 3.1 数据存储配置
 
-**数据存储创建**
+**数据存储创建**:
 
 ```bash
 # 列出可用存储设备
@@ -270,7 +270,7 @@ esxcli storage vmfs extent add --volume-label=datastore1 --device=/vmfs/devices/
 esxcli storage vmfs extent list
 ```
 
-**存储多路径配置**
+**存储多路径配置**:
 
 ```bash
 # 配置多路径策略
@@ -285,7 +285,7 @@ esxcli storage nmp device list
 
 #### 3.2 存储性能优化
 
-**存储性能调优**
+**存储性能调优**:
 
 ```yaml
 # 存储优化配置
@@ -312,7 +312,7 @@ Storage_Optimization:
 
 #### 1.1 CPU调度优化
 
-**CPU调度配置**
+**CPU调度配置**:
 
 ```bash
 # 查看CPU信息
@@ -328,7 +328,7 @@ esxcli vm process set --world-id=12345 --cpu-affinity=0,1
 esxcli system process stats load get
 ```
 
-**CPU性能监控**
+**CPU性能监控**:
 
 ```yaml
 # CPU性能指标
@@ -351,7 +351,7 @@ CPU_Performance_Metrics:
 
 #### 1.2 NUMA优化
 
-**NUMA配置优化**
+**NUMA配置优化**:
 
 ```bash
 # 查看NUMA拓扑
@@ -371,7 +371,7 @@ esxcli system process stats numa get
 
 #### 2.1 内存管理优化
 
-**内存配置优化**
+**内存配置优化**:
 
 ```bash
 # 查看内存信息
@@ -387,7 +387,7 @@ esxcli system module set --module=memcomp --enabled=true
 esxcli system module set --module=tps --enabled=true
 ```
 
-**内存性能监控**
+**内存性能监控**:
 
 ```yaml
 # 内存性能指标
@@ -417,7 +417,7 @@ Memory_Performance_Metrics:
 
 #### 3.1 存储I/O优化
 
-**存储I/O配置**
+**存储I/O配置**:
 
 ```bash
 # 配置存储队列深度
@@ -433,7 +433,7 @@ esxcli storage core device set --device=naa.xxx --cache-policy=adaptive
 esxcli storage core device stats get --device=naa.xxx
 ```
 
-**存储性能监控**
+**存储性能监控**:
 
 ```yaml
 # 存储性能指标
@@ -463,7 +463,7 @@ Storage_Performance_Metrics:
 
 #### 4.1 网络I/O优化
 
-**网络I/O配置**
+**网络I/O配置**:
 
 ```bash
 # 配置网络I/O控制
@@ -479,7 +479,7 @@ esxcli network nic set --nic=vmnic0 --queue-count=8
 esxcli network nic stats get --nic=vmnic0
 ```
 
-**网络性能监控**
+**网络性能监控**:
 
 ```yaml
 # 网络性能指标
@@ -511,7 +511,7 @@ Network_Performance_Metrics:
 
 #### 1.1 安全基线配置
 
-**安全配置清单**
+**安全配置清单**:
 
 ```yaml
 # ESXi安全配置
@@ -535,7 +535,7 @@ Security_Configuration:
     - "Audit_logging_enabled"
 ```
 
-**安全配置实施**
+**安全配置实施**:
 
 ```bash
 # 配置防火墙
@@ -554,7 +554,7 @@ esxcli system syslog config set --logdir=/scratch/log
 
 #### 1.2 补丁管理
 
-**补丁管理流程**
+**补丁管理流程**:
 
 ```bash
 # 查看当前版本
@@ -574,7 +574,7 @@ esxcli system shutdown reboot --reason="Patch installation"
 
 #### 2.1 防火墙配置
 
-**防火墙规则配置**
+**防火墙规则配置**:
 
 ```bash
 # 配置防火墙规则
@@ -591,7 +591,7 @@ esxcli network firewall get
 
 #### 2.2 网络隔离
 
-**网络隔离配置**
+**网络隔离配置**:
 
 ```yaml
 # 网络隔离策略
@@ -616,7 +616,7 @@ Network_Isolation:
 
 #### 3.1 数据加密
 
-**数据加密配置**
+**数据加密配置**:
 
 ```bash
 # 启用存储加密
@@ -634,7 +634,7 @@ esxcli storage vmfs encryption get --volume-label=datastore1
 
 #### 3.2 备份与恢复
 
-**备份配置**
+**备份配置**:
 
 ```yaml
 # 备份策略
@@ -661,7 +661,7 @@ Backup_Strategy:
 
 #### 1.1 性能监控
 
-**监控工具配置**
+**监控工具配置**:
 
 ```bash
 # 配置性能监控
@@ -680,7 +680,7 @@ esxcli system status get
 
 #### 1.2 日志管理
 
-**日志配置管理**
+**日志配置管理**:
 
 ```yaml
 # 日志管理配置
@@ -704,7 +704,7 @@ Log_Management:
 
 #### 2.1 常见问题诊断
 
-**故障诊断流程**
+**故障诊断流程**:
 
 ```yaml
 # 故障诊断步骤
@@ -733,7 +733,7 @@ Troubleshooting_Process:
 
 #### 2.2 故障排除工具
 
-**诊断工具使用**
+**诊断工具使用**:
 
 ```bash
 # 系统诊断工具
