@@ -1,233 +1,435 @@
-# 02 PowerCLI 技术
+# PowerCLI技术详解
 
-## 目标
+## PowerCLI概述
 
-- 提供可直接复用的 PowerCLI 最小可复现实例与最佳实践
-- 覆盖连接、查询、变更、导出证据与回滚的基础闭环
+### 什么是PowerCLI
 
-## 前置条件
+PowerCLI是VMware提供的PowerShell模块集合，用于自动化管理vSphere环境。它提供了丰富的cmdlet来管理ESXi主机、vCenter Server、虚拟机等资源。
 
-- PowerShell 7+ 或 Windows PowerShell 5.1+
-- 安装 VMware.PowerCLI 模块（离线导入可参考目录 README）
-- vCenter 可达且具备最小必要权限账号
-
-## 基础配置
+### 安装和配置
 
 ```powershell
-# 可选：在实验环境忽略自签证书（生产不建议）
-Set-PowerCLIConfiguration -InvalidCertificateAction Ignore -Scope Session -Confirm:$false | Out-Null
-
-# 导入模块（如已自动加载可省略）
-Import-Module VMware.PowerCLI -ErrorAction SilentlyContinue
-```
-
-## 连接与断开
-
-```powershell
-$cred = Get-Credential  # 建议使用凭据管理器或企业密码库
-Connect-VIServer -Server vcenter.example.com -Credential $cred
-
-# 结束后断开
-Disconnect-VIServer -Server vcenter.example.com -Confirm:$false
-```
-
-## 资产导出（可审计）
-
-```powershell
-Connect-VIServer vcenter.example.com
-
-$date = Get-Date -Format 'yyyy-MM-dd'
-New-Item -ItemType Directory -Force -Path "artifacts/$date" | Out-Null
-
-Get-VMHost | Select Name, Version, Build |
-  Export-Csv hosts.csv -NoTypeInformation
-Get-VM | Select Name, PowerState, NumCpu, MemoryMB, Folder |
-  Export-Csv vms.csv -NoTypeInformation
-
-Get-FileHash -Algorithm SHA256 hosts.csv | Select Hash | Set-Content "artifacts/$date/hosts.csv.sha256"
-Get-FileHash -Algorithm SHA256 vms.csv   | Select Hash | Set-Content "artifacts/$date/vms.csv.sha256"
-Move-Item hosts.csv "artifacts/$date/"
-Move-Item vms.csv   "artifacts/$date/"
-```
-
-## 查询与筛选示例
-
-```powershell
-# 查询近24小时失败任务
-Get-Task -Start (Get-Date).AddDays(-1) | Where-Object {$_.State -eq 'Error'}
-
-# 查询打特定标签的 VM
-Get-VM -Tag 'low-priority' | Select Name, PowerState
-```
-
-## 变更与回滚示例（含证据）
-
-```powershell
-Start-Transcript -Path automation_run.log -Append
-try {
-  $ticket = 'CHG-2025-0918-002'
-  Connect-VIServer vcenter.example.com | Out-Null
-
-  # 例：为指定 VM 调整 CPU 核数
-  $vmName = 'DemoVM'
-  $old = Get-VM -Name $vmName | Select-Object Name, NumCpu
-  Set-VM -VM $vmName -NumCpu 4 -Confirm:$false | Out-Null
-  $new = Get-VM -Name $vmName | Select-Object Name, NumCpu
-
-  # 证据输出
-  $evidence = [pscustomobject]@{
-    TicketId  = $ticket
-    Name      = $vmName
-    OldNumCpu = $old.NumCpu
-    NewNumCpu = $new.NumCpu
-    Timestamp = (Get-Date).ToString('s')
-  }
-  $date = Get-Date -Format 'yyyy-MM-dd'
-  New-Item -ItemType Directory -Force -Path "artifacts/$date" | Out-Null
-  $evidence | Export-Csv "artifacts/$date/cpu_change.csv" -NoTypeInformation
-  Get-FileHash "artifacts/$date/cpu_change.csv" | Select Hash |
-    Set-Content "artifacts/$date/cpu_change.csv.sha256"
-}
-catch {
-  Write-Error $_
-}
-finally {
-  Stop-Transcript | Out-Null
-}
-```
-
-回滚建议：在变更前导出原配置（如 CPU/内存/网络/存储），回滚时按清单恢复。
-
-## 批量基线核查
-
-```powershell
-Connect-VIServer vcenter.example.com
-Get-VMHost | Select Name,
-  @{N='Lockdown';E={(Get-VMHost | Get-View).Config.LockdownMode}},
-  @{N='SSHRunning';E={(Get-VMHostService -VMHost $_ | Where-Object {$_.Key -eq 'TSM-SSH'}).Running}} |
-  Export-Csv esxi_baseline.csv -NoTypeInformation
-```
-
-## 常见问题排查
-
-- TLS/证书问题：临时使用 `-InvalidCertificateAction Ignore`，生产改为可信证书
-- 性能与超时：对大规模清单使用 `-PipelineVariable`、`Get-View` 批量化
-- 权限不足：采用最小权限角色并按需授予 API 操作权限
-
-## 参考
-
-- `01_自动化基础.md`
-- `README.md`
-
-## 02 PowerCLI 技术（安装、连接、资产/合规导出）
-
-## 目标1
-
-- 提供可复现的 PowerCLI 安装方式（在线/离线）与连接范式
-- 形成资产、配置、事件的标准导出与证据留存
-
-## 安装
-
-### 在线安装
-
-```powershell
+# 安装PowerCLI模块
 Install-Module VMware.PowerCLI -Scope CurrentUser -Force
+
+# 导入模块
 Import-Module VMware.PowerCLI
+
+# 查看已安装的模块
+Get-Module VMware.PowerCLI -ListAvailable
+
+# 配置PowerCLI设置
 Set-PowerCLIConfiguration -InvalidCertificateAction Ignore -Confirm:$false
+Set-PowerCLIConfiguration -DefaultVIServerMode Multiple -Confirm:$false
 ```
 
-### 离线安装
+## 连接管理
+
+### 连接vCenter Server
 
 ```powershell
-# 在可联网机器
-Save-Module VMware.PowerCLI -Path \\share\psmodules
-# 在目标机器（拷贝后）
-Copy-Item \\share\psmodules\VMware* -Destination $env:PSModulePath -Recurse
-Import-Module VMware.PowerCLI
+# 基本连接
+Connect-VIServer -Server vcenter.company.com
+
+# 使用凭据连接
+$credential = Get-Credential
+Connect-VIServer -Server vcenter.company.com -Credential $credential
+
+# 连接多个vCenter
+Connect-VIServer -Server @("vcenter1.company.com", "vcenter2.company.com")
+
+# 查看连接状态
+Get-VIServer
+
+# 断开连接
+Disconnect-VIServer -Server vcenter.company.com -Confirm:$false
 ```
 
-## 连接 vCenter（最小范式）
+### 会话管理
 
 ```powershell
-$server = 'vcenter.example.com'
-Connect-VIServer -Server $server  # 建议使用凭据管理器/企业密码库
+# 保存会话
+Save-VIServer -Server vcenter.company.com -Path "C:\Scripts\session.xml"
+
+# 恢复会话
+Restore-VIServer -Path "C:\Scripts\session.xml"
+
+# 会话超时设置
+Set-PowerCLIConfiguration -WebOperationTimeoutSeconds 300 -Confirm:$false
 ```
 
-可选：
+## 主机管理
+
+### ESXi主机操作
 
 ```powershell
-$cred = Get-Credential
-Connect-VIServer -Server $server -Credential $cred
+# 获取主机信息
+Get-VMHost | Select Name, Version, ConnectionState, PowerState
+
+# 添加主机到vCenter
+Add-VMHost -Name "esxi01.company.com" -Location (Get-Datacenter -Name "Datacenter1")
+
+# 移除主机
+Remove-VMHost -VMHost "esxi01.company.com" -Confirm:$false
+
+# 主机维护模式
+Set-VMHost -VMHost "esxi01.company.com" -State Maintenance
+Set-VMHost -VMHost "esxi01.company.com" -State Connected
+
+# 重启主机
+Restart-VMHost -VMHost "esxi01.company.com" -Confirm:$false
 ```
 
-## 资产导出（CSV）
+### 主机配置
 
 ```powershell
-Get-VMHost | Select-Object Name, Version, Build |
-  Export-Csv hosts.csv -NoTypeInformation
-Get-VM | Select-Object Name, PowerState, NumCpu, MemoryMB |
-  Export-Csv vms.csv -NoTypeInformation
+# 配置NTP
+Get-VMHost | Add-VMHostNtpServer -NtpServer "pool.ntp.org"
+Get-VMHost | Get-VMHostService | Where-Object {$_.Key -eq 'ntpd'} | Set-VMHostService -Policy On -Running $true
+
+# 配置Syslog
+Get-VMHost | Set-VMHostSysLogServer -SysLogServer "udp://syslog.company.com:514"
+
+# 配置防火墙
+Get-VMHost | Get-VMHostFirewallSystem | Set-VMHostFirewallSystem -Enabled $true
+
+# 配置高级设置
+Get-VMHost | Get-AdvancedSetting -Name "Mem.MemEagerZero" | Set-AdvancedSetting -Value 1
 ```
 
-## 合规基线核查（示例）
+## 虚拟机管理
+
+### 虚拟机操作
 
 ```powershell
-# SSH 服务策略与运行状态
-Get-VMHost | ForEach-Object {
-  $svc = Get-VMHostService -VMHost $_ | Where-Object {$_.Key -eq 'TSM-SSH'}
-  [pscustomobject]@{
-    Host    = $_.Name
-    Service = 'TSM-SSH'
-    Policy  = $svc.Policy
-    Running = $svc.Running
-  }
-} | Export-Csv esxi_services_ssh.csv -NoTypeInformation
+# 获取虚拟机信息
+Get-VM | Select Name, PowerState, NumCpu, MemoryGB, Guest
 
-# Lockdown 模式
-Get-VMHost | Get-View |
-  Select-Object Name, @{N='LockdownMode';E={$_.Config.LockdownMode}} |
-  Export-Csv esxi_lockdown.csv -NoTypeInformation
+# 创建虚拟机
+New-VM -Name "TestVM" -Template "Windows2019Template" -Datastore "Datastore1" -Location "Cluster1"
+
+# 启动虚拟机
+Start-VM -VM "TestVM"
+
+# 停止虚拟机
+Stop-VM -VM "TestVM" -Confirm:$false
+
+# 重启虚拟机
+Restart-VM -VM "TestVM" -Confirm:$false
+
+# 挂起虚拟机
+Suspend-VM -VM "TestVM"
+
+# 恢复虚拟机
+Resume-VM -VM "TestVM"
 ```
 
-## 事件与任务导出（证据）
+### 虚拟机配置
 
 ```powershell
-$start = (Get-Date).AddDays(-7)
-Get-VIEvent -Start $start |
-  Where-Object { $_.FullFormattedMessage -match 'login|permission|profile|baseline' } |
-  Export-Csv events-audit.csv -NoTypeInformation
+# 修改虚拟机配置
+Set-VM -VM "TestVM" -NumCpu 4 -MemoryGB 8
 
-Get-Task -Start $start |
-  Select-Object Name, State, StartTime, FinishTime |
-  Export-Csv tasks-archive.csv -NoTypeInformation
+# 添加硬盘
+New-HardDisk -VM "TestVM" -CapacityGB 100 -StorageFormat "Thin"
+
+# 添加网络适配器
+New-NetworkAdapter -VM "TestVM" -NetworkName "VM Network" -Type "Vmxnet3"
+
+# 配置CD/DVD
+Set-CDDrive -CD "TestVM" -IsoPath "[Datastore1] ISO/Windows2019.iso" -Connected $true
+
+# 配置快照
+New-Snapshot -VM "TestVM" -Name "Before Update" -Description "快照描述"
+Get-Snapshot -VM "TestVM" | Restore-Snapshot
+Remove-Snapshot -Snapshot (Get-Snapshot -VM "TestVM" -Name "Before Update") -Confirm:$false
 ```
 
-## 证据留存与完整性
+### 虚拟机克隆和模板
 
 ```powershell
-$date = Get-Date -Format 'yyyy-MM-dd'
-New-Item -ItemType Directory -Force -Path "artifacts/$date" | Out-Null
-foreach ($f in 'hosts.csv','vms.csv','esxi_services_ssh.csv','esxi_lockdown.csv','events-audit.csv','tasks-archive.csv') {
-  if (Test-Path $f) {
-    Get-FileHash -Algorithm SHA256 $f | Select Hash | Set-Content "artifacts/$date/$f.sha256"
-    Move-Item $f "artifacts/$date/"
-  }
+# 克隆虚拟机
+New-VM -Name "TestVM-Clone" -VM "TestVM" -Datastore "Datastore1"
+
+# 创建模板
+Set-Template -Template "Windows2019Template" -ToVM
+
+# 从模板部署
+New-VM -Name "NewVM" -Template "Windows2019Template" -Datastore "Datastore1"
+
+# 自定义规范
+New-OSCustomizationSpec -Name "Windows2019Spec" -OSType Windows -FullName "Administrator" -OrgName "Company"
+Set-VM -VM "NewVM" -OSCustomizationSpec "Windows2019Spec"
+```
+
+## 集群管理
+
+### 集群操作
+
+```powershell
+# 创建集群
+New-Cluster -Name "Production" -Location (Get-Datacenter -Name "Datacenter1")
+
+# 添加主机到集群
+Add-VMHost -Name "esxi01.company.com" -Location (Get-Cluster -Name "Production")
+
+# 配置HA
+Set-Cluster -Cluster "Production" -HAEnabled $true
+Set-Cluster -Cluster "Production" -HAAdmissionControlEnabled $true
+
+# 配置DRS
+Set-Cluster -Cluster "Production" -DRSEnabled $true
+Set-Cluster -Cluster "Production" -DRSAutomationLevel "FullyAutomated"
+
+# 配置EVC
+Set-Cluster -Cluster "Production" -EVCMode "intel-broadwell"
+```
+
+### 资源池管理
+
+```powershell
+# 创建资源池
+New-ResourcePool -Name "Development" -Location (Get-Cluster -Name "Production")
+
+# 配置资源池
+Set-ResourcePool -ResourcePool "Development" -CpuLimitMHz 8000 -MemLimitGB 16
+
+# 移动虚拟机到资源池
+Move-VM -VM "TestVM" -Destination (Get-ResourcePool -Name "Development")
+```
+
+## 存储管理
+
+### 数据存储操作
+
+```powershell
+# 获取数据存储信息
+Get-Datastore | Select Name, FreeSpaceGB, CapacityGB, Type
+
+# 创建数据存储
+New-Datastore -Name "NewDatastore" -VMHost "esxi01.company.com" -Path "/vmfs/volumes/datastore1"
+
+# 移除数据存储
+Remove-Datastore -Datastore "OldDatastore" -Confirm:$false
+
+# 扩展数据存储
+Get-Datastore -Name "Datastore1" | Set-Datastore -CapacityGB 2000
+```
+
+### vSAN管理
+
+```powershell
+# 启用vSAN
+Enable-VsanCluster -Cluster "Production"
+
+# 配置vSAN存储策略
+New-SpbmStoragePolicy -Name "Gold-Tier" -Description "高性能存储策略" -Rules @(
+    New-SpbmRule -Capability @{
+        "VSAN.hostFailuresToTolerate" = "1"
+        "VSAN.forceProvisioning" = "false"
+        "VSAN.replicaPreference" = "RAID-1 (Mirroring)"
+    }
+)
+
+# 应用存储策略
+Set-SpbmEntityConfiguration -Configuration (Get-VM -Name "TestVM") -StoragePolicy "Gold-Tier"
+```
+
+## 网络管理
+
+### 虚拟交换机
+
+```powershell
+# 获取虚拟交换机
+Get-VirtualSwitch -VMHost "esxi01.company.com"
+
+# 创建标准交换机
+New-VirtualSwitch -VMHost "esxi01.company.com" -Name "vSwitch1"
+
+# 创建端口组
+New-VirtualPortGroup -VirtualSwitch "vSwitch1" -Name "VM Network"
+
+# 配置端口组
+Set-VirtualPortGroup -VirtualPortGroup "VM Network" -VlanId 100
+```
+
+### 分布式交换机
+
+```powershell
+# 创建分布式交换机
+New-VDSwitch -Name "vDSwitch1" -Location (Get-Datacenter -Name "Datacenter1")
+
+# 添加主机到分布式交换机
+Add-VDSwitchVMHost -VDSwitch "vDSwitch1" -VMHost "esxi01.company.com"
+
+# 创建分布式端口组
+New-VDPortgroup -Name "Distributed-VM-Network" -VDSwitch "vDSwitch1"
+
+# 配置分布式端口组
+Set-VDPortgroup -VDPortgroup "Distributed-VM-Network" -VlanId 200
+```
+
+## 性能监控
+
+### 性能统计
+
+```powershell
+# 获取实时性能统计
+Get-Stat -Entity (Get-VMHost -Name "esxi01.company.com") -Stat cpu.usage.average -Realtime
+Get-Stat -Entity (Get-VM -Name "TestVM") -Stat mem.usage.average -Realtime
+
+# 获取历史性能统计
+Get-Stat -Entity (Get-VMHost -Name "esxi01.company.com") -Stat cpu.usage.average -Start (Get-Date).AddHours(-24)
+
+# 获取多个统计指标
+Get-Stat -Entity (Get-VM -Name "TestVM") -Stat @("cpu.usage.average", "mem.usage.average", "disk.usage.average") -Realtime
+```
+
+### 性能分析
+
+```powershell
+# 性能分析脚本
+function Get-VMPerformanceAnalysis {
+    param([string]$VMName)
+    
+    $vm = Get-VM -Name $VMName
+    $stats = Get-Stat -Entity $vm -Stat @("cpu.usage.average", "mem.usage.average", "disk.usage.average") -Realtime
+    
+    $analysis = @{
+        VM = $VMName
+        CPU = $stats | Where-Object {$_.MetricId -eq "cpu.usage.average"} | Select-Object -ExpandProperty Value
+        Memory = $stats | Where-Object {$_.MetricId -eq "mem.usage.average"} | Select-Object -ExpandProperty Value
+        Disk = $stats | Where-Object {$_.MetricId -eq "disk.usage.average"} | Select-Object -ExpandProperty Value
+        Timestamp = Get-Date
+    }
+    
+    return $analysis
+}
+```
+
+## 事件和任务管理
+
+### 事件管理
+
+```powershell
+# 获取事件
+Get-VIEvent -Start (Get-Date).AddDays(-1)
+
+# 获取特定类型的事件
+Get-VIEvent -Start (Get-Date).AddDays(-1) | Where-Object {$_.GetType().Name -eq "VmPoweredOnEvent"}
+
+# 获取虚拟机事件
+Get-VIEvent -Entity (Get-VM -Name "TestVM") -Start (Get-Date).AddDays(-7)
+```
+
+### 任务管理
+
+```powershell
+# 获取任务
+Get-Task -Start (Get-Date).AddDays(-1)
+
+# 获取正在运行的任务
+Get-Task | Where-Object {$_.State -eq "Running"}
+
+# 等待任务完成
+$task = Start-VM -VM "TestVM" -RunAsync
+Wait-Task -Task $task
+```
+
+## 高级功能
+
+### 批量操作
+
+```powershell
+# 批量启动虚拟机
+Get-VM | Where-Object {$_.PowerState -eq "PoweredOff"} | Start-VM
+
+# 批量配置虚拟机
+Get-VM | Where-Object {$_.Name -like "Test*"} | Set-VM -NumCpu 2 -MemoryGB 4
+
+# 批量创建快照
+Get-VM | Where-Object {$_.PowerState -eq "PoweredOn"} | New-Snapshot -Name "Batch Snapshot"
+```
+
+### 自动化脚本
+
+```powershell
+# 自动化部署脚本
+function Deploy-VMFromTemplate {
+    param(
+        [string]$VMName,
+        [string]$TemplateName,
+        [string]$DatastoreName,
+        [string]$ClusterName
+    )
+    
+    $template = Get-Template -Name $TemplateName
+    $datastore = Get-Datastore -Name $DatastoreName
+    $cluster = Get-Cluster -Name $ClusterName
+    
+    $vm = New-VM -Name $VMName -Template $template -Datastore $datastore -Location $cluster
+    Start-VM -VM $vm
+    
+    return $vm
 }
 
-$manifest = [pscustomobject]@{
-  ticketId      = 'CHG-<id>'
-  generatedAt   = (Get-Date).ToString('s')
-  generatedBy   = 'PowerCLI'
-  retentionDays = 180
-  artifacts     = Get-ChildItem "artifacts/$date" -Filter *.csv | ForEach-Object {
-    [pscustomobject]@{ name=$_.Name; sha256=(Get-Content ("artifacts/$date/"+$_.Name+".sha256")).Trim() }
-  }
-} | ConvertTo-Json -Depth 4
-$manifest | Set-Content "artifacts/$date/manifest.json"
+# 使用示例
+$vm = Deploy-VMFromTemplate -VMName "NewVM" -TemplateName "Windows2019Template" -DatastoreName "Datastore1" -ClusterName "Production"
 ```
 
-## 参考1
+### 错误处理
 
-- `../09_安全与合规管理/Checklist_基线清单.md`
-- `../09_安全与合规管理/Runbook_审计与变更操作.md`
-- `../09_安全与合规管理/Templates_证据与对标映射.md`
+```powershell
+# 错误处理示例
+function Safe-VMOperation {
+    param(
+        [string]$VMName,
+        [scriptblock]$Operation
+    )
+    
+    try {
+        $vm = Get-VM -Name $VMName
+        if ($vm) {
+            & $Operation
+            Write-Host "操作成功完成" -ForegroundColor Green
+        }
+        else {
+            throw "虚拟机 $VMName 不存在"
+        }
+    }
+    catch {
+        Write-Error "操作失败: $($_.Exception.Message)"
+        throw
+    }
+}
+
+# 使用示例
+Safe-VMOperation -VMName "TestVM" -Operation { Start-VM -VM "TestVM" }
+```
+
+## 最佳实践
+
+### 性能优化
+
+1. **批量操作**: 使用管道和批量操作减少API调用
+2. **异步操作**: 使用-RunAsync参数进行异步操作
+3. **缓存对象**: 缓存常用对象避免重复查询
+4. **限制结果**: 使用Where-Object过滤结果
+
+### 错误处理1
+
+1. **Try-Catch**: 使用try-catch处理异常
+2. **参数验证**: 验证输入参数的有效性
+3. **日志记录**: 记录操作日志便于故障排除
+4. **回滚机制**: 实现操作回滚机制
+
+### 安全考虑
+
+1. **凭据管理**: 安全存储和管理凭据
+2. **权限控制**: 使用最小权限原则
+3. **审计日志**: 记录所有操作日志
+4. **网络安全**: 使用加密连接
+
+---
+
+*本指南提供了PowerCLI的全面使用方法和最佳实践，可根据实际需求进行扩展和定制。*
