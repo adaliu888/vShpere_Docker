@@ -1,0 +1,65 @@
+{
+  "toc_title": "## 目录",
+  "toc_patterns": [
+    "^## 目录\\s*$",
+    "^## Table of Contents\\s*$",
+    "^## 目錄\\s*$"
+  ],
+  "header_pattern": "^(#{1,6})\\s+(.+)$",
+  "exclude_dirs": [
+    ".git",
+    "tools",
+    "__pycache__",
+    ".vscode",
+    "node_modules",
+    ".pytest_cache",
+    "venv",
+    "env"
+  ],
+  "exclude_files": [
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE.md",
+    "CONTRIBUTING.md"
+  ],
+  "auto_backup": true,
+  "backup_dir": "backups",
+  "verbose": true,
+  "quality_checks": {
+    "min_headers": 3,
+    "require_toc": true,
+    "check_anchor_links": true,
+    "validate_structure": true
+  },
+  "formatting": {
+    "indent_size": 2,
+    "list_style": "-",
+    "anchor_style": "lowercase-hyphen",
+    "toc_position": "after_abstract"
+  },
+  "templates": {
+    "analysis_document": {
+      "required_sections": [
+        "摘要",
+        "目录",
+        "理论基础",
+        "技术实现",
+        "形式化证明",
+        "实践应用",
+        "最佳实践",
+        "总结"
+      ]
+    },
+    "semantic_document": {
+      "required_sections": [
+        "摘要",
+        "目录",
+        "语义模型",
+        "形式化定义",
+        "验证方法",
+        "应用案例",
+        "总结"
+      ]
+    }
+  }
+}

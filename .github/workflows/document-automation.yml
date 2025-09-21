@@ -1,0 +1,205 @@
+name: 文档自动化管理
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - '**/*.md'
+      - 'tools/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '**/*.md'
+      - 'tools/**'
+  schedule:
+    # 每天凌晨2点运行
+    - cron: '0 2 * * *'
+
+jobs:
+  document-validation:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+      
+    - name: 设置Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: 安装UV
+      uses: astral-sh/setup-uv@v2
+      with:
+        version: "latest"
+        
+    - name: 安装依赖
+      run: |
+        uv sync
+        
+    - name: 验证文档质量
+      run: |
+        uv run python tools/document_automation.py --validate
+        
+    - name: 生成质量报告
+      run: |
+        uv run python tools/document_automation.py --report
+        
+    - name: 更新文档目录
+      run: |
+        uv run python tools/simple_toc_updater.py .
+        
+    - name: 上传质量报告
+      uses: actions/upload-artifact@v3
+      with:
+        name: quality-report
+        path: tools/quality_report.md
+        
+    - name: 检查格式问题
+      run: |
+        uv run python tools/document_automation.py --validate
+        if [ $? -ne 0 ]; then
+          echo "发现格式问题，请检查质量报告"
+          exit 1
+        fi
+
+  toc-update:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+      
+    - name: 设置Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: 安装UV
+      uses: astral-sh/setup-uv@v2
+      with:
+        version: "latest"
+        
+    - name: 安装依赖
+      run: |
+        uv sync
+        
+    - name: 更新所有文档目录
+      run: |
+        uv run python tools/simple_toc_updater.py .
+        
+    - name: 检查是否有变更
+      id: check-changes
+      run: |
+        if [ -n "$(git status --porcelain)" ]; then
+          echo "changes=true" >> $GITHUB_OUTPUT
+        else
+          echo "changes=false" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: 提交目录更新
+      if: steps.check-changes.outputs.changes == 'true'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        git commit -m "自动更新文档目录 [skip ci]"
+        git push
+
+  performance-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+      
+    - name: 设置Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: 安装UV
+      uses: astral-sh/setup-uv@v2
+      with:
+        version: "latest"
+        
+    - name: 安装依赖
+      run: |
+        uv sync
+        
+    - name: 性能测试
+      run: |
+        echo "开始性能测试..."
+        time uv run python tools/simple_toc_updater.py .
+        echo "性能测试完成"
+        
+    - name: 内存使用测试
+      run: |
+        echo "开始内存使用测试..."
+        /usr/bin/time -v uv run python tools/simple_toc_updater.py . 2>&1 | grep -E "(Maximum resident set size|User time|System time)"
+        
+    - name: 生成性能报告
+      run: |
+        echo "# 性能测试报告" > performance_report.md
+        echo "生成时间: $(date)" >> performance_report.md
+        echo "" >> performance_report.md
+        echo "## 测试结果" >> performance_report.md
+        echo "- 测试时间: $(date)" >> performance_report.md
+        echo "- Python版本: $(python --version)" >> performance_report.md
+        echo "- UV版本: $(uv --version)" >> performance_report.md
+        
+    - name: 上传性能报告
+      uses: actions/upload-artifact@v3
+      with:
+        name: performance-report
+        path: performance_report.md
+
+  security-scan:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+      
+    - name: 设置Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: 安装UV
+      uses: astral-sh/setup-uv@v2
+      with:
+        version: "latest"
+        
+    - name: 安装依赖
+      run: |
+        uv sync
+        
+    - name: 安全扫描
+      run: |
+        uv run python -m pip install safety
+        uv run safety check
+        
+    - name: 代码质量检查
+      run: |
+        uv run python -m pip install flake8
+        uv run flake8 tools/ --max-line-length=88 --extend-ignore=E203,W503
+        
+    - name: 类型检查
+      run: |
+        uv run python -m pip install mypy
+        uv run mypy tools/ --ignore-missing-imports
+
+  notification:
+    runs-on: ubuntu-latest
+    needs: [document-validation, toc-update, performance-test, security-scan]
+    if: always()
+    
+    steps:
+    - name: 发送通知
+      run: |
+        echo "文档自动化管理流程完成"
+        echo "验证结果: ${{ needs.document-validation.result }}"
+        echo "目录更新结果: ${{ needs.toc-update.result }}"
+        echo "性能测试结果: ${{ needs.performance-test.result }}"
+        echo "安全扫描结果: ${{ needs.security-scan.result }}"

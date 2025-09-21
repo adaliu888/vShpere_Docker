@@ -1,5 +1,15 @@
 # 03 vCenter Server 技术
 
+## 目录
+
+- [03 vCenter Server 技术](#03-vcenter-server-技术)
+  - [导航](#导航)
+  - [学习路径（建议）](#学习路径建议)
+  - [快速Checklist](#快速checklist)
+  - [对标与参考](#对标与参考)
+
+
+
 ## 导航
 
 - 01_vCenter架构原理.md
