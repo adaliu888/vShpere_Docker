@@ -1,0 +1,78 @@
+# 文档自动化管理配置文件
+
+document_structure:
+  required_sections:
+    - "摘要"
+    - "目录"
+    - "理论基础"
+    - "技术实现"
+    - "实践应用"
+    - "最佳实践"
+    - "总结"
+  
+  optional_sections:
+    - "技术对比"
+    - "发展趋势"
+    - "参考文献"
+    - "附录"
+    - "术语表"
+    - "配置模板"
+    - "故障诊断"
+
+quality_checks:
+  min_sections: 5
+  min_code_examples: 2
+  min_word_count: 1000
+  require_toc: true
+  require_abstract: true
+  require_code_examples: true
+  require_references: false
+
+file_patterns:
+  markdown: "*.md"
+  config: "*.yaml"
+  code:
+    - "*.py"
+    - "*.rs"
+    - "*.go"
+    - "*.js"
+    - "*.ts"
+    - "*.haskell"
+    - "*.smt2"
+    - "*.tla"
+
+formatting_rules:
+  header_format: "# Title"
+  list_format: "- Item"
+  code_block_language: true
+  paragraph_spacing: true
+  link_format: "[text](url)"
+
+validation_rules:
+  check_links: true
+  check_images: true
+  check_code_blocks: true
+  check_tables: true
+  check_math: true
+
+automation:
+  auto_update_toc: true
+  auto_fix_format: true
+  auto_validate: true
+  backup_before_fix: true
+  create_backup: true
+
+templates:
+  default_template: "standard"
+  custom_templates:
+    - "analysis"
+    - "semantic"
+    - "implementation"
+    - "comparison"
+
+reporting:
+  generate_reports: true
+  report_format: "markdown"
+  include_statistics: true
+  include_recommendations: true
+  save_reports: true

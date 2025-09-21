@@ -1,0 +1,258 @@
+# Kubernetes服务配置
+# 用于暴露虚拟化容器化技术演示环境的服务
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: virtualization-monitor-service
+  namespace: virtualization-demo
+  labels:
+    app: virtualization-monitor
+    component: monitoring
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: virtualization-monitor
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: container-orchestrator-service
+  namespace: virtualization-demo
+  labels:
+    app: container-orchestrator
+    component: orchestration
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: container-orchestrator
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: semantic-validator-service
+  namespace: virtualization-demo
+  labels:
+    app: semantic-validator
+    component: validation
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: semantic-validator
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-service
+  namespace: virtualization-demo
+  labels:
+    app: prometheus
+    component: monitoring
+spec:
+  type: ClusterIP
+  ports:
+  - port: 9090
+    targetPort: 9090
+    protocol: TCP
+    name: http
+  selector:
+    app: prometheus
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-service
+  namespace: virtualization-demo
+  labels:
+    app: grafana
+    component: visualization
+spec:
+  type: ClusterIP
+  ports:
+  - port: 3000
+    targetPort: 3000
+    protocol: TCP
+    name: http
+  selector:
+    app: grafana
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+  namespace: virtualization-demo
+  labels:
+    app: postgres
+    component: database
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5432
+    targetPort: 5432
+    protocol: TCP
+    name: postgres
+  selector:
+    app: postgres
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+  namespace: virtualization-demo
+  labels:
+    app: redis
+    component: cache
+spec:
+  type: ClusterIP
+  ports:
+  - port: 6379
+    targetPort: 6379
+    protocol: TCP
+    name: redis
+  selector:
+    app: redis
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-lb-service
+  namespace: virtualization-demo
+  labels:
+    app: nginx-lb
+    component: loadbalancer
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+  - port: 443
+    targetPort: 443
+    protocol: TCP
+    name: https
+  selector:
+    app: nginx-lb
+
+---
+# NodePort服务用于外部访问
+apiVersion: v1
+kind: Service
+metadata:
+  name: virtualization-monitor-nodeport
+  namespace: virtualization-demo
+  labels:
+    app: virtualization-monitor
+    component: monitoring
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    targetPort: 8080
+    nodePort: 30080
+    protocol: TCP
+    name: http
+  selector:
+    app: virtualization-monitor
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: container-orchestrator-nodeport
+  namespace: virtualization-demo
+  labels:
+    app: container-orchestrator
+    component: orchestration
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    targetPort: 8080
+    nodePort: 30081
+    protocol: TCP
+    name: http
+  selector:
+    app: container-orchestrator
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: semantic-validator-nodeport
+  namespace: virtualization-demo
+  labels:
+    app: semantic-validator
+    component: validation
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    targetPort: 8080
+    nodePort: 30082
+    protocol: TCP
+    name: http
+  selector:
+    app: semantic-validator
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-nodeport
+  namespace: virtualization-demo
+  labels:
+    app: grafana
+    component: visualization
+spec:
+  type: NodePort
+  ports:
+  - port: 3000
+    targetPort: 3000
+    nodePort: 30300
+    protocol: TCP
+    name: http
+  selector:
+    app: grafana
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-nodeport
+  namespace: virtualization-demo
+  labels:
+    app: prometheus
+    component: monitoring
+spec:
+  type: NodePort
+  ports:
+  - port: 9090
+    targetPort: 9090
+    nodePort: 30090
+    protocol: TCP
+    name: http
+  selector:
+    app: prometheus
