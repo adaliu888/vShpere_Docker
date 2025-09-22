@@ -15,8 +15,6 @@
   - [当前状态（T0）](#当前状态t0)
   - [许可证](#许可证)
 
-
-
 vSphere / VMware / Docker / Podman 全面技术体系库
 
 本仓库旨在系统化梳理虚拟化与容器化的原理、架构与实践，覆盖 vSphere、ESXi、vCenter、NSX、vSAN 以及 Docker、Podman 等核心技术，参考国际知名大学课程、权威标准与企业最佳实践，持续更新。
