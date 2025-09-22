@@ -495,7 +495,24 @@ Docker是一个开源的容器化平台，基于Linux容器（LXC）技术，通
 最小验证:
 
 ```bash
-docker version && docker info | sed -n '1,40p'
+#!/bin/bash
+# Docker环境验证脚本
+
+echo "=== Docker版本信息 ==="
+docker --version
+docker-compose --version
+
+echo "=== Docker服务状态 ==="
+docker info | head -20
+
+echo "=== Docker镜像列表 ==="
+docker images
+
+echo "=== Docker容器状态 ==="
+docker ps -a
+
+echo "=== 测试容器运行 ==="
+docker run --rm hello-world
 ```
 
 ### 9.2 第一个容器

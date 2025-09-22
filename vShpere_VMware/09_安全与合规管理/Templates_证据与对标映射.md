@@ -41,6 +41,17 @@
 | CIS ESXi | 3.2 | 账户锁定策略 | 锁定阈值与时间符合基线 | `esxi_account_lockout.csv` | ESXCLI/PowerCLI |
 | PCI DSS | 10.x | 审计与保留 | 保留≥90天，可检索 | `log_retention_manifest.json` | 日志平台导出 |
 
+### 3.1 K8s/容器与供应链扩展（新增）
+
+| Standard | Clause/ID | ControlId | Control | Evidence | Notes |
+|---|---|---|---|---|---|
+| CIS K8s | v1.x | K8S.CIS | 基线扫描与整改 | `cis-benchmark-report.json` | 记录失败项与整改追踪 |
+| K8s Policy | PSA/NP | K8S.POLICY | Pod 安全/NetworkPolicy | `runtime/policies/*.yaml` | 伴随审计与事件 |
+| Audit | NIST AU | K8S.AUDIT | 审计与事件留存 | `runtime/audit/audit-*.json`、`events/*.json` | 哈希与留存期 |
+| Supply Chain | SLSA/CIS | IMG.SUPPLYCHAIN | SBOM/签名/声明 | `images/sbom/*.json`、`signatures/*.sig`、`attestations/*.jsonl` | Cosign/Syft/CycloneDX |
+
+> 标准与版本锚点：统一引用《2025年技术标准最终对齐报告.md》（Docker 25.0、Kubernetes 1.30、OCI 1.1、CIS 基线）。
+
 ## 4. 证据生成脚本占位
 
 ```powershell

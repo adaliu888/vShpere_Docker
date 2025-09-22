@@ -16,6 +16,7 @@
     - [6.4 网络与防护](#64-网络与防护)
     - [6.5 数据与备份](#65-数据与备份)
   - [7. 证据模板与导出位置](#7-证据模板与导出位置)
+  - [8. K8s/容器基线对照区（新增）](#8-k8s容器基线对照区新增)
 
 > 使用前提：具备 vCenter 权限；PowerCLI 已连接；已规划 NTP、Syslog 与维护窗口。
 
@@ -92,3 +93,14 @@
 - 合规报表：`compliance-report-YYYYMM.pdf`
 
 > 导出命令参见 Runbook；建议将路径参数标准化并记录于变更单附件。
+
+## 8. K8s/容器基线对照区（新增）
+
+- 目的：在企业统一基线下，将 vSphere 与 K8s/容器基线做映射，统一证据目录与对标条款。
+- 参照目录：`../Artifacts_Index.md` → “容器/Kubernetes 合规证据模板”。
+- 最小对照项目：
+  - 身份与访问：vSphere RBAC ↔ K8s RBAC/PSA
+  - 网络与防护：NSX 微隔离 ↔ NetworkPolicy/mTLS
+  - 镜像与供应链：N/A ↔ SBOM/签名/声明（Cosign/SLSA）
+  - 审计与日志：vCenter 事件/任务 ↔ apiserver 审计/事件
+- 标准锚点：统一引用《2025年技术标准最终对齐报告.md》中的 Docker/Kubernetes/OCI/CIS 版本。

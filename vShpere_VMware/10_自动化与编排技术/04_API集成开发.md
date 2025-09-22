@@ -170,6 +170,13 @@ foreach ($f in 'vc_events.json','hosts_rest.json','vms_rest.json') {
 }
 ```
 
+## 证据自动归档约定（新增）
+
+- 归档路径：`artifacts/YYYY-MM-DD/`，命名使用 UTC 日期。
+- 校验与可追溯：每个导出文件生成 `*.sha256`；汇总至 `manifest.json` 并包含来源、生成时间、保留期。
+- 结构对齐：参照 `../09_安全与合规管理/Artifacts_Index.md` 的仓库级结构；与容器/K8s 证据统一汇聚。
+- 版本锚点：涉及产品与 API 版本的描述统一指向《2025年技术标准最终对齐报告.md》。
+
 ## 最佳实践
 
 - Token 轮换与最小权限（只读/运维分权）

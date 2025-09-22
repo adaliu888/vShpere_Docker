@@ -98,32 +98,38 @@ docker inspect --format='{{.State.Status}}' my-container
 #### 状态管理
 
 ```bash
-    # 暂停/恢复容器
+# 暂停/恢复容器
 docker pause my-container
 docker unpause my-container
 
-    # 重启容器
+# 重启容器
 docker restart my-container
 
-    # 停止容器
+# 停止容器
 docker stop my-container
 docker kill my-container     # 强制停止
+
+# 检查容器状态
+docker ps -a | grep my-container
 ```
 
 ### 1.3 容器停止与删除
 
 ```bash
-    # 停止容器
+# 停止容器
 docker stop my-container
 
-    # 删除容器
+# 删除容器
 docker rm my-container
 
-    # 强制删除运行中的容器
+# 强制删除运行中的容器
 docker rm -f my-container
 
-    # 清理所有停止的容器
+# 清理所有停止的容器
 docker container prune
+
+# 批量清理容器
+docker container prune -f
 ```
 
 ### 1.4 容器重启与恢复

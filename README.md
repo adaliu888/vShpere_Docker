@@ -66,6 +66,15 @@ vSphere / VMware / Docker / Podman 全面技术体系库
 - 引用标准与外链需注明来源（标准号、版本、年份）
 - 命令/代码段使用 fenced code block，避免混用制表符与空格
 
+### 版本锚点与引用规范（新增）
+
+- 统一从《2025年技术标准最终对齐报告.md》检索版本与标准号，避免文档间漂移：
+  - 虚拟化：vSphere/ESXi/vCenter/NSX 等版本以该文档为准
+  - 容器：Docker/Kubernetes/OCI 等版本以该文档为准
+  - WASM/WASI：以该文档为准
+- 在各文档首次出现版本信息时，添加指向该报告对应小节的锚链接。
+- 如需更新版本，仅修改该报告，并在 PR 中说明“版本锚点更新”。
+
 ## 对标与参考
 
 - 标准：ISO/IEC 27001、ISO/IEC 20000、NIST SP 800-53、CIS Benchmarks（VMware/OS/容器）、PCI DSS、GDPR 等
