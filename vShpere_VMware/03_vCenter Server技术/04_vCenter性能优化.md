@@ -1,4 +1,4 @@
-# vCenter性能优化深度解析
+    # vCenter性能优化深度解析
 
 ## 目录
 
@@ -191,7 +191,7 @@
 #### CPU优化
 
 ```bash
-# 配置CPU参数
+    # 配置CPU参数
 vpxd_servicecfg system set --option=config.vpxd.system.cpu.max --value=8
 vpxd_servicecfg system set --option=config.vpxd.system.cpu.affinity --value=1
 ```
@@ -199,7 +199,7 @@ vpxd_servicecfg system set --option=config.vpxd.system.cpu.affinity --value=1
 #### 内存优化
 
 ```bash
-# 配置内存参数
+    # 配置内存参数
 vpxd_servicecfg system set --option=config.vpxd.system.memory.max --value=16G
 vpxd_servicecfg system set --option=config.vpxd.system.memory.heap --value=4G
 ```
@@ -209,7 +209,7 @@ vpxd_servicecfg system set --option=config.vpxd.system.memory.heap --value=4G
 #### 内核参数
 
 ```bash
-# 配置内核参数
+    # 配置内核参数
 vpxd_servicecfg system set --option=config.vpxd.system.kernel.threads --value=1000
 vpxd_servicecfg system set --option=config.vpxd.system.kernel.files --value=65536
 ```
@@ -221,7 +221,7 @@ vpxd_servicecfg system set --option=config.vpxd.system.kernel.files --value=6553
 #### 连接池优化
 
 ```bash
-# 配置连接池
+    # 配置连接池
 vpxd_servicecfg database set --option=config.vpxd.database.connection.pool.size --value=100
 vpxd_servicecfg database set --option=config.vpxd.database.connection.pool.timeout --value=300
 ```
@@ -229,7 +229,7 @@ vpxd_servicecfg database set --option=config.vpxd.database.connection.pool.timeo
 #### 查询优化
 
 ```bash
-# 配置查询优化
+    # 配置查询优化
 vpxd_servicecfg database set --option=config.vpxd.database.query.timeout --value=300
 vpxd_servicecfg database set --option=config.vpxd.database.query.cache --value=true
 ```
@@ -239,7 +239,7 @@ vpxd_servicecfg database set --option=config.vpxd.database.query.cache --value=t
 #### 索引配置
 
 ```bash
-# 配置数据库索引
+    # 配置数据库索引
 vpxd_servicecfg database set --option=config.vpxd.database.index.optimize --value=true
 vpxd_servicecfg database set --option=config.vpxd.database.index.rebuild --value=true
 ```
@@ -251,7 +251,7 @@ vpxd_servicecfg database set --option=config.vpxd.database.index.rebuild --value
 #### 网络参数
 
 ```bash
-# 配置网络参数
+    # 配置网络参数
 vpxd_servicecfg network set --option=config.vpxd.network.tcp.buffer --value=64K
 vpxd_servicecfg network set --option=config.vpxd.network.tcp.window --value=256K
 ```
@@ -259,7 +259,7 @@ vpxd_servicecfg network set --option=config.vpxd.network.tcp.window --value=256K
 #### 网络优化
 
 ```bash
-# 配置网络优化
+    # 配置网络优化
 vpxd_servicecfg network set --option=config.vpxd.network.keepalive --value=true
 vpxd_servicecfg network set --option=config.vpxd.network.compression --value=true
 ```
@@ -271,7 +271,7 @@ vpxd_servicecfg network set --option=config.vpxd.network.compression --value=tru
 #### 存储参数
 
 ```bash
-# 配置存储参数
+    # 配置存储参数
 vpxd_servicecfg storage set --option=config.vpxd.storage.cache.size --value=1G
 vpxd_servicecfg storage set --option=config.vpxd.storage.cache.policy --value=LRU
 ```
@@ -279,7 +279,7 @@ vpxd_servicecfg storage set --option=config.vpxd.storage.cache.policy --value=LR
 #### 存储优化
 
 ```bash
-# 配置存储优化
+    # 配置存储优化
 vpxd_servicecfg storage set --option=config.vpxd.storage.async --value=true
 vpxd_servicecfg storage set --option=config.vpxd.storage.batch --value=true
 ```
@@ -291,7 +291,7 @@ vpxd_servicecfg storage set --option=config.vpxd.storage.batch --value=true
 #### 服务参数
 
 ```bash
-# 配置服务参数
+    # 配置服务参数
 vpxd_servicecfg service set --option=config.vpxd.service.threads --value=100
 vpxd_servicecfg service set --option=config.vpxd.service.queue --value=1000
 ```
@@ -299,7 +299,7 @@ vpxd_servicecfg service set --option=config.vpxd.service.queue --value=1000
 #### 服务优化
 
 ```bash
-# 配置服务优化
+    # 配置服务优化
 vpxd_servicecfg service set --option=config.vpxd.service.pool --value=true
 vpxd_servicecfg service set --option=config.vpxd.service.cache --value=true
 ```
@@ -318,13 +318,13 @@ vpxd_servicecfg service set --option=config.vpxd.service.cache --value=true
 #### 监控工具
 
 ```bash
-# 查看性能统计
+    # 查看性能统计
 vpxd_servicecfg performance stats
 
-# 查看系统状态
+    # 查看系统状态
 vpxd_servicecfg system status
 
-# 查看服务状态
+    # 查看服务状态
 vpxd_servicecfg service status
 ```
 

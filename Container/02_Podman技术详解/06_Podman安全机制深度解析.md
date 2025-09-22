@@ -1,4 +1,4 @@
-# Podman安全机制深度解析
+    # Podman安全机制深度解析
 
 ## 摘要
 
@@ -14,8 +14,6 @@
   - [2. Rootless安全模型](#2-rootless安全模型)
     - [2.1 Rootless架构原理](#21-rootless架构原理)
       - [2.1.1 用户命名空间映射](#211-用户命名空间映射)
-- [配置subuid和subgid映射](#配置subuid和subgid映射)
-- [验证映射配置](#验证映射配置)
       - [2.1.2 Rootless容器特性](#212-rootless容器特性)
     - [2.2 形式化安全模型](#22-形式化安全模型)
       - [2.2.1 安全状态定义](#221-安全状态定义)
@@ -24,109 +22,20 @@
     - [3.1 能力控制](#31-能力控制)
       - [3.1.1 Linux能力模型](#311-linux能力模型)
       - [3.1.2 能力配置](#312-能力配置)
-- [podman-compose.yml](#podman-composeyml)
     - [3.2 SELinux/AppArmor集成](#32-selinuxapparmor集成)
       - [3.2.1 SELinux配置](#321-selinux配置)
-- [检查SELinux状态](#检查selinux状态)
-- [设置SELinux上下文](#设置selinux上下文)
-- [创建自定义SELinux策略](#创建自定义selinux策略)
-- [编译和安装策略](#编译和安装策略)
       - [3.2.2 AppArmor配置](#322-apparmor配置)
-- [/etc/apparmor.d/container](#etcapparmordcontainer)
-- [include <tunables/global>](#include-tunablesglobal)
   - [4. 策略引擎与验证](#4-策略引擎与验证)
     - [4.1 策略引擎架构](#41-策略引擎架构)
       - [4.1.1 策略定义语言](#411-策略定义语言)
     - [4.2 策略验证机制](#42-策略验证机制)
       - [4.2.1 运行时策略检查](#421-运行时策略检查)
-- [[derive(Debug, Clone, Serialize, Deserialize)]](#derivedebug-clone-serialize-deserialize)
-- [[derive(Debug, Clone, Serialize, Deserialize)]](#derivedebug-clone-serialize-deserialize)
-- [[derive(Debug, Clone, Serialize, Deserialize)]](#derivedebug-clone-serialize-deserialize)
-- [[derive(Debug, Clone, Serialize, Deserialize)]](#derivedebug-clone-serialize-deserialize)
-- [[derive(Debug, Clone)]](#derivedebug-clone)
   - [5. 供应链安全](#5-供应链安全)
     - [5.1 镜像签名与验证](#51-镜像签名与验证)
       - [5.1.1 GPG签名验证](#511-gpg签名验证)
-- [生成GPG密钥](#生成gpg密钥)
-- [导出公钥](#导出公钥)
-- [配置Podman信任密钥](#配置podman信任密钥)
       - [5.1.2 镜像扫描](#512-镜像扫描)
-- [使用Trivy扫描镜像](#使用trivy扫描镜像)
-- [使用Clair扫描镜像](#使用clair扫描镜像)
-- [集成到Podman构建流程](#集成到podman构建流程)
     - [5.2 SBOM生成与验证](#52-sbom生成与验证)
       - [5.2.1 SBOM生成](#521-sbom生成)
-- [生成容器镜像SBOM](#生成容器镜像sbom)
-- [验证SBOM签名](#验证sbom签名)
-  - [6. 代码实现与工具](#6-代码实现与工具)
-    - [6.1 Golang实现：安全监控器](#61-golang实现安全监控器)
-  - [7. 最佳实践](#7-最佳实践)
-    - [7.1 安全配置最佳实践](#71-安全配置最佳实践)
-      - [7.1.1 容器安全配置](#711-容器安全配置)
-      - [7.1.2 镜像安全最佳实践](#712-镜像安全最佳实践)
-    - [7.2 监控与审计](#72-监控与审计)
-      - [7.2.1 安全监控](#721-安全监控)
-      - [7.2.2 事件响应](#722-事件响应)
-  - [8. 总结](#8-总结)
-    - [8.1 技术要点总结](#81-技术要点总结)
-    - [8.2 实施建议](#82-实施建议)
-
-- [Podman安全机制深度解析](#podman安全机制深度解析)
-  - [摘要](#摘要)
-  - [1. Podman安全架构](#1-podman安全架构)
-    - [1.1 安全架构设计](#11-安全架构设计)
-    - [1.2 安全组件关系](#12-安全组件关系)
-  - [2. Rootless安全模型](#2-rootless安全模型)
-    - [2.1 Rootless架构原理](#21-rootless架构原理)
-      - [2.1.1 用户命名空间映射](#211-用户命名空间映射)
-- [配置subuid和subgid映射](#配置subuid和subgid映射)
-- [验证映射配置](#验证映射配置)
-      - [2.1.2 Rootless容器特性](#212-rootless容器特性)
-    - [2.2 形式化安全模型](#22-形式化安全模型)
-      - [2.2.1 安全状态定义](#221-安全状态定义)
-      - [2.2.2 安全性质验证](#222-安全性质验证)
-  - [3. 权限控制机制](#3-权限控制机制)
-    - [3.1 能力控制](#31-能力控制)
-      - [3.1.1 Linux能力模型](#311-linux能力模型)
-      - [3.1.2 能力配置](#312-能力配置)
-- [podman-compose.yml](#podman-composeyml)
-    - [3.2 SELinux/AppArmor集成](#32-selinuxapparmor集成)
-      - [3.2.1 SELinux配置](#321-selinux配置)
-- [检查SELinux状态](#检查selinux状态)
-- [设置SELinux上下文](#设置selinux上下文)
-- [创建自定义SELinux策略](#创建自定义selinux策略)
-- [编译和安装策略](#编译和安装策略)
-      - [3.2.2 AppArmor配置](#322-apparmor配置)
-- [/etc/apparmor.d/container](#etcapparmordcontainer)
-- [include <tunables/global>](#include-tunablesglobal)
-- [允许基本文件操作](#允许基本文件操作)
-- [拒绝危险操作](#拒绝危险操作)
-- [网络访问](#网络访问)
-- [信号处理](#信号处理)
-  - [4. 策略引擎与验证](#4-策略引擎与验证)
-    - [4.1 策略引擎架构](#41-策略引擎架构)
-      - [4.1.1 策略定义语言](#411-策略定义语言)
-    - [4.2 策略验证机制](#42-策略验证机制)
-      - [4.2.1 运行时策略检查](#421-运行时策略检查)
-- [[derive(Debug, Clone, Serialize, Deserialize)]](#derivedebug-clone-serialize-deserialize)
-- [[derive(Debug, Clone, Serialize, Deserialize)]](#derivedebug-clone-serialize-deserialize)
-- [[derive(Debug, Clone, Serialize, Deserialize)]](#derivedebug-clone-serialize-deserialize)
-- [[derive(Debug, Clone, Serialize, Deserialize)]](#derivedebug-clone-serialize-deserialize)
-- [[derive(Debug, Clone)]](#derivedebug-clone)
-  - [5. 供应链安全](#5-供应链安全)
-    - [5.1 镜像签名与验证](#51-镜像签名与验证)
-      - [5.1.1 GPG签名验证](#511-gpg签名验证)
-- [生成GPG密钥](#生成gpg密钥)
-- [导出公钥](#导出公钥)
-- [配置Podman信任密钥](#配置podman信任密钥)
-      - [5.1.2 镜像扫描](#512-镜像扫描)
-- [使用Trivy扫描镜像](#使用trivy扫描镜像)
-- [使用Clair扫描镜像](#使用clair扫描镜像)
-- [集成到Podman构建流程](#集成到podman构建流程)
-    - [5.2 SBOM生成与验证](#52-sbom生成与验证)
-      - [5.2.1 SBOM生成](#521-sbom生成)
-- [生成容器镜像SBOM](#生成容器镜像sbom)
-- [验证SBOM签名](#验证sbom签名)
   - [6. 代码实现与工具](#6-代码实现与工具)
     - [6.1 Golang实现：安全监控器](#61-golang实现安全监控器)
   - [7. 最佳实践](#7-最佳实践)
@@ -199,11 +108,11 @@
 **用户ID映射配置**：
 
 ```bash
-# 配置subuid和subgid映射
+    # 配置subuid和subgid映射
 echo "$USER:100000:65536" >> /etc/subuid
 echo "$USER:100000:65536" >> /etc/subgid
 
-# 验证映射配置
+    # 验证映射配置
 podman unshare cat /proc/self/uid_map
 podman unshare cat /proc/self/gid_map
 ```
@@ -275,7 +184,7 @@ Rootless容器通过用户命名空间实现隔离：
 **容器能力配置**：
 
 ```yaml
-# podman-compose.yml
+    # podman-compose.yml
 version: '3.8'
 services:
   web:
@@ -301,13 +210,13 @@ services:
 **SELinux策略配置**：
 
 ```bash
-# 检查SELinux状态
+    # 检查SELinux状态
 sestatus
 
-# 设置SELinux上下文
+    # 设置SELinux上下文
 chcon -t container_file_t /var/lib/containers/storage
 
-# 创建自定义SELinux策略
+    # 创建自定义SELinux策略
 cat > container.te << EOF
 policy_module(container, 1.0.0)
 
@@ -320,7 +229,7 @@ require {
 allow container_t container_file_t:file { read write execute };
 EOF
 
-# 编译和安装策略
+    # 编译和安装策略
 checkmodule -M -m -o container.mod container.te
 semodule_package -o container.pp -m container.mod
 semodule -i container.pp
@@ -331,8 +240,8 @@ semodule -i container.pp
 **AppArmor配置文件**：
 
 ```bash
-# /etc/apparmor.d/container
-# include <tunables/global>
+    # /etc/apparmor.d/container
+    # include <tunables/global>
 
 profile container flags=(attach_disconnected,mediate_deleted) {
   #include <abstractions/base>
@@ -408,7 +317,7 @@ use serde::{Deserialize, Serialize};
 use std::sync::RwLock;
 
 /// 安全策略
-# [derive(Debug, Clone, Serialize, Deserialize)]
+    # [derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SecurityPolicy {
     pub name: String,
     pub description: String,
@@ -416,21 +325,21 @@ pub struct SecurityPolicy {
 }
 
 /// 策略规则
-# [derive(Debug, Clone, Serialize, Deserialize)]
+    # [derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PolicyRule {
     pub action: PolicyAction,
     pub resource: String,
     pub condition: PolicyCondition,
 }
 
-# [derive(Debug, Clone, Serialize, Deserialize)]
+    # [derive(Debug, Clone, Serialize, Deserialize)]
 pub enum PolicyAction {
     Allow,
     Deny,
     Audit,
 }
 
-# [derive(Debug, Clone, Serialize, Deserialize)]
+    # [derive(Debug, Clone, Serialize, Deserialize)]
 pub enum PolicyCondition {
     User(String),
     Registry(String),
@@ -444,7 +353,7 @@ pub struct PolicyEngine {
     audit_log: RwLock<Vec<AuditEntry>>,
 }
 
-# [derive(Debug, Clone)]
+    # [derive(Debug, Clone)]
 pub struct AuditEntry {
     pub timestamp: std::time::SystemTime,
     pub user: String,
@@ -563,13 +472,13 @@ impl PolicyEngine {
 **签名配置**：
 
 ```bash
-# 生成GPG密钥
+    # 生成GPG密钥
 gpg --full-generate-key
 
-# 导出公钥
+    # 导出公钥
 gpg --armor --export user@example.com > public.key
 
-# 配置Podman信任密钥
+    # 配置Podman信任密钥
 mkdir -p ~/.config/containers/registries.d
 cat > ~/.config/containers/registries.d/default.yaml << EOF
 docker:
@@ -584,13 +493,13 @@ EOF
 **漏洞扫描配置**：
 
 ```bash
-# 使用Trivy扫描镜像
+    # 使用Trivy扫描镜像
 trivy image --severity HIGH,CRITICAL nginx:latest
 
-# 使用Clair扫描镜像
+    # 使用Clair扫描镜像
 clair-scanner --ip 192.168.1.100 nginx:latest
 
-# 集成到Podman构建流程
+    # 集成到Podman构建流程
 podman build --security-opt seccomp=unconfined \
   --security-opt apparmor=unconfined \
   -t myapp:latest .
@@ -603,10 +512,10 @@ podman build --security-opt seccomp=unconfined \
 **Syft SBOM生成**：
 
 ```bash
-# 生成容器镜像SBOM
+    # 生成容器镜像SBOM
 syft nginx:latest -o spdx-json > nginx-sbom.json
 
-# 验证SBOM签名
+    # 验证SBOM签名
 cosign verify-blob --key cosign.pub --signature nginx-sbom.sig nginx-sbom.json
 ```
 

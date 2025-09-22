@@ -1,3 +1,5 @@
+# vRealize Operations / Aria Operations 指标与KPI（最小可用）
+
 ## 目录
 
 - [vRealize Operations / Aria Operations 指标与KPI（最小可用）](#vrealize-operations-aria-operations-指标与kpi最小可用)
@@ -10,20 +12,6 @@
   - [7. 告警策略（建议）](#7-告警策略建议)
   - [8. 容量与成本（可选）](#8-容量与成本可选)
   - [9. 交叉链接](#9-交叉链接)
-
-- [vRealize Operations / Aria Operations 指标与KPI（最小可用）](#vrealize-operations-aria-operations-指标与kpi最小可用)
-  - [1. 目标](#1-目标)
-  - [2. 指标分类（建议）](#2-指标分类建议)
-  - [3. KPI/SLO（样例）](#3-kpislo样例)
-  - [4. 仪表板与视图（建议）](#4-仪表板与视图建议)
-  - [5. 基线建立与异常检测](#5-基线建立与异常检测)
-  - [6. 报表与证据导出（示例）](#6-报表与证据导出示例)
-  - [7. 告警策略（建议）](#7-告警策略建议)
-  - [8. 容量与成本（可选）](#8-容量与成本可选)
-  - [9. 交叉链接](#9-交叉链接)
-
-
-# vRealize Operations / Aria Operations 指标与KPI（最小可用）
 
 ## 1. 目标
 

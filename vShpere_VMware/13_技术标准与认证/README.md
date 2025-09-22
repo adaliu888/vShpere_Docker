@@ -14,8 +14,6 @@
   - [快速Checklist](#快速checklist)
   - [对标与参考](#对标与参考)
 
-
-
 ## 导航
 
 - 01_vSphere技术标准.md

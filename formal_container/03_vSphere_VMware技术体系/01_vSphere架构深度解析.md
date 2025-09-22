@@ -4,7 +4,6 @@
 
 本文档深入解析VMware vSphere的架构设计，包括ESXi、vCenter Server、虚拟化层、管理层的完整技术体系。通过系统性的架构分析，为vSphere的部署、管理和优化提供全面的技术指导。
 
-
 ## 目录
 
 - [vSphere架构深度解析](#vsphere架构深度解析)
@@ -12,180 +11,50 @@
   - [vSphere总体架构](#vsphere总体架构)
     - [1. 架构层次结构](#1-架构层次结构)
     - [2. 核心组件关系](#2-核心组件关系)
-- [组件交互示例](#组件交互示例)
   - [ESXi架构深度分析](#esxi架构深度分析)
     - [1. ESXi内核架构](#1-esxi内核架构)
       - [1.1 VMkernel架构](#11-vmkernel架构)
       - [1.2 虚拟化技术实现](#12-虚拟化技术实现)
-- [CPU虚拟化技术](#cpu虚拟化技术)
-- [内存虚拟化技术](#内存虚拟化技术)
     - [2. ESXi存储架构](#2-esxi存储架构)
       - [2.1 存储虚拟化层](#21-存储虚拟化层)
-- [VMFS特性](#vmfs特性)
       - [2.2 存储I/O路径](#22-存储io路径)
     - [3. ESXi网络架构](#3-esxi网络架构)
       - [3.1 虚拟网络层](#31-虚拟网络层)
-- [虚拟网络架构](#虚拟网络架构)
-- [vDS特性](#vds特性)
       - [3.2 网络性能优化](#32-网络性能优化)
-- [NIOC配置](#nioc配置)
   - [vCenter Server架构分析](#vcenter-server架构分析)
     - [1. vCenter Server组件架构](#1-vcenter-server组件架构)
       - [1.1 服务组件](#11-服务组件)
-- [vCenter服务组件](#vcenter服务组件)
       - [1.2 数据库架构](#12-数据库架构)
     - [2. vCenter Server功能模块](#2-vcenter-server功能模块)
       - [2.1 资源管理](#21-资源管理)
-- [资源池配置](#资源池配置)
       - [2.2 高可用性](#22-高可用性)
-- [HA配置参数](#ha配置参数)
-- [DRS配置参数](#drs配置参数)
   - [虚拟化技术深度分析](#虚拟化技术深度分析)
     - [1. 虚拟机架构](#1-虚拟机架构)
       - [1.1 虚拟硬件抽象](#11-虚拟硬件抽象)
-- [虚拟硬件架构](#虚拟硬件架构)
       - [1.2 虚拟机生命周期](#12-虚拟机生命周期)
     - [2. 高级虚拟化特性](#2-高级虚拟化特性)
       - [2.1 vMotion技术](#21-vmotion技术)
-- [vMotion技术细节](#vmotion技术细节)
       - [2.2 存储vMotion](#22-存储vmotion)
-- [Storage vMotion特性](#storage-vmotion特性)
       - [2.3 容错技术](#23-容错技术)
-- [FT技术特性](#ft技术特性)
   - [性能优化与调优](#性能优化与调优)
     - [1. CPU性能优化](#1-cpu性能优化)
       - [1.1 CPU调度优化](#11-cpu调度优化)
-- [CPU调度配置](#cpu调度配置)
       - [1.2 内存性能优化](#12-内存性能优化)
-- [内存优化策略](#内存优化策略)
     - [2. 存储性能优化](#2-存储性能优化)
       - [2.1 存储I/O优化](#21-存储io优化)
-- [存储优化配置](#存储优化配置)
       - [2.2 网络性能优化](#22-网络性能优化)
-- [网络优化配置](#网络优化配置)
   - [安全架构分析](#安全架构分析)
     - [1. 虚拟化安全](#1-虚拟化安全)
       - [1.1 虚拟机隔离](#11-虚拟机隔离)
-- [VM安全隔离](#vm安全隔离)
       - [1.2 管理安全](#12-管理安全)
-- [管理安全配置](#管理安全配置)
     - [2. 网络安全](#2-网络安全)
       - [2.1 虚拟网络安全](#21-虚拟网络安全)
-- [虚拟网络安全](#虚拟网络安全)
   - [监控与故障排除](#监控与故障排除)
     - [1. 性能监控](#1-性能监控)
       - [1.1 监控指标](#11-监控指标)
-- [性能监控指标](#性能监控指标)
       - [1.2 监控工具](#12-监控工具)
-- [监控工具](#监控工具)
     - [2. 故障排除](#2-故障排除)
       - [2.1 常见问题诊断](#21-常见问题诊断)
-- [故障诊断](#故障诊断)
-  - [总结](#总结)
-  - [10. vSphere生态系统](#10-vsphere生态系统)
-    - [10.1 vSphere产品套件](#101-vsphere产品套件)
-      - [10.1.1 核心产品组件](#1011-核心产品组件)
-      - [10.1.2 扩展产品](#1012-扩展产品)
-    - [10.2 云原生集成](#102-云原生集成)
-      - [10.2.1 Kubernetes集成](#1021-kubernetes集成)
-      - [10.2.2 容器化应用](#1022-容器化应用)
-    - [10.3 混合云架构](#103-混合云架构)
-      - [10.3.1 多云管理](#1031-多云管理)
-      - [10.3.2 边缘计算](#1032-边缘计算)
-  - [11. vSphere最佳实践](#11-vsphere最佳实践)
-    - [11.1 架构设计最佳实践](#111-架构设计最佳实践)
-      - [11.1.1 设计原则](#1111-设计原则)
-      - [11.1.2 部署策略](#1112-部署策略)
-    - [11.2 运维最佳实践](#112-运维最佳实践)
-      - [11.2.1 监控运维](#1121-监控运维)
-      - [11.2.2 变更管理](#1122-变更管理)
-    - [11.3 安全最佳实践](#113-安全最佳实践)
-      - [11.3.1 安全架构](#1131-安全架构)
-      - [11.3.2 合规管理](#1132-合规管理)
-  - [12. vSphere故障排除](#12-vsphere故障排除)
-    - [12.1 故障诊断方法](#121-故障诊断方法)
-      - [12.1.1 诊断流程](#1211-诊断流程)
-      - [12.1.2 诊断工具](#1212-诊断工具)
-    - [12.2 常见问题解决](#122-常见问题解决)
-      - [12.2.1 性能问题](#1221-性能问题)
-      - [12.2.2 可用性问题](#1222-可用性问题)
-  - [13. 总结](#13-总结)
-
-- [vSphere架构深度解析](#vsphere架构深度解析)
-  - [概述](#概述)
-  - [vSphere总体架构](#vsphere总体架构)
-    - [1. 架构层次结构](#1-架构层次结构)
-    - [2. 核心组件关系](#2-核心组件关系)
-- [组件交互示例](#组件交互示例)
-  - [ESXi架构深度分析](#esxi架构深度分析)
-    - [1. ESXi内核架构](#1-esxi内核架构)
-      - [1.1 VMkernel架构](#11-vmkernel架构)
-      - [1.2 虚拟化技术实现](#12-虚拟化技术实现)
-- [CPU虚拟化技术](#cpu虚拟化技术)
-- [内存虚拟化技术](#内存虚拟化技术)
-    - [2. ESXi存储架构](#2-esxi存储架构)
-      - [2.1 存储虚拟化层](#21-存储虚拟化层)
-- [VMFS特性](#vmfs特性)
-      - [2.2 存储I/O路径](#22-存储io路径)
-    - [3. ESXi网络架构](#3-esxi网络架构)
-      - [3.1 虚拟网络层](#31-虚拟网络层)
-- [虚拟网络架构](#虚拟网络架构)
-- [vDS特性](#vds特性)
-      - [3.2 网络性能优化](#32-网络性能优化)
-- [NIOC配置](#nioc配置)
-  - [vCenter Server架构分析](#vcenter-server架构分析)
-    - [1. vCenter Server组件架构](#1-vcenter-server组件架构)
-      - [1.1 服务组件](#11-服务组件)
-- [vCenter服务组件](#vcenter服务组件)
-      - [1.2 数据库架构](#12-数据库架构)
-    - [2. vCenter Server功能模块](#2-vcenter-server功能模块)
-      - [2.1 资源管理](#21-资源管理)
-- [资源池配置](#资源池配置)
-      - [2.2 高可用性](#22-高可用性)
-- [HA配置参数](#ha配置参数)
-- [DRS配置参数](#drs配置参数)
-  - [虚拟化技术深度分析](#虚拟化技术深度分析)
-    - [1. 虚拟机架构](#1-虚拟机架构)
-      - [1.1 虚拟硬件抽象](#11-虚拟硬件抽象)
-- [虚拟硬件架构](#虚拟硬件架构)
-      - [1.2 虚拟机生命周期](#12-虚拟机生命周期)
-    - [2. 高级虚拟化特性](#2-高级虚拟化特性)
-      - [2.1 vMotion技术](#21-vmotion技术)
-- [vMotion技术细节](#vmotion技术细节)
-      - [2.2 存储vMotion](#22-存储vmotion)
-- [Storage vMotion特性](#storage-vmotion特性)
-      - [2.3 容错技术](#23-容错技术)
-- [FT技术特性](#ft技术特性)
-  - [性能优化与调优](#性能优化与调优)
-    - [1. CPU性能优化](#1-cpu性能优化)
-      - [1.1 CPU调度优化](#11-cpu调度优化)
-- [CPU调度配置](#cpu调度配置)
-      - [1.2 内存性能优化](#12-内存性能优化)
-- [内存优化策略](#内存优化策略)
-    - [2. 存储性能优化](#2-存储性能优化)
-      - [2.1 存储I/O优化](#21-存储io优化)
-- [存储优化配置](#存储优化配置)
-      - [2.2 网络性能优化](#22-网络性能优化)
-- [网络优化配置](#网络优化配置)
-  - [安全架构分析](#安全架构分析)
-    - [1. 虚拟化安全](#1-虚拟化安全)
-      - [1.1 虚拟机隔离](#11-虚拟机隔离)
-- [VM安全隔离](#vm安全隔离)
-      - [1.2 管理安全](#12-管理安全)
-- [管理安全配置](#管理安全配置)
-    - [2. 网络安全](#2-网络安全)
-      - [2.1 虚拟网络安全](#21-虚拟网络安全)
-- [虚拟网络安全](#虚拟网络安全)
-  - [监控与故障排除](#监控与故障排除)
-    - [1. 性能监控](#1-性能监控)
-      - [1.1 监控指标](#11-监控指标)
-- [性能监控指标](#性能监控指标)
-      - [1.2 监控工具](#12-监控工具)
-- [监控工具](#监控工具)
-    - [2. 故障排除](#2-故障排除)
-      - [2.1 常见问题诊断](#21-常见问题诊断)
-- [故障诊断](#故障诊断)
-  - [总结](#总结)
   - [10. vSphere生态系统](#10-vsphere生态系统)
     - [10.1 vSphere产品套件](#101-vsphere产品套件)
       - [10.1.1 核心产品组件](#1011-核心产品组件)
@@ -255,7 +124,7 @@ graph TB
 **组件交互关系**:
 
 ```yaml
-# 组件交互示例
+    # 组件交互示例
 vCenter_Server:
   manages: [ESXi_hosts, Virtual_machines, Datastores, Networks]
   provides: [Centralized_management, High_availability, Resource_optimization]
@@ -307,7 +176,7 @@ VMkernel架构层次:
 **CPU虚拟化**:
 
 ```yaml
-# CPU虚拟化技术
+    # CPU虚拟化技术
 CPU_Virtualization:
   Intel_VT_x:
     features: [VMX_instructions, Extended_page_tables, VT_d]
@@ -325,7 +194,7 @@ CPU_Virtualization:
 **内存虚拟化**:
 
 ```yaml
-# 内存虚拟化技术
+    # 内存虚拟化技术
 Memory_Virtualization:
   Shadow_Page_Tables:
     technique: [Guest_PT -> Shadow_PT -> Host_PT]
@@ -361,7 +230,7 @@ graph TB
 **VMFS文件系统**:
 
 ```yaml
-# VMFS特性
+    # VMFS特性
 VMFS_Features:
   version: "VMFS-6"
   features:
@@ -408,7 +277,7 @@ VMFS_Features:
 **虚拟网络组件**:
 
 ```yaml
-# 虚拟网络架构
+    # 虚拟网络架构
 Virtual_Network:
   Virtual_Switch:
     types: [Standard_vSwitch, Distributed_vSwitch]
@@ -428,7 +297,7 @@ Virtual_Network:
 **分布式虚拟交换机**:
 
 ```yaml
-# vDS特性
+    # vDS特性
 Distributed_vSwitch:
   features:
     - "Centralized_management"
@@ -450,7 +319,7 @@ Distributed_vSwitch:
 **网络I/O控制**:
 
 ```yaml
-# NIOC配置
+    # NIOC配置
 Network_I/O_Control:
   traffic_types:
     - "vMotion"
@@ -475,7 +344,7 @@ Network_I/O_Control:
 **vCenter Server服务**:
 
 ```yaml
-# vCenter服务组件
+    # vCenter服务组件
 vCenter_Services:
   vpxd:
     description: "vCenter Server主服务"
@@ -533,7 +402,7 @@ CREATE TABLE vpx_datastore (
 **资源池管理**:
 
 ```yaml
-# 资源池配置
+    # 资源池配置
 Resource_Pool:
   CPU_Resources:
     shares: [Low, Normal, High, Custom]
@@ -557,7 +426,7 @@ Resource_Pool:
 **vSphere HA配置**:
 
 ```yaml
-# HA配置参数
+    # HA配置参数
 vSphere_HA:
   admission_control:
     policy: "Percentage" # Percentage, Slot, Failover
@@ -576,7 +445,7 @@ vSphere_HA:
 **vSphere DRS配置**:
 
 ```yaml
-# DRS配置参数
+    # DRS配置参数
 vSphere_DRS:
   automation_level: "FullyAutomated" # Manual, PartiallyAutomated, FullyAutomated
   migration_threshold: 3 # 1-5 scale
@@ -599,7 +468,7 @@ vSphere_DRS:
 **虚拟硬件组件**:
 
 ```yaml
-# 虚拟硬件架构
+    # 虚拟硬件架构
 Virtual_Hardware:
   CPU:
     type: "Virtual CPU (vCPU)"
@@ -651,7 +520,7 @@ stateDiagram-v2
 **vMotion工作原理**:
 
 ```yaml
-# vMotion技术细节
+    # vMotion技术细节
 vMotion_Technology:
   prerequisites:
     - "Shared_storage"
@@ -676,7 +545,7 @@ vMotion_Technology:
 **Storage vMotion技术**:
 
 ```yaml
-# Storage vMotion特性
+    # Storage vMotion特性
 Storage_vMotion:
   features:
     - "Zero_downtime_migration"
@@ -696,7 +565,7 @@ Storage_vMotion:
 **vSphere Fault Tolerance**:
 
 ```yaml
-# FT技术特性
+    # FT技术特性
 Fault_Tolerance:
   requirements:
     - "FT_compatible_CPUs"
@@ -725,7 +594,7 @@ Fault_Tolerance:
 **CPU调度策略**:
 
 ```yaml
-# CPU调度配置
+    # CPU调度配置
 CPU_Scheduling:
   scheduler: "Co-scheduler"
   features:
@@ -746,7 +615,7 @@ CPU_Scheduling:
 **内存管理优化**:
 
 ```yaml
-# 内存优化策略
+    # 内存优化策略
 Memory_Optimization:
   techniques:
     - "Memory_overcommit"
@@ -768,7 +637,7 @@ Memory_Optimization:
 **存储性能调优**:
 
 ```yaml
-# 存储优化配置
+    # 存储优化配置
 Storage_Optimization:
   queue_depth:
     default: 32
@@ -790,7 +659,7 @@ Storage_Optimization:
 **网络性能调优**:
 
 ```yaml
-# 网络优化配置
+    # 网络优化配置
 Network_Optimization:
   virtual_switches:
     - "Use_vDS_when_possible"
@@ -813,7 +682,7 @@ Network_Optimization:
 **VM隔离机制**:
 
 ```yaml
-# VM安全隔离
+    # VM安全隔离
 VM_Isolation:
   hardware_isolation:
     - "CPU_virtualization"
@@ -833,7 +702,7 @@ VM_Isolation:
 **管理安全控制**:
 
 ```yaml
-# 管理安全配置
+    # 管理安全配置
 Management_Security:
   authentication:
     - "Active_Directory_integration"
@@ -855,7 +724,7 @@ Management_Security:
 **虚拟网络安全**:
 
 ```yaml
-# 虚拟网络安全
+    # 虚拟网络安全
 Virtual_Network_Security:
   micro_segmentation:
     - "NSX_distributed_firewall"
@@ -879,7 +748,7 @@ Virtual_Network_Security:
 **关键性能指标**:
 
 ```yaml
-# 性能监控指标
+    # 性能监控指标
 Performance_Metrics:
   CPU:
     - "CPU_utilization"
@@ -911,7 +780,7 @@ Performance_Metrics:
 **监控工具集成**:
 
 ```yaml
-# 监控工具
+    # 监控工具
 Monitoring_Tools:
   vSphere_native:
     - "vCenter_Server_performance_charts"
@@ -933,7 +802,7 @@ Monitoring_Tools:
 **故障诊断流程**:
 
 ```yaml
-# 故障诊断
+    # 故障诊断
 Troubleshooting:
   performance_issues:
     1: "Identify_bottleneck"

@@ -49,7 +49,7 @@
   - [10. 常见陷阱与案例（新增）](#10-常见陷阱与案例新增)
 
 
-# vSAN 性能与重建策略（最小可用）
+    # vSAN 性能与重建策略（最小可用）
 
 ## 1. 目标
 
@@ -94,17 +94,17 @@ manifest 字段：cluster、faultDomains、timeRange、metrics、hashes、ticket
 ### 6.1 vSAN 重建监控与导出（示例）
 
 ```powershell
-# 通过 PowerCLI 调用 vSAN API（需相应模块与权限）
+    # 通过 PowerCLI 调用 vSAN API（需相应模块与权限）
 $cluster = Get-Cluster -Name "Prod-Cluster"
 $vsanView = Get-View -Id $cluster.ExtensionData.MoRef
-# 示例：获取 vSAN 性能计数器（具体对象与路径按环境调整）
-# 也可配合 RVC/vSAN Observer 导出
+    # 示例：获取 vSAN 性能计数器（具体对象与路径按环境调整）
+    # 也可配合 RVC/vSAN Observer 导出
 
-# 伪示例：导出 Resync I/O 与延迟（替换为实际查询）
+    # 伪示例：导出 Resync I/O 与延迟（替换为实际查询）
 "timestamp,metric,value" | Set-Content vsan-resync-io.csv
 Get-Date -Format o | ForEach-Object { "$_,resync_iops,123" } | Add-Content vsan-resync-io.csv
 
-# 生成清单与哈希
+    # 生成清单与哈希
 $date = Get-Date -Format 'yyyy-MM-dd'
 New-Item -ItemType Directory -Force -Path "artifacts/$date" | Out-Null
 Get-FileHash -Algorithm SHA256 vsan-resync-io.csv | Select Hash | Set-Content "artifacts/$date/vsan-resync-io.csv.sha256"
@@ -119,7 +119,7 @@ Get-FileHash -Algorithm SHA256 vsan-resync-io.csv | Select Hash | Set-Content "a
 ### 6.2 vSAN Observer 导出（可选）
 
 ```bash
-# 在 RVC/vSAN Observer 主机上（示意，按版本调整命令）
+    # 在 RVC/vSAN Observer 主机上（示意，按版本调整命令）
 vsan-observer --run-webserver --force --cluster Prod-Cluster --duration 3600 --generate-json /var/tmp/vsan-observer
 tar -czf vsan-observer-$(date +%F).tar.gz /var/tmp/vsan-observer
 sha256sum vsan-observer-*.tar.gz > vsan-observer-*.tar.gz.sha256
@@ -128,7 +128,7 @@ sha256sum vsan-observer-*.tar.gz > vsan-observer-*.tar.gz.sha256
 ### 6.3 RVC 与 vSAN Performance API（示例）
 
 ```bash
-# RVC 执行（示意，按环境替换登录与路径）
+    # RVC 执行（示意，按环境替换登录与路径）
 rvc administrator@vsphere.local@vcenter.example.com
 > cd /vcenter.example.com/datacenter/computers/Prod-Cluster
 > vsan.perf.stats_dump . --metrics resync_iops,dom_latency --start "1h"
@@ -136,10 +136,10 @@ rvc administrator@vsphere.local@vcenter.example.com
 ```
 
 ```powershell
-# vSAN Performance API（伪示例，需对应 SDK）
+    # vSAN Performance API（伪示例，需对应 SDK）
 $svc = Get-View ServiceInstance
 $perfMgr = Get-View $svc.Content.PerfManager
-# TODO: 构造 vSAN 特定的查询（按 SDK 指南），导出为 CSV
+    # TODO: 构造 vSAN 特定的查询（按 SDK 指南），导出为 CSV
 "timestamp,metric,value" | Set-Content vsan-dom-latency.csv
 ```
 

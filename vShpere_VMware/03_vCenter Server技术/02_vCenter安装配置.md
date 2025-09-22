@@ -1,4 +1,4 @@
-# vCenter安装配置深度解析
+    # vCenter安装配置深度解析
 
 ## 目录
 
@@ -358,36 +358,36 @@
 #### Windows安装
 
 ```bash
-# 1. 准备Windows Server环境
-# 2. 下载vCenter安装包
-# 3. 运行安装程序
-# 4. 选择安装类型
-# 5. 配置数据库连接
-# 6. 配置网络设置
-# 7. 设置管理员账户
-# 8. 完成安装
+    # 1. 准备Windows Server环境
+    # 2. 下载vCenter安装包
+    # 3. 运行安装程序
+    # 4. 选择安装类型
+    # 5. 配置数据库连接
+    # 6. 配置网络设置
+    # 7. 设置管理员账户
+    # 8. 完成安装
 ```
 
 #### Linux安装
 
 ```bash
-# 1. 准备Linux环境
-# 2. 下载vCenter安装包
-# 3. 解压安装包
-# 4. 运行安装脚本
-# 5. 配置安装参数
-# 6. 执行安装
-# 7. 验证安装结果
+    # 1. 准备Linux环境
+    # 2. 下载vCenter安装包
+    # 3. 解压安装包
+    # 4. 运行安装脚本
+    # 5. 配置安装参数
+    # 6. 执行安装
+    # 7. 验证安装结果
 ```
 
 #### vCenter Server Appliance
 
 ```bash
-# 1. 下载vCenter Server Appliance
-# 2. 部署到ESXi主机
-# 3. 配置网络设置
-# 4. 启动vCenter服务
-# 5. 完成初始配置
+    # 1. 下载vCenter Server Appliance
+    # 2. 部署到ESXi主机
+    # 3. 配置网络设置
+    # 4. 启动vCenter服务
+    # 5. 完成初始配置
 ```
 
 ### 2.2 安装步骤
@@ -417,28 +417,28 @@
 #### 系统配置
 
 ```bash
-# 配置主机名
+    # 配置主机名
 hostnamectl set-hostname vcenter.example.com
 
-# 配置网络
+    # 配置网络
 ip addr add 192.168.1.100/24 dev eth0
 ip route add default via 192.168.1.1
 
-# 配置DNS
+    # 配置DNS
 echo "nameserver 8.8.8.8" >> /etc/resolv.conf
 
-# 配置NTP
+    # 配置NTP
 timedatectl set-ntp true
 ```
 
 #### 服务配置
 
 ```bash
-# 启动vCenter服务
+    # 启动vCenter服务
 service-control --start vpxd
 service-control --start vsphere-ui
 
-# 检查服务状态
+    # 检查服务状态
 service-control --status vpxd
 service-control --status vsphere-ui
 ```
@@ -448,20 +448,20 @@ service-control --status vsphere-ui
 #### 时间配置
 
 ```bash
-# 设置时区
+    # 设置时区
 timedatectl set-timezone Asia/Shanghai
 
-# 同步时间
+    # 同步时间
 timedatectl set-ntp true
 ```
 
 #### 日志配置
 
 ```bash
-# 配置日志级别
+    # 配置日志级别
 vpxd_servicecfg system set --option=config.vpxd.log.level --value=info
 
-# 配置日志目录
+    # 配置日志目录
 vpxd_servicecfg system set --option=config.vpxd.log.directory --value=/var/log/vmware/vpxd
 ```
 
@@ -488,10 +488,10 @@ vpxd_servicecfg system set --option=config.vpxd.log.directory --value=/var/log/v
 #### PostgreSQL配置
 
 ```bash
-# 配置PostgreSQL连接
+    # 配置PostgreSQL连接
 vpxd_servicecfg database set --host=db-server --port=5432 --database=vcdb --username=vpxuser --password=password
 
-# 配置数据库参数
+    # 配置数据库参数
 vpxd_servicecfg database set --option=shared_buffers --value=256MB
 vpxd_servicecfg database set --option=work_mem --value=4MB
 ```
@@ -499,10 +499,10 @@ vpxd_servicecfg database set --option=work_mem --value=4MB
 #### Oracle配置
 
 ```bash
-# 配置Oracle连接
+    # 配置Oracle连接
 vpxd_servicecfg database set --host=oracle-server --port=1521 --database=orcl --username=vpxuser --password=password
 
-# 配置Oracle参数
+    # 配置Oracle参数
 vpxd_servicecfg database set --option=db_block_size --value=8192
 vpxd_servicecfg database set --option=sga_target --value=1G
 ```
@@ -514,24 +514,24 @@ vpxd_servicecfg database set --option=sga_target --value=1G
 #### 网络接口管理
 
 ```bash
-# 查看网络接口
+    # 查看网络接口
 ip addr show
 
-# 配置网络接口
+    # 配置网络接口
 ip addr add 192.168.1.100/24 dev eth0
 ip link set eth0 up
 
-# 配置路由
+    # 配置路由
 ip route add default via 192.168.1.1
 ```
 
 #### 网络服务配置
 
 ```bash
-# 配置网络服务
+    # 配置网络服务
 vpxd_servicecfg network set --option=config.vpxd.network.port --value=443
 
-# 配置SSL证书
+    # 配置SSL证书
 vpxd_servicecfg network set --option=config.vpxd.network.ssl --value=true
 ```
 
@@ -540,7 +540,7 @@ vpxd_servicecfg network set --option=config.vpxd.network.ssl --value=true
 #### 防火墙配置
 
 ```bash
-# 配置防火墙
+    # 配置防火墙
 ufw enable
 ufw allow 443/tcp
 ufw allow 80/tcp
@@ -550,7 +550,7 @@ ufw allow 22/tcp
 #### SSL配置
 
 ```bash
-# 配置SSL证书
+    # 配置SSL证书
 vpxd_servicecfg network set --option=config.vpxd.network.ssl.certificate --value=/etc/ssl/certs/vcenter.crt
 vpxd_servicecfg network set --option=config.vpxd.network.ssl.privatekey --value=/etc/ssl/private/vcenter.key
 ```
@@ -562,20 +562,20 @@ vpxd_servicecfg network set --option=config.vpxd.network.ssl.privatekey --value=
 #### 用户管理
 
 ```bash
-# 创建本地用户
+    # 创建本地用户
 vpxd_servicecfg user add --username=admin --password=password --role=Administrator
 
-# 配置域认证
+    # 配置域认证
 vpxd_servicecfg domain set --domain=example.com --username=administrator --password=password
 ```
 
 #### 权限配置
 
 ```bash
-# 配置权限
+    # 配置权限
 vpxd_servicecfg permission set --username=admin --role=Administrator
 
-# 配置安全策略
+    # 配置安全策略
 vpxd_servicecfg security set --option=config.vpxd.security.password.minlength --value=8
 ```
 
@@ -584,7 +584,7 @@ vpxd_servicecfg security set --option=config.vpxd.security.password.minlength --
 #### 安全参数
 
 ```bash
-# 配置安全参数
+    # 配置安全参数
 vpxd_servicecfg security set --option=config.vpxd.security.session.timeout --value=3600
 vpxd_servicecfg security set --option=config.vpxd.security.audit.enabled --value=true
 ```
@@ -596,20 +596,20 @@ vpxd_servicecfg security set --option=config.vpxd.security.audit.enabled --value
 #### HA配置
 
 ```bash
-# 配置vCenter HA
+    # 配置vCenter HA
 vpxd_servicecfg ha set --enabled=true --active-node=vcenter1 --passive-node=vcenter2 --witness-node=vcenter3
 
-# 配置HA网络
+    # 配置HA网络
 vpxd_servicecfg ha set --option=config.vpxd.ha.network --value=192.168.100.0/24
 ```
 
 #### HA监控
 
 ```bash
-# 查看HA状态
+    # 查看HA状态
 vpxd_servicecfg ha status
 
-# 配置HA监控
+    # 配置HA监控
 vpxd_servicecfg ha set --option=config.vpxd.ha.monitor.interval --value=30
 ```
 
@@ -618,10 +618,10 @@ vpxd_servicecfg ha set --option=config.vpxd.ha.monitor.interval --value=30
 #### 数据库集群
 
 ```bash
-# 配置数据库集群
+    # 配置数据库集群
 vpxd_servicecfg database set --cluster=true --primary=db1 --secondary=db2 --witness=db3
 
-# 配置数据库复制
+    # 配置数据库复制
 vpxd_servicecfg database set --option=config.vpxd.database.replication.enabled --value=true
 ```
 
@@ -632,7 +632,7 @@ vpxd_servicecfg database set --option=config.vpxd.database.replication.enabled -
 #### 系统参数
 
 ```bash
-# 配置系统参数
+    # 配置系统参数
 vpxd_servicecfg system set --option=config.vpxd.system.memory.max --value=8G
 vpxd_servicecfg system set --option=config.vpxd.system.cpu.max --value=4
 ```
@@ -640,7 +640,7 @@ vpxd_servicecfg system set --option=config.vpxd.system.cpu.max --value=4
 #### 性能优化
 
 ```bash
-# 配置性能优化
+    # 配置性能优化
 vpxd_servicecfg performance set --option=config.vpxd.performance.cache.size --value=1G
 vpxd_servicecfg performance set --option=config.vpxd.performance.threads.max --value=100
 ```
@@ -650,7 +650,7 @@ vpxd_servicecfg performance set --option=config.vpxd.performance.threads.max --v
 #### 数据库优化
 
 ```bash
-# 配置数据库优化
+    # 配置数据库优化
 vpxd_servicecfg database set --option=config.vpxd.database.connection.pool.size --value=50
 vpxd_servicecfg database set --option=config.vpxd.database.query.timeout --value=300
 ```
@@ -678,16 +678,16 @@ vpxd_servicecfg database set --option=config.vpxd.database.query.timeout --value
 #### 诊断工具
 
 ```bash
-# 查看系统日志
+    # 查看系统日志
 tail -f /var/log/vmware/vpxd/vpxd.log
 
-# 查看服务状态
+    # 查看服务状态
 service-control --status vpxd
 
-# 查看系统状态
+    # 查看系统状态
 vpxd_servicecfg system status
 
-# 查看网络状态
+    # 查看网络状态
 ip addr show
 ```
 

@@ -1,4 +1,4 @@
-# ESXi主机管理深度解析
+    # ESXi主机管理深度解析
 
 ## 目录
 
@@ -526,13 +526,13 @@ ESXi（Elastic Sky X Integrated）是VMware开发的Type-1虚拟化管理程序�
 #### 安装步骤
 
 ```bash
-# 1. 准备安装介质
-# 2. 配置BIOS/UEFI设置
-# 3. 启动安装程序
-# 4. 选择安装位置
-# 5. 配置网络设置
-# 6. 设置root密码
-# 7. 完成安装
+    # 1. 准备安装介质
+    # 2. 配置BIOS/UEFI设置
+    # 3. 启动安装程序
+    # 4. 选择安装位置
+    # 5. 配置网络设置
+    # 6. 设置root密码
+    # 7. 完成安装
 ```
 
 ### 2.3 初始配置
@@ -540,16 +540,16 @@ ESXi（Elastic Sky X Integrated）是VMware开发的Type-1虚拟化管理程序�
 #### 基本配置
 
 ```bash
-# 配置主机名
+    # 配置主机名
 esxcli system hostname set --host=esxi-host-01
 
-# 配置网络
+    # 配置网络
 esxcli network ip interface ipv4 set --interface-name=vmk0 --type=static --ipv4=192.168.1.100 --netmask=255.255.255.0
 
-# 配置DNS
+    # 配置DNS
 esxcli network ip dns server add --server=8.8.8.8
 
-# 配置NTP
+    # 配置NTP
 esxcli system ntp set --enabled=true
 esxcli system ntp server add --server=pool.ntp.org
 ```
@@ -569,15 +569,15 @@ esxcli system ntp server add --server=pool.ntp.org
 #### 连接配置
 
 ```bash
-# 启用SSH
+    # 启用SSH
 vim-cmd hostsvc/enable_ssh
 vim-cmd hostsvc/start_ssh
 
-# 启用ESXi Shell
+    # 启用ESXi Shell
 vim-cmd hostsvc/enable_esx_shell
 vim-cmd hostsvc/start_esx_shell
 
-# 配置防火墙
+    # 配置防火墙
 esxcli network firewall set --enabled=true
 esxcli network firewall ruleset set --ruleset-id=sshServer --enabled=true
 ```
@@ -587,12 +587,12 @@ esxcli network firewall ruleset set --ruleset-id=sshServer --enabled=true
 #### 系统配置
 
 ```bash
-# 查看系统信息
+    # 查看系统信息
 esxcli system version get
 esxcli system hostname get
 esxcli system time get
 
-# 配置系统参数
+    # 配置系统参数
 esxcli system settings advanced set --option=Mem.AllocGuestLargePage --int-value=1
 esxcli system settings advanced set --option=Net.TcpipHeapSize --int-value=32
 ```
@@ -600,12 +600,12 @@ esxcli system settings advanced set --option=Net.TcpipHeapSize --int-value=32
 #### 硬件配置
 
 ```bash
-# 查看硬件信息
+    # 查看硬件信息
 esxcli hardware cpu global get
 esxcli hardware memory get
 esxcli hardware pci list
 
-# 配置硬件参数
+    # 配置硬件参数
 esxcli system module parameters set --module=vmw_pvscsi --parameter-string="ring_pages=32"
 ```
 
@@ -614,29 +614,29 @@ esxcli system module parameters set --module=vmw_pvscsi --parameter-string="ring
 #### 性能监控
 
 ```bash
-# 查看CPU使用情况
+    # 查看CPU使用情况
 esxcli system stats cpu get
 
-# 查看内存使用情况
+    # 查看内存使用情况
 esxcli system stats memory get
 
-# 查看网络统计
+    # 查看网络统计
 esxcli network stats get
 
-# 查看存储统计
+    # 查看存储统计
 esxcli storage core device stats get
 ```
 
 #### 健康监控
 
 ```bash
-# 查看系统健康状态
+    # 查看系统健康状态
 esxcli system health get
 
-# 查看硬件健康状态
+    # 查看硬件健康状态
 esxcli hardware health get
 
-# 查看日志
+    # 查看日志
 esxcli system syslog config get
 ```
 
@@ -654,13 +654,13 @@ esxcli system syslog config get
 #### CPU配置
 
 ```bash
-# 查看CPU信息
+    # 查看CPU信息
 esxcli hardware cpu global get
 
-# 配置CPU调度
+    # 配置CPU调度
 esxcli system settings advanced set --option=CPU.SchedAffinity --int-value=1
 
-# 配置CPU限制
+    # 配置CPU限制
 esxcli vm process list
 esxcli vm process kill --type=force --world-id=12345
 ```
@@ -677,10 +677,10 @@ esxcli vm process kill --type=force --world-id=12345
 #### 内存配置
 
 ```bash
-# 查看内存信息
+    # 查看内存信息
 esxcli hardware memory get
 
-# 配置内存参数
+    # 配置内存参数
 esxcli system settings advanced set --option=Mem.AllocGuestLargePage --int-value=1
 esxcli system settings advanced set --option=Mem.MemEagerZero --int-value=1
 ```
@@ -697,13 +697,13 @@ esxcli system settings advanced set --option=Mem.MemEagerZero --int-value=1
 #### 存储配置
 
 ```bash
-# 查看存储设备
+    # 查看存储设备
 esxcli storage core device list
 
-# 配置存储路径
+    # 配置存储路径
 esxcli storage nmp satp rule add --satp=VMW_SATP_LOCAL --device=naa.xxx
 
-# 配置存储多路径
+    # 配置存储多路径
 esxcli storage nmp psp roundrobin deviceconfig set --device=naa.xxx --iops=1000
 ```
 
@@ -719,14 +719,14 @@ esxcli storage nmp psp roundrobin deviceconfig set --device=naa.xxx --iops=1000
 #### 网络配置
 
 ```bash
-# 查看网络配置
+    # 查看网络配置
 esxcli network vswitch standard list
 esxcli network ip interface list
 
-# 创建虚拟交换机
+    # 创建虚拟交换机
 esxcli network vswitch standard add --vswitch-name=vSwitch1
 
-# 配置端口组
+    # 配置端口组
 esxcli network vswitch standard portgroup add --portgroup-name=VM Network --vswitch-name=vSwitch1
 ```
 
@@ -737,23 +737,23 @@ esxcli network vswitch standard portgroup add --portgroup-name=VM Network --vswi
 #### 用户管理
 
 ```bash
-# 创建本地用户
+    # 创建本地用户
 esxcli system account add --id=admin --password=password --role=Administrator
 
-# 配置域认证
+    # 配置域认证
 esxcli system domain join --domain=example.com --username=administrator --password=password
 
-# 配置LDAP认证
+    # 配置LDAP认证
 esxcli system ldap set --server=ldap.example.com --port=389
 ```
 
 #### 权限管理
 
 ```bash
-# 查看权限
+    # 查看权限
 esxcli system permission list
 
-# 配置权限
+    # 配置权限
 esxcli system permission set --id=admin --role=Administrator
 ```
 
@@ -762,23 +762,23 @@ esxcli system permission set --id=admin --role=Administrator
 #### 安全加固
 
 ```bash
-# 配置防火墙
+    # 配置防火墙
 esxcli network firewall set --enabled=true
 
-# 配置安全参数
+    # 配置安全参数
 esxcli system settings advanced set --option=Security.PasswordQualityControl --string-value=similar=deny
 
-# 配置审计日志
+    # 配置审计日志
 esxcli system audit set --enabled=true
 ```
 
 #### 加密配置
 
 ```bash
-# 启用存储加密
+    # 启用存储加密
 esxcli storage vmfs encryption set --enabled=true
 
-# 配置网络加密
+    # 配置网络加密
 esxcli network ip interface set --interface-name=vmk0 --enable-ipv6=false
 ```
 
@@ -787,10 +787,10 @@ esxcli network ip interface set --interface-name=vmk0 --enable-ipv6=false
 #### 安全审计
 
 ```bash
-# 查看审计日志
+    # 查看审计日志
 esxcli system audit get
 
-# 配置安全监控
+    # 配置安全监控
 esxcli system settings advanced set --option=Security.AccountLockFailures --int-value=5
 ```
 
@@ -808,10 +808,10 @@ esxcli system settings advanced set --option=Security.AccountLockFailures --int-
 #### 监控工具
 
 ```bash
-# 使用esxtop监控
+    # 使用esxtop监控
 esxtop
 
-# 使用esxcli监控
+    # 使用esxcli监控
 esxcli system stats cpu get
 esxcli system stats memory get
 esxcli network stats get
@@ -823,20 +823,20 @@ esxcli storage core device stats get
 #### CPU调优
 
 ```bash
-# 配置CPU调度
+    # 配置CPU调度
 esxcli system settings advanced set --option=CPU.SchedAffinity --int-value=1
 
-# 配置CPU限制
+    # 配置CPU限制
 esxcli system settings advanced set --option=CPU.SchedLatency --int-value=20000
 ```
 
 #### 内存调优
 
 ```bash
-# 配置内存压缩
+    # 配置内存压缩
 esxcli system settings advanced set --option=Mem.MemZipEnable --int-value=1
 
-# 配置内存回收
+    # 配置内存回收
 esxcli system settings advanced set --option=Mem.MemEagerZero --int-value=1
 ```
 
@@ -863,15 +863,15 @@ esxcli system settings advanced set --option=Mem.MemEagerZero --int-value=1
 #### 检测方法
 
 ```bash
-# 查看系统日志
+    # 查看系统日志
 esxcli system syslog config get
 tail -f /var/log/vmware/hostd.log
 
-# 查看硬件状态
+    # 查看硬件状态
 esxcli hardware health get
 esxcli hardware pci list
 
-# 查看服务状态
+    # 查看服务状态
 esxcli system service list
 ```
 
@@ -887,12 +887,12 @@ esxcli system service list
 #### 分析工具
 
 ```bash
-# 使用esxcli分析
+    # 使用esxcli分析
 esxcli system stats cpu get
 esxcli system stats memory get
 esxcli network stats get
 
-# 使用vmware-cmd分析
+    # 使用vmware-cmd分析
 vmware-cmd -l
 vmware-cmd -s getstate
 ```
@@ -909,11 +909,11 @@ vmware-cmd -s getstate
 #### 恢复步骤
 
 ```bash
-# 1. 诊断故障原因
-# 2. 制定恢复计划
-# 3. 执行恢复操作
-# 4. 验证恢复结果
-# 5. 监控系统状态
+    # 1. 诊断故障原因
+    # 2. 制定恢复计划
+    # 3. 执行恢复操作
+    # 4. 验证恢复结果
+    # 5. 监控系统状态
 ```
 
 ## 8. ESXi维护管理
@@ -930,13 +930,13 @@ vmware-cmd -s getstate
 #### 补丁安装
 
 ```bash
-# 查看已安装补丁
+    # 查看已安装补丁
 esxcli software vib list
 
-# 安装补丁
+    # 安装补丁
 esxcli software vib install --viburl=patch.vib
 
-# 更新补丁
+    # 更新补丁
 esxcli software profile update --profile=ESXi-7.0.0-12345678-standard
 ```
 
@@ -952,10 +952,10 @@ esxcli software profile update --profile=ESXi-7.0.0-12345678-standard
 #### 备份方法
 
 ```bash
-# 备份配置
+    # 备份配置
 esxcli system settings advanced list > config_backup.txt
 
-# 备份虚拟机
+    # 备份虚拟机
 vmware-cmd -s snapshot
 vmware-cmd -s snapshotremove
 ```
@@ -972,11 +972,11 @@ vmware-cmd -s snapshotremove
 #### 升级步骤
 
 ```bash
-# 1. 备份当前系统
-# 2. 下载升级包
-# 3. 执行升级
-# 4. 验证升级结果
-# 5. 回滚（如需要）
+    # 1. 备份当前系统
+    # 2. 下载升级包
+    # 3. 执行升级
+    # 4. 验证升级结果
+    # 5. 回滚（如需要）
 ```
 
 ## 9. ESXi最佳实践

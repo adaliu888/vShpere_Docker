@@ -1,4 +1,4 @@
-# OCI标准详解
+    # OCI标准详解
 
 ## 概述
 
@@ -274,7 +274,7 @@ graph TB
 ### 标准演进
 
 ```yaml
-# OCI标准版本演进
+    # OCI标准版本演进
 oci_standards:
   image_spec:
     v1.0.0: "2017-07-19"
@@ -397,7 +397,7 @@ oci_standards:
 #### 层结构
 
 ```bash
-# 层文件系统结构
+    # 层文件系统结构
 layer/
 ├── bin/
 ├── etc/
@@ -409,13 +409,13 @@ layer/
 #### 层操作
 
 ```bash
-# 创建层
+    # 创建层
 tar -czf layer.tar.gz -C layer/ .
 
-# 计算层摘要
+    # 计算层摘要
 sha256sum layer.tar.gz
 
-# 验证层完整性
+    # 验证层完整性
 sha256sum -c layer.sha256
 ```
 
@@ -703,7 +703,7 @@ graph LR
 #### 钩子类型
 
 ```bash
-# 预启动钩子
+    # 预启动钩子
 {
   "path": "/usr/bin/fix-mounts",
   "args": ["fix-mounts", "arg1", "arg2"],
@@ -711,13 +711,13 @@ graph LR
   "timeout": 30
 }
 
-# 启动后钩子
+    # 启动后钩子
 {
   "path": "/usr/bin/notify-start",
   "timeout": 5
 }
 
-# 停止后钩子
+    # 停止后钩子
 {
   "path": "/usr/bin/cleanup.sh"
 }
@@ -730,18 +730,18 @@ graph LR
 #### 清单操作
 
 ```http
-# 获取清单
+    # 获取清单
 GET /v2/<name>/manifests/<reference>
 Host: <registry>
 Authorization: Bearer <token>
 
-# 推送清单
+    # 推送清单
 PUT /v2/<name>/manifests/<reference>
 Host: <registry>
 Authorization: Bearer <token>
 Content-Type: application/vnd.oci.image.manifest.v1+json
 
-# 删除清单
+    # 删除清单
 DELETE /v2/<name>/manifests/<reference>
 Host: <registry>
 Authorization: Bearer <token>
@@ -750,18 +750,18 @@ Authorization: Bearer <token>
 #### Blob操作
 
 ```http
-# 获取Blob
+    # 获取Blob
 GET /v2/<name>/blobs/<digest>
 Host: <registry>
 Authorization: Bearer <token>
 
-# 推送Blob
+    # 推送Blob
 PUT /v2/<name>/blobs/uploads/<uuid>
 Host: <registry>
 Authorization: Bearer <token>
 Content-Type: application/octet-stream
 
-# 检查Blob存在
+    # 检查Blob存在
 HEAD /v2/<name>/blobs/<digest>
 Host: <registry>
 Authorization: Bearer <token>
@@ -772,12 +772,12 @@ Authorization: Bearer <token>
 #### Token认证
 
 ```http
-# 获取Token
+    # 获取Token
 GET /v2/token?service=<service>&scope=<scope>
 Host: <auth-server>
 Authorization: Basic <base64-credentials>
 
-# 响应
+    # 响应
 {
   "token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...",
   "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...",
@@ -789,10 +789,10 @@ Authorization: Basic <base64-credentials>
 #### 范围定义
 
 ```bash
-# 范围格式
+    # 范围格式
 scope = <resource-type>:<resource-name>:<actions>
 
-# 示例
+    # 示例
 repository:library/nginx:pull
 repository:library/nginx:pull,push
 registry:catalog:*
@@ -830,7 +830,7 @@ registry:catalog:*
 #### 标准媒体类型
 
 ```yaml
-# 镜像相关
+    # 镜像相关
 image_media_types:
   manifest: "application/vnd.oci.image.manifest.v1+json"
   manifest_list: "application/vnd.oci.image.index.v1+json"
@@ -838,7 +838,7 @@ image_media_types:
   layer: "application/vnd.oci.image.layer.v1.tar+gzip"
   layer_nondistributable: "application/vnd.oci.image.layer.nondistributable.v1.tar+gzip"
 
-# 运行时相关
+    # 运行时相关
 runtime_media_types:
   config: "application/vnd.oci.runtime.config.v1+json"
   state: "application/vnd.oci.runtime.state.v1+json"
@@ -851,32 +851,32 @@ runtime_media_types:
 #### 使用buildah构建
 
 ```bash
-# 创建容器
+    # 创建容器
 buildah from ubuntu:20.04
 
-# 配置容器
+    # 配置容器
 buildah config --label "org.opencontainers.image.title=My App" mycontainer
 buildah config --port 8080 mycontainer
 buildah config --user 1000:1000 mycontainer
 
-# 安装软件
+    # 安装软件
 buildah run mycontainer -- apt-get update
 buildah run mycontainer -- apt-get install -y nginx
 
-# 提交镜像
+    # 提交镜像
 buildah commit mycontainer myapp:latest
 ```
 
 #### 使用skopeo操作
 
 ```bash
-# 复制镜像
+    # 复制镜像
 skopeo copy docker://nginx:latest oci:nginx:latest
 
-# 检查镜像
+    # 检查镜像
 skopeo inspect oci:nginx:latest
 
-# 同步镜像
+    # 同步镜像
 skopeo sync --src docker --dest oci nginx:latest oci:nginx:latest
 ```
 
@@ -885,29 +885,29 @@ skopeo sync --src docker --dest oci nginx:latest oci:nginx:latest
 #### 使用runc运行
 
 ```bash
-# 创建运行时配置
+    # 创建运行时配置
 runc spec
 
-# 运行容器
+    # 运行容器
 runc run mycontainer
 
-# 列出容器
+    # 列出容器
 runc list
 
-# 停止容器
+    # 停止容器
 runc kill mycontainer SIGTERM
 ```
 
 #### 使用crun运行
 
 ```bash
-# 创建运行时配置
+    # 创建运行时配置
 crun spec
 
-# 运行容器
+    # 运行容器
 crun run mycontainer
 
-# 列出容器
+    # 列出容器
 crun list
 ```
 
@@ -916,13 +916,13 @@ crun list
 #### 使用containerd分发
 
 ```bash
-# 拉取镜像
+    # 拉取镜像
 ctr images pull docker.io/library/nginx:latest
 
-# 推送镜像
+    # 推送镜像
 ctr images push docker.io/myregistry/myapp:latest
 
-# 列出镜像
+    # 列出镜像
 ctr images list
 ```
 
@@ -933,13 +933,13 @@ ctr images list
 #### 多阶段构建
 
 ```dockerfile
-# 构建阶段
+    # 构建阶段
 FROM golang:1.19-alpine AS builder
 WORKDIR /app
 COPY . .
 RUN go build -o myapp .
 
-# 运行阶段
+    # 运行阶段
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 WORKDIR /root/
@@ -950,13 +950,13 @@ CMD ["./myapp"]
 #### 层优化
 
 ```bash
-# 合并RUN指令
+    # 合并RUN指令
 RUN apt-get update && \
     apt-get install -y nginx && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# 使用.dockerignore
+    # 使用.dockerignore
 echo "node_modules" >> .dockerignore
 echo "*.log" >> .dockerignore
 ```
@@ -1011,23 +1011,23 @@ echo "*.log" >> .dockerignore
 #### 镜像签名
 
 ```bash
-# 创建签名密钥
+    # 创建签名密钥
 cosign generate-key-pair
 
-# 签名镜像
+    # 签名镜像
 cosign sign --key cosign.key myregistry/myapp:latest
 
-# 验证签名
+    # 验证签名
 cosign verify --key cosign.pub myregistry/myapp:latest
 ```
 
 #### 漏洞扫描
 
 ```bash
-# 使用trivy扫描
+    # 使用trivy扫描
 trivy image myregistry/myapp:latest
 
-# 使用grype扫描
+    # 使用grype扫描
 grype myregistry/myapp:latest
 ```
 

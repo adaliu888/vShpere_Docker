@@ -1,4 +1,4 @@
-# vSAN技术详解深度解析
+    # vSAN技术详解深度解析
 
 ## 目录
 
@@ -336,10 +336,10 @@ vSAN（Virtual SAN）是VMware开发的软件定义存储技术，将ESXi主机�
 #### 硬件配置
 
 ```bash
-# 查看存储设备
+    # 查看存储设备
 esxcli storage core device list
 
-# 配置存储设备
+    # 配置存储设备
 esxcli storage nmp satp rule add --satp=VMW_SATP_LOCAL --device=naa.xxx
 ```
 
@@ -348,17 +348,17 @@ esxcli storage nmp satp rule add --satp=VMW_SATP_LOCAL --device=naa.xxx
 #### vSAN网络
 
 ```bash
-# 配置vSAN网络
+    # 配置vSAN网络
 esxcli network vswitch standard portgroup add --portgroup-name=vSAN --vswitch-name=vSwitch0
 
-# 配置vSAN IP
+    # 配置vSAN IP
 esxcli network ip interface ipv4 set --interface-name=vmk1 --type=static --ipv4=192.168.100.10 --netmask=255.255.255.0
 ```
 
 #### 网络优化
 
 ```bash
-# 配置网络优化
+    # 配置网络优化
 esxcli system settings advanced set --option=Net.TcpipHeapSize --value=32
 esxcli system settings advanced set --option=Net.TcpipHeapMax --value=1536
 ```
@@ -368,20 +368,20 @@ esxcli system settings advanced set --option=Net.TcpipHeapMax --value=1536
 #### 启用vSAN
 
 ```bash
-# 启用vSAN
+    # 启用vSAN
 esxcli vsan cluster join --cluster-uuid=cluster-uuid
 
-# 查看vSAN状态
+    # 查看vSAN状态
 esxcli vsan cluster get
 ```
 
 #### 配置存储策略
 
 ```bash
-# 创建存储策略
+    # 创建存储策略
 New-SpbmStoragePolicy -Name "vSAN-Policy" -Description "vSAN storage policy"
 
-# 应用存储策略
+    # 应用存储策略
 Set-VM -VM "Web-Server-01" -StoragePolicy "vSAN-Policy"
 ```
 
@@ -392,26 +392,26 @@ Set-VM -VM "Web-Server-01" -StoragePolicy "vSAN-Policy"
 #### 存储设备管理
 
 ```bash
-# 查看存储设备
+    # 查看存储设备
 esxcli vsan storage list
 
-# 添加存储设备
+    # 添加存储设备
 esxcli vsan storage add --ssd=naa.xxx --capacity=naa.yyy
 
-# 移除存储设备
+    # 移除存储设备
 esxcli vsan storage remove --device=naa.xxx
 ```
 
 #### 存储策略管理
 
 ```bash
-# 查看存储策略
+    # 查看存储策略
 Get-SpbmStoragePolicy
 
-# 创建存储策略
+    # 创建存储策略
 New-SpbmStoragePolicy -Name "Gold-Policy" -Description "Gold storage policy"
 
-# 更新存储策略
+    # 更新存储策略
 Set-SpbmStoragePolicy -StoragePolicy "Gold-Policy" -Description "Updated gold policy"
 ```
 
@@ -420,23 +420,23 @@ Set-SpbmStoragePolicy -StoragePolicy "Gold-Policy" -Description "Updated gold po
 #### 集群操作
 
 ```bash
-# 查看集群状态
+    # 查看集群状态
 esxcli vsan cluster get
 
-# 添加节点
+    # 添加节点
 esxcli vsan cluster join --cluster-uuid=cluster-uuid
 
-# 移除节点
+    # 移除节点
 esxcli vsan cluster leave
 ```
 
 #### 集群监控
 
 ```bash
-# 查看集群健康状态
+    # 查看集群健康状态
 esxcli vsan health get
 
-# 查看集群性能
+    # 查看集群性能
 esxcli vsan perf stats get
 ```
 
@@ -447,7 +447,7 @@ esxcli vsan perf stats get
 #### 存储配置优化
 
 ```bash
-# 配置存储参数
+    # 配置存储参数
 esxcli system settings advanced set --option=VSAN.ClomRepairDelay --value=60
 esxcli system settings advanced set --option=VSAN.ClomRebalanceThreshold --value=30
 ```
@@ -455,7 +455,7 @@ esxcli system settings advanced set --option=VSAN.ClomRebalanceThreshold --value
 #### 缓存优化
 
 ```bash
-# 配置缓存参数
+    # 配置缓存参数
 esxcli system settings advanced set --option=VSAN.CacheReservation --value=10
 esxcli system settings advanced set --option=VSAN.CacheEvictionThreshold --value=80
 ```
@@ -465,7 +465,7 @@ esxcli system settings advanced set --option=VSAN.CacheEvictionThreshold --value
 #### 网络配置优化
 
 ```bash
-# 配置网络参数
+    # 配置网络参数
 esxcli system settings advanced set --option=Net.TcpipHeapSize --value=32
 esxcli system settings advanced set --option=Net.TcpipHeapMax --value=1536
 ```
@@ -473,7 +473,7 @@ esxcli system settings advanced set --option=Net.TcpipHeapMax --value=1536
 #### 网络性能优化
 
 ```bash
-# 配置网络性能
+    # 配置网络性能
 esxcli system settings advanced set --option=Net.TcpipHeapSize --value=32
 esxcli system settings advanced set --option=Net.TcpipHeapMax --value=1536
 ```
@@ -492,13 +492,13 @@ esxcli system settings advanced set --option=Net.TcpipHeapMax --value=1536
 #### 监控工具
 
 ```bash
-# 查看性能统计
+    # 查看性能统计
 esxcli vsan perf stats get
 
-# 查看健康状态
+    # 查看健康状态
 esxcli vsan health get
 
-# 查看存储状态
+    # 查看存储状态
 esxcli vsan storage list
 ```
 
@@ -507,20 +507,20 @@ esxcli vsan storage list
 #### 健康检查
 
 ```bash
-# 执行健康检查
+    # 执行健康检查
 esxcli vsan health check run
 
-# 查看健康报告
+    # 查看健康报告
 esxcli vsan health check get
 ```
 
 #### 告警监控
 
 ```bash
-# 配置告警
+    # 配置告警
 esxcli system settings advanced set --option=VSAN.HealthCheckInterval --value=300
 
-# 查看告警
+    # 查看告警
 esxcli vsan health get
 ```
 
@@ -547,23 +547,23 @@ esxcli vsan health get
 #### 诊断工具
 
 ```bash
-# 查看系统日志
+    # 查看系统日志
 tail -f /var/log/vmware/vsan-health.log
 
-# 查看存储状态
+    # 查看存储状态
 esxcli vsan storage list
 
-# 查看集群状态
+    # 查看集群状态
 esxcli vsan cluster get
 ```
 
 #### 故障恢复
 
 ```bash
-# 恢复存储设备
+    # 恢复存储设备
 esxcli vsan storage add --ssd=naa.xxx --capacity=naa.yyy
 
-# 恢复集群
+    # 恢复集群
 esxcli vsan cluster join --cluster-uuid=cluster-uuid
 ```
 

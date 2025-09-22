@@ -1,4 +1,4 @@
-# vCenter安全管理深度解析
+    # vCenter安全管理深度解析
 
 ## 目录
 
@@ -208,23 +208,23 @@
 #### 本地用户管理
 
 ```bash
-# 创建本地用户
+    # 创建本地用户
 vpxd_servicecfg user add --username=admin --password=password --role=Administrator
 
-# 修改用户密码
+    # 修改用户密码
 vpxd_servicecfg user set --username=admin --password=newpassword
 
-# 删除用户
+    # 删除用户
 vpxd_servicecfg user remove --username=admin
 ```
 
 #### 域认证配置
 
 ```bash
-# 配置域认证
+    # 配置域认证
 vpxd_servicecfg domain set --domain=example.com --username=administrator --password=password
 
-# 配置LDAP认证
+    # 配置LDAP认证
 vpxd_servicecfg ldap set --server=ldap.example.com --port=389 --username=cn=admin,dc=example,dc=com --password=password
 ```
 
@@ -233,13 +233,13 @@ vpxd_servicecfg ldap set --server=ldap.example.com --port=389 --username=cn=admi
 #### 角色管理
 
 ```bash
-# 创建角色
+    # 创建角色
 vpxd_servicecfg role create --name=VM-Admin --privileges=VirtualMachine.*
 
-# 分配角色
+    # 分配角色
 vpxd_servicecfg permission set --username=admin --role=VM-Admin --entity=datacenter1
 
-# 查看权限
+    # 查看权限
 vpxd_servicecfg permission list --entity=datacenter1
 ```
 
@@ -250,10 +250,10 @@ vpxd_servicecfg permission list --entity=datacenter1
 #### 防火墙管理
 
 ```bash
-# 启用防火墙
+    # 启用防火墙
 vpxd_servicecfg firewall set --enabled=true
 
-# 配置防火墙规则
+    # 配置防火墙规则
 vpxd_servicecfg firewall rule add --name=SSH --port=22 --protocol=tcp --action=allow
 vpxd_servicecfg firewall rule add --name=HTTPS --port=443 --protocol=tcp --action=allow
 ```
@@ -261,7 +261,7 @@ vpxd_servicecfg firewall rule add --name=HTTPS --port=443 --protocol=tcp --actio
 #### 网络安全策略
 
 ```bash
-# 配置网络安全策略
+    # 配置网络安全策略
 vpxd_servicecfg network set --option=config.vpxd.network.ssl.enabled --value=true
 vpxd_servicecfg network set --option=config.vpxd.network.ssl.certificate --value=/etc/ssl/certs/vcenter.crt
 ```
@@ -271,7 +271,7 @@ vpxd_servicecfg network set --option=config.vpxd.network.ssl.certificate --value
 #### 网络分段
 
 ```bash
-# 配置网络分段
+    # 配置网络分段
 vpxd_servicecfg network set --option=config.vpxd.network.segmentation --value=true
 vpxd_servicecfg network set --option=config.vpxd.network.isolation --value=true
 ```
@@ -283,7 +283,7 @@ vpxd_servicecfg network set --option=config.vpxd.network.isolation --value=true
 #### 存储加密
 
 ```bash
-# 启用存储加密
+    # 启用存储加密
 vpxd_servicecfg storage set --option=config.vpxd.storage.encryption.enabled --value=true
 vpxd_servicecfg storage set --option=config.vpxd.storage.encryption.algorithm --value=AES-256
 ```
@@ -291,7 +291,7 @@ vpxd_servicecfg storage set --option=config.vpxd.storage.encryption.algorithm --
 #### 传输加密
 
 ```bash
-# 配置传输加密
+    # 配置传输加密
 vpxd_servicecfg network set --option=config.vpxd.network.ssl.enabled --value=true
 vpxd_servicecfg network set --option=config.vpxd.network.ssl.protocol --value=TLS1.2
 ```
@@ -301,7 +301,7 @@ vpxd_servicecfg network set --option=config.vpxd.network.ssl.protocol --value=TL
 #### 数据完整性检查
 
 ```bash
-# 配置数据完整性检查
+    # 配置数据完整性检查
 vpxd_servicecfg storage set --option=config.vpxd.storage.integrity.check --value=true
 vpxd_servicecfg storage set --option=config.vpxd.storage.integrity.algorithm --value=SHA-256
 ```
@@ -313,7 +313,7 @@ vpxd_servicecfg storage set --option=config.vpxd.storage.integrity.algorithm --v
 #### 安全参数配置
 
 ```bash
-# 配置安全参数
+    # 配置安全参数
 vpxd_servicecfg security set --option=config.vpxd.security.password.minlength --value=8
 vpxd_servicecfg security set --option=config.vpxd.security.password.complexity --value=true
 vpxd_servicecfg security set --option=config.vpxd.security.session.timeout --value=3600
@@ -322,7 +322,7 @@ vpxd_servicecfg security set --option=config.vpxd.security.session.timeout --val
 #### 系统服务安全
 
 ```bash
-# 配置系统服务安全
+    # 配置系统服务安全
 vpxd_servicecfg service set --option=config.vpxd.service.security.enabled --value=true
 vpxd_servicecfg service set --option=config.vpxd.service.security.audit --value=true
 ```
@@ -332,7 +332,7 @@ vpxd_servicecfg service set --option=config.vpxd.service.security.audit --value=
 #### UEFI安全启动
 
 ```bash
-# 配置安全启动
+    # 配置安全启动
 vpxd_servicecfg system set --option=config.vpxd.system.secure.boot --value=true
 vpxd_servicecfg system set --option=config.vpxd.system.secure.boot.keys --value=/etc/secure-boot/keys
 ```
@@ -344,7 +344,7 @@ vpxd_servicecfg system set --option=config.vpxd.system.secure.boot.keys --value=
 #### 系统审计
 
 ```bash
-# 启用系统审计
+    # 启用系统审计
 vpxd_servicecfg audit set --enabled=true
 vpxd_servicecfg audit set --log-dir=/var/log/vmware/audit
 vpxd_servicecfg audit set --log-level=info
@@ -353,7 +353,7 @@ vpxd_servicecfg audit set --log-level=info
 #### 安全事件监控
 
 ```bash
-# 配置安全事件监控
+    # 配置安全事件监控
 vpxd_servicecfg security set --option=config.vpxd.security.monitoring.enabled --value=true
 vpxd_servicecfg security set --option=config.vpxd.security.monitoring.events --value=all
 ```
@@ -374,7 +374,7 @@ vpxd_servicecfg security set --option=config.vpxd.security.monitoring.events --v
 #### 密码复杂度
 
 ```bash
-# 配置密码复杂度
+    # 配置密码复杂度
 vpxd_servicecfg security set --option=config.vpxd.security.password.minlength --value=8
 vpxd_servicecfg security set --option=config.vpxd.security.password.complexity --value=true
 vpxd_servicecfg security set --option=config.vpxd.security.password.history --value=5
@@ -383,7 +383,7 @@ vpxd_servicecfg security set --option=config.vpxd.security.password.history --va
 #### 账户锁定策略
 
 ```bash
-# 配置账户锁定
+    # 配置账户锁定
 vpxd_servicecfg security set --option=config.vpxd.security.account.lockout.failures --value=5
 vpxd_servicecfg security set --option=config.vpxd.security.account.lockout.time --value=900
 ```
@@ -393,7 +393,7 @@ vpxd_servicecfg security set --option=config.vpxd.security.account.lockout.time 
 #### 访问时间限制
 
 ```bash
-# 配置访问时间限制
+    # 配置访问时间限制
 vpxd_servicecfg security set --option=config.vpxd.security.session.timeout --value=3600
 vpxd_servicecfg security set --option=config.vpxd.security.session.max --value=10
 ```
@@ -405,7 +405,7 @@ vpxd_servicecfg security set --option=config.vpxd.security.session.max --value=1
 #### 异常检测
 
 ```bash
-# 配置异常检测
+    # 配置异常检测
 vpxd_servicecfg security set --option=config.vpxd.security.monitoring.anomaly --value=true
 vpxd_servicecfg security set --option=config.vpxd.security.monitoring.threshold --value=5
 ```
@@ -413,10 +413,10 @@ vpxd_servicecfg security set --option=config.vpxd.security.monitoring.threshold 
 #### 安全事件分析
 
 ```bash
-# 查看安全日志
+    # 查看安全日志
 vpxd_servicecfg audit logs --type=security
 
-# 分析安全事件
+    # 分析安全事件
 vpxd_servicecfg security analyze --event-type=all
 ```
 

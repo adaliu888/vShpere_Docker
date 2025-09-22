@@ -1,4 +1,4 @@
-# WebAssembly架构原理深度解析
+    # WebAssembly架构原理深度解析
 
 ## 目录
 
@@ -587,20 +587,20 @@ impl InlineOptimizer {
 #### 6.1.1 安装Wasmtime
 
 ```bash
-# 安装Wasmtime
+    # 安装Wasmtime
 curl https://wasmtime.dev/install.sh -sSf | bash
 
-# 验证安装
+    # 验证安装
 wasmtime --version
 ```
 
 #### 6.1.2 安装Rust工具链
 
 ```bash
-# 安装Rust
+    # 安装Rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
-# 安装WebAssembly目标
+    # 安装WebAssembly目标
 rustup target add wasm32-wasi
 ```
 
@@ -609,11 +609,11 @@ rustup target add wasm32-wasi
 #### 6.2.1 创建Rust项目
 
 ```bash
-# 创建新项目
+    # 创建新项目
 cargo new wasm-hello
 cd wasm-hello
 
-# 配置Cargo.toml
+    # 配置Cargo.toml
 cat >> Cargo.toml << EOF
 [lib]
 crate-type = ["cdylib"]
@@ -647,10 +647,10 @@ pub fn fibonacci(n: i32) -> i32 {
 #### 6.2.3 编译和运行
 
 ```bash
-# 编译为WebAssembly
+    # 编译为WebAssembly
 wasm-pack build --target web
 
-# 运行WebAssembly模块
+    # 运行WebAssembly模块
 wasmtime target/wasm32-wasi/release/wasm_hello.wasm --invoke add 1 2
 ```
 
@@ -659,29 +659,29 @@ wasmtime target/wasm32-wasi/release/wasm_hello.wasm --invoke add 1 2
 ### 7.1 基本命令
 
 ```bash
-# 运行WebAssembly模块
+    # 运行WebAssembly模块
 wasmtime module.wasm
 
-# 调用函数
+    # 调用函数
 wasmtime module.wasm --invoke function_name arg1 arg2
 
-# 设置内存限制
+    # 设置内存限制
 wasmtime --max-memory 100MB module.wasm
 
-# 设置栈大小
+    # 设置栈大小
 wasmtime --max-stack-size 1MB module.wasm
 ```
 
 ### 7.2 调试命令
 
 ```bash
-# 启用调试信息
+    # 启用调试信息
 wasmtime --debug-info module.wasm
 
-# 设置断点
+    # 设置断点
 wasmtime --breakpoint function_name module.wasm
 
-# 单步执行
+    # 单步执行
 wasmtime --step module.wasm
 ```
 
@@ -696,10 +696,10 @@ wasmtime --step module.wasm
 **解决方案**:
 
 ```bash
-# 增加内存限制
+    # 增加内存限制
 wasmtime --max-memory 1GB module.wasm
 
-# 检查内存使用
+    # 检查内存使用
 wasmtime --memory-usage module.wasm
 ```
 
@@ -710,11 +710,11 @@ wasmtime --memory-usage module.wasm
 **解决方案**:
 
 ```bash
-# 增加栈大小
+    # 增加栈大小
 wasmtime --max-stack-size 10MB module.wasm
 
-# 优化递归算法
-# 使用迭代替代递归
+    # 优化递归算法
+    # 使用迭代替代递归
 ```
 
 ### 8.2 性能问题
@@ -726,10 +726,10 @@ wasmtime --max-stack-size 10MB module.wasm
 **解决方案**:
 
 ```bash
-# 启用JIT编译
+    # 启用JIT编译
 wasmtime --jit module.wasm
 
-# 使用AOT编译
+    # 使用AOT编译
 wasmtime --aot module.wasm
 ```
 

@@ -1,4 +1,4 @@
-# 2025年vSphere技术发展趋势分析
+    # 2025年vSphere技术发展趋势分析
 
 ## 目录
 
@@ -218,7 +218,7 @@
 #### vSphere with Tanzu 3.0
 
 ```yaml
-# Tanzu 3.0 新特性
+    # Tanzu 3.0 新特性
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -251,7 +251,7 @@ data:
 #### 容器化工作负载
 
 ```powershell
-# 容器化工作负载管理
+    # 容器化工作负载管理
 function Deploy-ContainerizedWorkload {
     param(
         [string]$Namespace,
@@ -292,7 +292,7 @@ spec:
 #### 服务网格集成
 
 ```yaml
-# Istio服务网格配置
+    # Istio服务网格配置
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
@@ -320,7 +320,7 @@ spec:
 #### API网关管理
 
 ```powershell
-# API网关配置
+    # API网关配置
 function Configure-APIGateway {
     param(
         [string]$GatewayName,
@@ -371,20 +371,20 @@ function Configure-APIGateway {
 
 ```bash
 #!/bin/bash
-# 边缘节点部署脚本
+    # 边缘节点部署脚本
 
-# 1. 安装vSphere Edge
+    # 1. 安装vSphere Edge
 curl -O https://vcenter.company.com/vsphere-edge-installer.sh
 chmod +x vsphere-edge-installer.sh
 ./vsphere-edge-installer.sh --edge-mode --minimal-config
 
-# 2. 配置边缘连接
+    # 2. 配置边缘连接
 vsphere-edge configure \
   --cloud-endpoint vcenter.company.com \
   --edge-id edge-node-001 \
   --certificate-path /etc/ssl/edge-cert.pem
 
-# 3. 启动边缘服务
+    # 3. 启动边缘服务
 systemctl enable vsphere-edge
 systemctl start vsphere-edge
 ```
@@ -394,7 +394,7 @@ systemctl start vsphere-edge
 #### 数据同步策略
 
 ```powershell
-# 边缘数据同步配置
+    # 边缘数据同步配置
 function Configure-EdgeDataSync {
     param(
         [string]$EdgeNode,
@@ -420,7 +420,7 @@ function Configure-EdgeDataSync {
 #### 边缘存储管理
 
 ```yaml
-# 边缘存储配置
+    # 边缘存储配置
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -451,7 +451,7 @@ data:
 #### 智能监控系统
 
 ```powershell
-# AI驱动的监控系统
+    # AI驱动的监控系统
 function Start-AIDrivenMonitoring {
     param(
         [string]$ClusterName,
@@ -479,7 +479,7 @@ function Start-AIDrivenMonitoring {
 #### 预测性分析
 
 ```python
-# 预测性分析脚本
+    # 预测性分析脚本
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
@@ -519,7 +519,7 @@ class PredictiveAnalyzer:
 #### 智能资源调度
 
 ```powershell
-# 智能资源调度系统
+    # 智能资源调度系统
 function Invoke-IntelligentScheduling {
     param(
         [string]$ClusterName,
@@ -546,7 +546,7 @@ function Invoke-IntelligentScheduling {
 #### 自动化故障恢复
 
 ```powershell
-# 自动化故障恢复系统
+    # 自动化故障恢复系统
 function Start-AutoRecovery {
     param(
         [string]$VMName,
@@ -608,7 +608,7 @@ function Start-AutoRecovery {
 #### 多云资源管理
 
 ```powershell
-# 多云资源管理脚本
+    # 多云资源管理脚本
 function Manage-MultiCloudResources {
     param(
         [string[]]$CloudProviders,
@@ -651,7 +651,7 @@ function Manage-MultiCloudResources {
 #### 智能迁移决策
 
 ```powershell
-# 智能迁移决策系统
+    # 智能迁移决策系统
 function Get-MigrationRecommendation {
     param(
         [string]$VMName,
@@ -685,7 +685,7 @@ function Get-MigrationRecommendation {
 #### 迁移执行引擎
 
 ```powershell
-# 迁移执行引擎
+    # 迁移执行引擎
 function Start-CloudMigration {
     param(
         [string]$VMName,
@@ -725,7 +725,7 @@ function Start-CloudMigration {
 #### 零信任网络
 
 ```yaml
-# 零信任网络配置
+    # 零信任网络配置
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -753,7 +753,7 @@ spec:
 #### 身份验证增强
 
 ```powershell
-# 多因素身份验证
+    # 多因素身份验证
 function Enable-MultiFactorAuth {
     param(
         [string]$UserPrincipalName,
@@ -780,7 +780,7 @@ function Enable-MultiFactorAuth {
 #### 端到端加密
 
 ```powershell
-# 端到端加密配置
+    # 端到端加密配置
 function Enable-EndToEndEncryption {
     param(
         [string]$VMName,
@@ -803,7 +803,7 @@ function Enable-EndToEndEncryption {
 #### 数据分类和保护
 
 ```powershell
-# 数据分类和保护
+    # 数据分类和保护
 function Set-DataClassification {
     param(
         [string]$DataPath,
@@ -832,7 +832,7 @@ function Set-DataClassification {
 #### 自动化运维引擎
 
 ```powershell
-# 自动化运维引擎
+    # 自动化运维引擎
 function Start-AutomationEngine {
     param(
         [string]$Environment,
@@ -854,7 +854,7 @@ function Start-AutomationEngine {
 #### 智能告警系统
 
 ```powershell
-# 智能告警系统
+    # 智能告警系统
 function Configure-SmartAlerting {
     param(
         [string]$AlertRule,
@@ -878,7 +878,7 @@ function Configure-SmartAlerting {
 #### CI/CD流水线
 
 ```yaml
-# CI/CD流水线配置
+    # CI/CD流水线配置
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -913,7 +913,7 @@ data:
 #### GitOps工作流
 
 ```powershell
-# GitOps工作流配置
+    # GitOps工作流配置
 function Configure-GitOpsWorkflow {
     param(
         [string]$Repository,
@@ -941,7 +941,7 @@ function Configure-GitOpsWorkflow {
 #### 自动性能优化
 
 ```powershell
-# 自动性能优化系统
+    # 自动性能优化系统
 function Start-AutoPerformanceOptimization {
     param(
         [string]$ClusterName,
@@ -963,7 +963,7 @@ function Start-AutoPerformanceOptimization {
 #### 资源预测和规划
 
 ```python
-# 资源预测和规划
+    # 资源预测和规划
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
@@ -1013,7 +1013,7 @@ class ResourcePredictor:
 #### 智能容量规划
 
 ```powershell
-# 智能容量规划
+    # 智能容量规划
 function Get-CapacityRecommendation {
     param(
         [string]$ClusterName,

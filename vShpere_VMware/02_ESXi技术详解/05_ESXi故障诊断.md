@@ -1,4 +1,4 @@
-# ESXi故障诊断深度解析
+    # ESXi故障诊断深度解析
 
 ## 目录
 
@@ -282,13 +282,13 @@
 #### CPU故障检测
 
 ```bash
-# 查看CPU信息
+    # 查看CPU信息
 esxcli hardware cpu global get
 
-# 查看CPU状态
+    # 查看CPU状态
 esxcli hardware cpu global get
 
-# 查看CPU温度
+    # 查看CPU温度
 esxcli hardware cpu global get
 ```
 
@@ -304,13 +304,13 @@ esxcli hardware cpu global get
 #### 内存故障检测
 
 ```bash
-# 查看内存信息
+    # 查看内存信息
 esxcli hardware memory get
 
-# 查看内存状态
+    # 查看内存状态
 esxcli system stats memory get
 
-# 查看内存错误
+    # 查看内存错误
 esxcli hardware memory get
 ```
 
@@ -326,13 +326,13 @@ esxcli hardware memory get
 #### 存储故障检测
 
 ```bash
-# 查看存储设备
+    # 查看存储设备
 esxcli storage core device list
 
-# 查看存储状态
+    # 查看存储状态
 esxcli storage core device stats get
 
-# 查看存储错误
+    # 查看存储错误
 esxcli storage core device list
 ```
 
@@ -348,13 +348,13 @@ esxcli storage core device list
 #### 网络故障检测
 
 ```bash
-# 查看网络接口
+    # 查看网络接口
 esxcli network ip interface list
 
-# 查看网络状态
+    # 查看网络状态
 esxcli network stats get
 
-# 查看网络错误
+    # 查看网络错误
 esxcli network ip interface list
 ```
 
@@ -372,13 +372,13 @@ esxcli network ip interface list
 #### 服务状态检查
 
 ```bash
-# 查看服务状态
+    # 查看服务状态
 esxcli system service list
 
-# 启动服务
+    # 启动服务
 esxcli system service start --service=hostd
 
-# 停止服务
+    # 停止服务
 esxcli system service stop --service=hostd
 ```
 
@@ -394,13 +394,13 @@ esxcli system service stop --service=hostd
 #### 配置检查
 
 ```bash
-# 查看系统配置
+    # 查看系统配置
 esxcli system settings advanced list
 
-# 查看配置值
+    # 查看配置值
 esxcli system settings advanced get --option=Config.HostAgent.log.level
 
-# 修改配置
+    # 修改配置
 esxcli system settings advanced set --option=Config.HostAgent.log.level --value=info
 ```
 
@@ -418,13 +418,13 @@ esxcli system settings advanced set --option=Config.HostAgent.log.level --value=
 #### 网络连接检查
 
 ```bash
-# 测试网络连接
+    # 测试网络连接
 ping 8.8.8.8
 
-# 查看网络路由
+    # 查看网络路由
 esxcli network ip route ipv4 list
 
-# 查看网络接口
+    # 查看网络接口
 esxcli network ip interface list
 ```
 
@@ -440,13 +440,13 @@ esxcli network ip interface list
 #### 虚拟网络检查
 
 ```bash
-# 查看虚拟交换机
+    # 查看虚拟交换机
 esxcli network vswitch standard list
 
-# 查看端口组
+    # 查看端口组
 esxcli network vswitch standard portgroup list
 
-# 查看网络适配器
+    # 查看网络适配器
 esxcli network nic list
 ```
 
@@ -464,13 +464,13 @@ esxcli network nic list
 #### 存储设备检查
 
 ```bash
-# 查看存储设备
+    # 查看存储设备
 esxcli storage core device list
 
-# 查看存储路径
+    # 查看存储路径
 esxcli storage nmp path list
 
-# 查看存储统计
+    # 查看存储统计
 esxcli storage core device stats get
 ```
 
@@ -486,13 +486,13 @@ esxcli storage core device stats get
 #### 数据存储检查
 
 ```bash
-# 查看数据存储
+    # 查看数据存储
 esxcli storage vmfs extent list
 
-# 查看数据存储状态
+    # 查看数据存储状态
 esxcli storage vmfs volume list
 
-# 查看数据存储统计
+    # 查看数据存储统计
 esxcli storage vmfs volume stats get
 ```
 
@@ -510,13 +510,13 @@ esxcli storage vmfs volume stats get
 #### 虚拟机状态检查
 
 ```bash
-# 查看虚拟机列表
+    # 查看虚拟机列表
 esxcli vm process list
 
-# 查看虚拟机状态
+    # 查看虚拟机状态
 esxcli vm process list
 
-# 查看虚拟机配置
+    # 查看虚拟机配置
 esxcli vm process list
 ```
 
@@ -532,13 +532,13 @@ esxcli vm process list
 #### 虚拟机资源检查
 
 ```bash
-# 查看虚拟机资源使用
+    # 查看虚拟机资源使用
 esxcli system stats vm get
 
-# 查看虚拟机性能
+    # 查看虚拟机性能
 esxcli system stats vm get
 
-# 查看虚拟机统计
+    # 查看虚拟机统计
 esxcli system stats vm get
 ```
 
@@ -556,13 +556,13 @@ esxcli system stats vm get
 #### 系统性能检查
 
 ```bash
-# 查看系统性能
+    # 查看系统性能
 esxcli system stats system get
 
-# 查看CPU性能
+    # 查看CPU性能
 esxcli system stats cpu get
 
-# 查看内存性能
+    # 查看内存性能
 esxcli system stats memory get
 ```
 
@@ -578,13 +578,13 @@ esxcli system stats memory get
 #### 应用性能检查
 
 ```bash
-# 查看应用性能
+    # 查看应用性能
 esxcli system stats vm get
 
-# 查看应用资源使用
+    # 查看应用资源使用
 esxcli system stats vm get
 
-# 查看应用统计
+    # 查看应用统计
 esxcli system stats vm get
 ```
 

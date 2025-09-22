@@ -1,14 +1,13 @@
 # ESXi管理与优化
 
-## 概述
+## 摘要
 
 本文档深入解析ESXi的管理和优化技术，包括ESXi安装配置、系统管理、性能调优、安全加固等各个方面。通过系统性的管理实践，为ESXi的高效运行提供全面的技术指导。
-
 
 ## 目录
 
 - [ESXi管理与优化](#esxi管理与优化)
-  - [概述](#概述)
+  - [摘要](#摘要)
   - [ESXi安装与配置](#esxi安装与配置)
     - [1. ESXi安装准备](#1-esxi安装准备)
       - [1.1 硬件要求](#11-硬件要求)
@@ -22,8 +21,8 @@
 - [检查网络设备](#检查网络设备)
       - [1.2 安装介质准备](#12-安装介质准备)
 - [安装方式选择](#安装方式选择)
-    - [2. ESXi安装过程](#2-esxi安装过程)
-      - [2.1 安装步骤](#21-安装步骤)
+  - [2. ESXi安装过程](#2-esxi安装过程)
+    - [2.1 安装步骤](#21-安装步骤)
 - [安装配置](#安装配置)
       - [2.2 初始配置](#22-初始配置)
 - [配置主机名](#配置主机名)
@@ -43,8 +42,8 @@
 - [验证域加入](#验证域加入)
 - [配置域用户权限](#配置域用户权限)
 - [退出域](#退出域)
-    - [2. 网络管理](#2-网络管理)
-      - [2.1 虚拟交换机配置](#21-虚拟交换机配置)
+  - [2. 网络管理](#2-网络管理)
+    - [2.1 虚拟交换机配置](#21-虚拟交换机配置)
 - [创建虚拟交换机](#创建虚拟交换机)
 - [添加端口组](#添加端口组)
 - [配置VLAN](#配置vlan)
@@ -55,8 +54,8 @@
 - [配置网络I/O控制](#配置网络io控制)
 - [配置负载均衡](#配置负载均衡)
 - [配置故障切换](#配置故障切换)
-    - [3. 存储管理](#3-存储管理)
-      - [3.1 数据存储配置](#31-数据存储配置)
+  - [3. 存储管理](#3-存储管理)
+    - [3.1 数据存储配置](#31-数据存储配置)
 - [列出可用存储设备](#列出可用存储设备)
 - [创建VMFS数据存储](#创建vmfs数据存储)
 - [扩展VMFS数据存储](#扩展vmfs数据存储)
@@ -79,22 +78,22 @@
 - [配置NUMA亲和性](#配置numa亲和性)
 - [启用NUMA负载均衡](#启用numa负载均衡)
 - [监控NUMA性能](#监控numa性能)
-    - [2. 内存性能优化](#2-内存性能优化)
-      - [2.1 内存管理优化](#21-内存管理优化)
+  - [2. 内存性能优化](#2-内存性能优化)
+    - [2.1 内存管理优化](#21-内存管理优化)
 - [查看内存信息](#查看内存信息)
 - [配置内存气球驱动](#配置内存气球驱动)
 - [启用内存压缩](#启用内存压缩)
 - [配置透明页共享](#配置透明页共享)
 - [内存性能指标](#内存性能指标)
-    - [3. 存储性能优化](#3-存储性能优化)
-      - [3.1 存储I/O优化](#31-存储io优化)
+  - [3. 存储性能优化](#3-存储性能优化)
+    - [3.1 存储I/O优化](#31-存储io优化)
 - [配置存储队列深度](#配置存储队列深度)
 - [启用存储I/O控制](#启用存储io控制)
 - [配置存储缓存](#配置存储缓存)
 - [监控存储性能](#监控存储性能)
 - [存储性能指标](#存储性能指标)
-    - [4. 网络性能优化](#4-网络性能优化)
-      - [4.1 网络I/O优化](#41-网络io优化)
+  - [4. 网络性能优化](#4-网络性能优化)
+    - [4.1 网络I/O优化](#41-网络io优化)
 - [配置网络I/O控制](#配置网络io控制)
 - [启用网络硬件卸载](#启用网络硬件卸载)
 - [配置网络队列](#配置网络队列)
@@ -112,15 +111,15 @@
 - [查看可用补丁](#查看可用补丁)
 - [安装补丁](#安装补丁)
 - [重启主机](#重启主机)
-    - [2. 网络安全](#2-网络安全)
-      - [2.1 防火墙配置](#21-防火墙配置)
+  - [2. 网络安全](#2-网络安全)
+    - [2.1 防火墙配置](#21-防火墙配置)
 - [配置防火墙规则](#配置防火墙规则)
 - [配置防火墙规则集](#配置防火墙规则集)
 - [查看防火墙状态](#查看防火墙状态)
       - [2.2 网络隔离](#22-网络隔离)
 - [网络隔离策略](#网络隔离策略)
-    - [3. 数据安全](#3-数据安全)
-      - [3.1 数据加密](#31-数据加密)
+  - [3. 数据安全](#3-数据安全)
+    - [3.1 数据加密](#31-数据加密)
 - [启用存储加密](#启用存储加密)
 - [配置加密密钥](#配置加密密钥)
 - [启用vMotion加密](#启用vmotion加密)
@@ -136,8 +135,8 @@
 - [查看系统状态](#查看系统状态)
       - [1.2 日志管理](#12-日志管理)
 - [日志管理配置](#日志管理配置)
-    - [2. 故障排除](#2-故障排除)
-      - [2.1 常见问题诊断](#21-常见问题诊断)
+  - [2. 故障排除](#2-故障排除)
+    - [2.1 常见问题诊断](#21-常见问题诊断)
 - [故障诊断步骤](#故障诊断步骤)
       - [2.2 故障排除工具](#22-故障排除工具)
 - [系统诊断工具](#系统诊断工具)
@@ -147,7 +146,7 @@
   - [总结](#总结)
 
 - [ESXi管理与优化](#esxi管理与优化)
-  - [概述](#概述)
+  - [摘要](#摘要)
   - [ESXi安装与配置](#esxi安装与配置)
     - [1. ESXi安装准备](#1-esxi安装准备)
       - [1.1 硬件要求](#11-硬件要求)
@@ -161,8 +160,8 @@
 - [检查网络设备](#检查网络设备)
       - [1.2 安装介质准备](#12-安装介质准备)
 - [安装方式选择](#安装方式选择)
-    - [2. ESXi安装过程](#2-esxi安装过程)
-      - [2.1 安装步骤](#21-安装步骤)
+  - [2. ESXi安装过程](#2-esxi安装过程)
+    - [2.1 安装步骤](#21-安装步骤)
 - [安装配置](#安装配置)
       - [2.2 初始配置](#22-初始配置)
 - [配置主机名](#配置主机名)
@@ -182,8 +181,8 @@
 - [验证域加入](#验证域加入)
 - [配置域用户权限](#配置域用户权限)
 - [退出域](#退出域)
-    - [2. 网络管理](#2-网络管理)
-      - [2.1 虚拟交换机配置](#21-虚拟交换机配置)
+  - [2. 网络管理](#2-网络管理)
+    - [2.1 虚拟交换机配置](#21-虚拟交换机配置)
 - [创建虚拟交换机](#创建虚拟交换机)
 - [添加端口组](#添加端口组)
 - [配置VLAN](#配置vlan)
@@ -194,8 +193,8 @@
 - [配置网络I/O控制](#配置网络io控制)
 - [配置负载均衡](#配置负载均衡)
 - [配置故障切换](#配置故障切换)
-    - [3. 存储管理](#3-存储管理)
-      - [3.1 数据存储配置](#31-数据存储配置)
+  - [3. 存储管理](#3-存储管理)
+    - [3.1 数据存储配置](#31-数据存储配置)
 - [列出可用存储设备](#列出可用存储设备)
 - [创建VMFS数据存储](#创建vmfs数据存储)
 - [扩展VMFS数据存储](#扩展vmfs数据存储)
@@ -218,22 +217,22 @@
 - [配置NUMA亲和性](#配置numa亲和性)
 - [启用NUMA负载均衡](#启用numa负载均衡)
 - [监控NUMA性能](#监控numa性能)
-    - [2. 内存性能优化](#2-内存性能优化)
-      - [2.1 内存管理优化](#21-内存管理优化)
+  - [2. 内存性能优化](#2-内存性能优化)
+    - [2.1 内存管理优化](#21-内存管理优化)
 - [查看内存信息](#查看内存信息)
 - [配置内存气球驱动](#配置内存气球驱动)
 - [启用内存压缩](#启用内存压缩)
 - [配置透明页共享](#配置透明页共享)
 - [内存性能指标](#内存性能指标)
-    - [3. 存储性能优化](#3-存储性能优化)
-      - [3.1 存储I/O优化](#31-存储io优化)
+  - [3. 存储性能优化](#3-存储性能优化)
+    - [3.1 存储I/O优化](#31-存储io优化)
 - [配置存储队列深度](#配置存储队列深度)
 - [启用存储I/O控制](#启用存储io控制)
 - [配置存储缓存](#配置存储缓存)
 - [监控存储性能](#监控存储性能)
 - [存储性能指标](#存储性能指标)
-    - [4. 网络性能优化](#4-网络性能优化)
-      - [4.1 网络I/O优化](#41-网络io优化)
+  - [4. 网络性能优化](#4-网络性能优化)
+    - [4.1 网络I/O优化](#41-网络io优化)
 - [配置网络I/O控制](#配置网络io控制)
 - [启用网络硬件卸载](#启用网络硬件卸载)
 - [配置网络队列](#配置网络队列)
@@ -251,15 +250,15 @@
 - [查看可用补丁](#查看可用补丁)
 - [安装补丁](#安装补丁)
 - [重启主机](#重启主机)
-    - [2. 网络安全](#2-网络安全)
-      - [2.1 防火墙配置](#21-防火墙配置)
+  - [2. 网络安全](#2-网络安全)
+    - [2.1 防火墙配置](#21-防火墙配置)
 - [配置防火墙规则](#配置防火墙规则)
 - [配置防火墙规则集](#配置防火墙规则集)
 - [查看防火墙状态](#查看防火墙状态)
       - [2.2 网络隔离](#22-网络隔离)
 - [网络隔离策略](#网络隔离策略)
-    - [3. 数据安全](#3-数据安全)
-      - [3.1 数据加密](#31-数据加密)
+  - [3. 数据安全](#3-数据安全)
+    - [3.1 数据加密](#31-数据加密)
 - [启用存储加密](#启用存储加密)
 - [配置加密密钥](#配置加密密钥)
 - [启用vMotion加密](#启用vmotion加密)
@@ -275,8 +274,8 @@
 - [查看系统状态](#查看系统状态)
       - [1.2 日志管理](#12-日志管理)
 - [日志管理配置](#日志管理配置)
-    - [2. 故障排除](#2-故障排除)
-      - [2.1 常见问题诊断](#21-常见问题诊断)
+  - [2. 故障排除](#2-故障排除)
+    - [2.1 常见问题诊断](#21-常见问题诊断)
 - [故障诊断步骤](#故障诊断步骤)
       - [2.2 故障排除工具](#22-故障排除工具)
 - [系统诊断工具](#系统诊断工具)
@@ -294,7 +293,7 @@
 **最低硬件要求**:
 
 ```yaml
-# ESXi硬件要求
+    # ESXi硬件要求
 Hardware_Requirements:
   CPU:
     minimum: "2_cores"
@@ -320,20 +319,20 @@ Hardware_Requirements:
 **硬件兼容性检查**:
 
 ```bash
-# 硬件兼容性检查工具
-# 使用VMware Compatibility Guide
-# 检查CPU、内存、存储、网络设备兼容性
+    # 硬件兼容性检查工具
+    # 使用VMware Compatibility Guide
+    # 检查CPU、内存、存储、网络设备兼容性
 
-# 检查CPU虚拟化支持
+    # 检查CPU虚拟化支持
 grep -E "(vmx|svm)" /proc/cpuinfo
 
-# 检查内存大小
+    # 检查内存大小
 free -h
 
-# 检查存储设备
+    # 检查存储设备
 lsblk
 
-# 检查网络设备
+    # 检查网络设备
 ip link show
 ```
 
@@ -342,7 +341,7 @@ ip link show
 **ESXi安装选项**:
 
 ```yaml
-# 安装方式选择
+    # 安装方式选择
 Installation_Options:
   USB_Installation:
     advantages: ["Portable", "Fast_installation", "Easy_updates"]
@@ -378,7 +377,7 @@ ESXi安装步骤:
 **安装配置参数**:
 
 ```yaml
-# 安装配置
+    # 安装配置
 Installation_Config:
   keyboard_layout: "US_English"
   timezone: "UTC"
@@ -399,19 +398,19 @@ Installation_Config:
 **ESXi初始配置**:
 
 ```bash
-# 配置主机名
+    # 配置主机名
 esxcli system hostname set --host=esxi-host-01
 esxcli system hostname set --fqdn=esxi-host-01.company.com
 
-# 配置时间同步
+    # 配置时间同步
 esxcli system time set --ntp-server=pool.ntp.org
 esxcli system time set --ntp-enabled=true
 
-# 配置DNS
+    # 配置DNS
 esxcli network ip dns server add --server=8.8.8.8
 esxcli network ip dns server add --server=8.8.4.4
 
-# 配置网络
+    # 配置网络
 esxcli network ip interface ipv4 set --interface-name=vmk0 --type=static --ipv4=192.168.1.100 --netmask=255.255.255.0
 esxcli network ip route ipv4 add --gateway=192.168.1.1 --network=default
 ```
@@ -425,23 +424,23 @@ esxcli network ip route ipv4 add --gateway=192.168.1.1 --network=default
 **本地用户配置**:
 
 ```bash
-# 创建本地用户
+    # 创建本地用户
 esxcli system account add --id=admin --password=password123 --description="Administrator account"
 
-# 修改用户密码
+    # 修改用户密码
 esxcli system account set --id=admin --password=newpassword123
 
-# 删除用户
+    # 删除用户
 esxcli system account remove --id=admin
 
-# 列出所有用户
+    # 列出所有用户
 esxcli system account list
 ```
 
 **用户权限配置**:
 
 ```yaml
-# 用户权限级别
+    # 用户权限级别
 User_Permissions:
   Administrator:
     permissions: ["Full_access", "All_privileges", "System_management"]
@@ -458,16 +457,16 @@ User_Permissions:
 **AD集成配置**:
 
 ```bash
-# 配置AD域
+    # 配置AD域
 esxcli system domain join --domain=company.com --username=administrator --password=password
 
-# 验证域加入
+    # 验证域加入
 esxcli system domain status
 
-# 配置域用户权限
+    # 配置域用户权限
 esxcli system permission set --id=company\\user1 --role=Administrator
 
-# 退出域
+    # 退出域
 esxcli system domain leave --username=administrator --password=password
 ```
 
@@ -478,23 +477,23 @@ esxcli system domain leave --username=administrator --password=password
 **标准虚拟交换机配置**:
 
 ```bash
-# 创建虚拟交换机
+    # 创建虚拟交换机
 esxcli network vswitch standard add --vswitch-name=vSwitch1
 
-# 添加端口组
+    # 添加端口组
 esxcli network vswitch standard portgroup add --portgroup-name=VM_Network --vswitch-name=vSwitch1
 
-# 配置VLAN
+    # 配置VLAN
 esxcli network vswitch standard portgroup set --portgroup-name=VM_Network --vlan-id=100
 
-# 添加物理网卡
+    # 添加物理网卡
 esxcli network vswitch standard uplink add --uplink-name=vmnic0 --vswitch-name=vSwitch1
 ```
 
 **分布式虚拟交换机配置**:
 
 ```yaml
-# vDS配置示例
+    # vDS配置示例
 Distributed_vSwitch:
   name: "vDS-Production"
   mtu: 9000
@@ -518,16 +517,16 @@ Distributed_vSwitch:
 **网络性能调优**:
 
 ```bash
-# 启用Jumbo Frames
+    # 启用Jumbo Frames
 esxcli network vswitch standard set --vswitch-name=vSwitch1 --mtu=9000
 
-# 配置网络I/O控制
+    # 配置网络I/O控制
 esxcli network vswitch standard policy failover set --vswitch-name=vSwitch1 --active-uplinks=vmnic0,vmnic1
 
-# 配置负载均衡
+    # 配置负载均衡
 esxcli network vswitch standard policy failover set --vswitch-name=vSwitch1 --load-balance=srcid
 
-# 配置故障切换
+    # 配置故障切换
 esxcli network vswitch standard policy failover set --vswitch-name=vSwitch1 --notify-switches=true
 ```
 
@@ -538,29 +537,29 @@ esxcli network vswitch standard policy failover set --vswitch-name=vSwitch1 --no
 **数据存储创建**:
 
 ```bash
-# 列出可用存储设备
+    # 列出可用存储设备
 esxcli storage core device list
 
-# 创建VMFS数据存储
+    # 创建VMFS数据存储
 esxcli storage vmfs extent add --volume-label=datastore1 --device=/vmfs/devices/disks/naa.xxx
 
-# 扩展VMFS数据存储
+    # 扩展VMFS数据存储
 esxcli storage vmfs extent add --volume-label=datastore1 --device=/vmfs/devices/disks/naa.yyy
 
-# 列出数据存储
+    # 列出数据存储
 esxcli storage vmfs extent list
 ```
 
 **存储多路径配置**:
 
 ```bash
-# 配置多路径策略
+    # 配置多路径策略
 esxcli storage nmp satp rule add --satp=VMW_SATP_ALUA --device=naa.xxx --option=enable_alua
 
-# 设置路径选择策略
+    # 设置路径选择策略
 esxcli storage nmp psp set --psp=VMW_PSP_RR --device=naa.xxx
 
-# 查看多路径状态
+    # 查看多路径状态
 esxcli storage nmp device list
 ```
 
@@ -569,7 +568,7 @@ esxcli storage nmp device list
 **存储性能调优**:
 
 ```yaml
-# 存储优化配置
+    # 存储优化配置
 Storage_Optimization:
   queue_depth:
     default: 32
@@ -596,23 +595,23 @@ Storage_Optimization:
 **CPU调度配置**:
 
 ```bash
-# 查看CPU信息
+    # 查看CPU信息
 esxcli hardware cpu global get
 
-# 配置CPU调度器
+    # 配置CPU调度器
 esxcli system module set --module=vmkernel --enabled=true
 
-# 设置CPU亲和性
+    # 设置CPU亲和性
 esxcli vm process set --world-id=12345 --cpu-affinity=0,1
 
-# 监控CPU使用率
+    # 监控CPU使用率
 esxcli system process stats load get
 ```
 
 **CPU性能监控**:
 
 ```yaml
-# CPU性能指标
+    # CPU性能指标
 CPU_Performance_Metrics:
   utilization:
     threshold: "80%"
@@ -635,16 +634,16 @@ CPU_Performance_Metrics:
 **NUMA配置优化**:
 
 ```bash
-# 查看NUMA拓扑
+    # 查看NUMA拓扑
 esxcli hardware memory get
 
-# 配置NUMA亲和性
+    # 配置NUMA亲和性
 esxcli vm process set --world-id=12345 --numa-affinity=0
 
-# 启用NUMA负载均衡
+    # 启用NUMA负载均衡
 esxcli system module set --module=vmkernel --enabled=true
 
-# 监控NUMA性能
+    # 监控NUMA性能
 esxcli system process stats numa get
 ```
 
@@ -655,23 +654,23 @@ esxcli system process stats numa get
 **内存配置优化**:
 
 ```bash
-# 查看内存信息
+    # 查看内存信息
 esxcli hardware memory get
 
-# 配置内存气球驱动
+    # 配置内存气球驱动
 esxcli system module set --module=vmballoon --enabled=true
 
-# 启用内存压缩
+    # 启用内存压缩
 esxcli system module set --module=memcomp --enabled=true
 
-# 配置透明页共享
+    # 配置透明页共享
 esxcli system module set --module=tps --enabled=true
 ```
 
 **内存性能监控**:
 
 ```yaml
-# 内存性能指标
+    # 内存性能指标
 Memory_Performance_Metrics:
   utilization:
     threshold: "90%"
@@ -701,23 +700,23 @@ Memory_Performance_Metrics:
 **存储I/O配置**:
 
 ```bash
-# 配置存储队列深度
+    # 配置存储队列深度
 esxcli storage core device set --device=naa.xxx --queue-depth=64
 
-# 启用存储I/O控制
+    # 启用存储I/O控制
 esxcli storage iorm set --enabled=true
 
-# 配置存储缓存
+    # 配置存储缓存
 esxcli storage core device set --device=naa.xxx --cache-policy=adaptive
 
-# 监控存储性能
+    # 监控存储性能
 esxcli storage core device stats get --device=naa.xxx
 ```
 
 **存储性能监控**:
 
 ```yaml
-# 存储性能指标
+    # 存储性能指标
 Storage_Performance_Metrics:
   latency:
     threshold: "20ms"
@@ -747,23 +746,23 @@ Storage_Performance_Metrics:
 **网络I/O配置**:
 
 ```bash
-# 配置网络I/O控制
+    # 配置网络I/O控制
 esxcli network vswitch standard policy nicteaming set --vswitch-name=vSwitch1 --nic-order-policy=active
 
-# 启用网络硬件卸载
+    # 启用网络硬件卸载
 esxcli network nic set --nic=vmnic0 --hardware-offload=enabled
 
-# 配置网络队列
+    # 配置网络队列
 esxcli network nic set --nic=vmnic0 --queue-count=8
 
-# 监控网络性能
+    # 监控网络性能
 esxcli network nic stats get --nic=vmnic0
 ```
 
 **网络性能监控**:
 
 ```yaml
-# 网络性能指标
+    # 网络性能指标
 Network_Performance_Metrics:
   utilization:
     threshold: "80%"
@@ -795,7 +794,7 @@ Network_Performance_Metrics:
 **安全配置清单**:
 
 ```yaml
-# ESXi安全配置
+    # ESXi安全配置
 Security_Configuration:
   authentication:
     - "Strong_root_password"
@@ -819,16 +818,16 @@ Security_Configuration:
 **安全配置实施**:
 
 ```bash
-# 配置防火墙
+    # 配置防火墙
 esxcli network firewall set --enabled=true
 esxcli network firewall ruleset set --ruleset-id=sshServer --enabled=false
 esxcli network firewall ruleset set --ruleset-id=vSphereClient --enabled=true
 
-# 禁用SSH和Shell
+    # 禁用SSH和Shell
 esxcli system maintenanceMode set --enabled=true
 esxcli system maintenanceMode set --enabled=false
 
-# 配置审计日志
+    # 配置审计日志
 esxcli system syslog config set --loghost=192.168.1.10:514
 esxcli system syslog config set --logdir=/scratch/log
 ```
@@ -838,16 +837,16 @@ esxcli system syslog config set --logdir=/scratch/log
 **补丁管理流程**:
 
 ```bash
-# 查看当前版本
+    # 查看当前版本
 esxcli system version get
 
-# 查看可用补丁
+    # 查看可用补丁
 esxcli software profile get
 
-# 安装补丁
+    # 安装补丁
 esxcli software profile update --profile=ESXi-7.0.3-19193900-standard --depot=/vmfs/volumes/datastore1/patches/
 
-# 重启主机
+    # 重启主机
 esxcli system shutdown reboot --reason="Patch installation"
 ```
 
@@ -858,15 +857,15 @@ esxcli system shutdown reboot --reason="Patch installation"
 **防火墙规则配置**:
 
 ```bash
-# 配置防火墙规则
+    # 配置防火墙规则
 esxcli network firewall ruleset set --ruleset-id=vSphereClient --enabled=true
 esxcli network firewall ruleset set --ruleset-id=sshServer --enabled=false
 esxcli network firewall ruleset set --ruleset-id=ntpClient --enabled=true
 
-# 配置防火墙规则集
+    # 配置防火墙规则集
 esxcli network firewall ruleset rule add --ruleset-id=vSphereClient --rule-id=1 --direction=inbound --protocol=tcp --port=443
 
-# 查看防火墙状态
+    # 查看防火墙状态
 esxcli network firewall get
 ```
 
@@ -875,7 +874,7 @@ esxcli network firewall get
 **网络隔离配置**:
 
 ```yaml
-# 网络隔离策略
+    # 网络隔离策略
 Network_Isolation:
   management_network:
     vlan: 200
@@ -900,16 +899,16 @@ Network_Isolation:
 **数据加密配置**:
 
 ```bash
-# 启用存储加密
+    # 启用存储加密
 esxcli storage vmfs encryption set --volume-label=datastore1 --enabled=true
 
-# 配置加密密钥
+    # 配置加密密钥
 esxcli storage vmfs encryption key set --volume-label=datastore1 --key-id=key1
 
-# 启用vMotion加密
+    # 启用vMotion加密
 esxcli system settings advanced set --option=VMotion.Encryption --value=required
 
-# 查看加密状态
+    # 查看加密状态
 esxcli storage vmfs encryption get --volume-label=datastore1
 ```
 
@@ -918,7 +917,7 @@ esxcli storage vmfs encryption get --volume-label=datastore1
 **备份配置**:
 
 ```yaml
-# 备份策略
+    # 备份策略
 Backup_Strategy:
   configuration_backup:
     frequency: "Daily"
@@ -945,17 +944,17 @@ Backup_Strategy:
 **监控工具配置**:
 
 ```bash
-# 配置性能监控
+    # 配置性能监控
 esxcli system syslog config set --loghost=192.168.1.10:514
 esxcli system syslog config set --logdir=/scratch/log
 
-# 启用性能统计
+    # 启用性能统计
 esxcli system stats set --enabled=true
 
-# 配置SNMP
+    # 配置SNMP
 esxcli system snmp set --enabled=true --communities=public,private
 
-# 查看系统状态
+    # 查看系统状态
 esxcli system status get
 ```
 
@@ -964,7 +963,7 @@ esxcli system status get
 **日志配置管理**:
 
 ```yaml
-# 日志管理配置
+    # 日志管理配置
 Log_Management:
   log_rotation:
     size_limit: "100MB"
@@ -988,7 +987,7 @@ Log_Management:
 **故障诊断流程**:
 
 ```yaml
-# 故障诊断步骤
+    # 故障诊断步骤
 Troubleshooting_Process:
   performance_issues:
     1: "Identify_bottleneck"
@@ -1017,21 +1016,21 @@ Troubleshooting_Process:
 **诊断工具使用**:
 
 ```bash
-# 系统诊断工具
+    # 系统诊断工具
 esxcli system maintenanceMode set --enabled=true
 esxcli system maintenanceMode set --enabled=false
 
-# 网络诊断工具
+    # 网络诊断工具
 esxcli network ip connection list
 esxcli network ip route list
 esxcli network nic list
 
-# 存储诊断工具
+    # 存储诊断工具
 esxcli storage core device list
 esxcli storage vmfs extent list
 esxcli storage nmp device list
 
-# 性能诊断工具
+    # 性能诊断工具
 esxcli system process stats load get
 esxcli system process stats memory get
 esxcli system process stats cpu get

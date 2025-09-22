@@ -1,4 +1,4 @@
-# ESXi性能优化深度解析
+    # ESXi性能优化深度解析
 
 ## 目录
 
@@ -217,7 +217,7 @@
 #### 调度算法优化
 
 ```bash
-# 配置CPU调度参数
+    # 配置CPU调度参数
 esxcli system settings advanced set --option=CPU.SchedAffinity --value=1
 esxcli system settings advanced set --option=CPU.SchedLatency --value=20000
 esxcli system settings advanced set --option=CPU.SchedMinLatency --value=1000
@@ -226,10 +226,10 @@ esxcli system settings advanced set --option=CPU.SchedMinLatency --value=1000
 #### CPU亲和性配置
 
 ```bash
-# 配置CPU亲和性
+    # 配置CPU亲和性
 esxcli system settings advanced set --option=CPU.SchedAffinity --value=1
 
-# 配置CPU限制
+    # 配置CPU限制
 esxcli system settings advanced set --option=CPU.SchedLimit --value=100
 ```
 
@@ -238,20 +238,20 @@ esxcli system settings advanced set --option=CPU.SchedLimit --value=100
 #### 硬件辅助虚拟化
 
 ```bash
-# 启用硬件辅助虚拟化
+    # 启用硬件辅助虚拟化
 esxcli system settings advanced set --option=VMkernel.Boot.execInstalledOnly --value=1
 
-# 配置虚拟化参数
+    # 配置虚拟化参数
 esxcli system settings advanced set --option=VMkernel.Boot.hypervisor --value=1
 ```
 
 #### CPU性能监控
 
 ```bash
-# 查看CPU使用情况
+    # 查看CPU使用情况
 esxcli system stats cpu get
 
-# 查看CPU调度统计
+    # 查看CPU调度统计
 esxcli system stats cpu scheduler get
 ```
 
@@ -262,7 +262,7 @@ esxcli system stats cpu scheduler get
 #### 内存分配优化
 
 ```bash
-# 配置内存分配策略
+    # 配置内存分配策略
 esxcli system settings advanced set --option=Mem.AllocGuestLargePage --value=1
 esxcli system settings advanced set --option=Mem.MemEagerZero --value=1
 esxcli system settings advanced set --option=Mem.MemZipEnable --value=1
@@ -271,10 +271,10 @@ esxcli system settings advanced set --option=Mem.MemZipEnable --value=1
 #### 内存压缩优化
 
 ```bash
-# 启用内存压缩
+    # 启用内存压缩
 esxcli system settings advanced set --option=Mem.MemZipEnable --value=1
 
-# 配置内存压缩参数
+    # 配置内存压缩参数
 esxcli system settings advanced set --option=Mem.MemZipMaxPct --value=10
 ```
 
@@ -283,10 +283,10 @@ esxcli system settings advanced set --option=Mem.MemZipMaxPct --value=10
 #### 内存使用监控
 
 ```bash
-# 查看内存使用情况
+    # 查看内存使用情况
 esxcli system stats memory get
 
-# 查看内存压缩统计
+    # 查看内存压缩统计
 esxcli system stats memory compression get
 ```
 
@@ -297,7 +297,7 @@ esxcli system stats memory compression get
 #### 存储参数优化
 
 ```bash
-# 配置存储I/O参数
+    # 配置存储I/O参数
 esxcli system settings advanced set --option=Disk.DiskMaxIOSize --value=32768
 esxcli system settings advanced set --option=Disk.UseDeviceReset --value=1
 esxcli system settings advanced set --option=Disk.EnableUUID --value=1
@@ -306,10 +306,10 @@ esxcli system settings advanced set --option=Disk.EnableUUID --value=1
 #### 存储队列优化
 
 ```bash
-# 配置存储队列深度
+    # 配置存储队列深度
 esxcli system settings advanced set --option=Disk.DiskMaxIOSize --value=32768
 
-# 配置存储超时
+    # 配置存储超时
 esxcli system settings advanced set --option=Disk.DiskTimeout --value=60
 ```
 
@@ -318,10 +318,10 @@ esxcli system settings advanced set --option=Disk.DiskTimeout --value=60
 #### 存储性能统计
 
 ```bash
-# 查看存储设备统计
+    # 查看存储设备统计
 esxcli storage core device stats get
 
-# 查看存储路径统计
+    # 查看存储路径统计
 esxcli storage nmp path list
 ```
 
@@ -332,21 +332,21 @@ esxcli storage nmp path list
 #### 网络参数优化
 
 ```bash
-# 配置网络堆栈大小
+    # 配置网络堆栈大小
 esxcli system settings advanced set --option=Net.TcpipHeapSize --value=32
 esxcli system settings advanced set --option=Net.TcpipHeapMax --value=1536
 
-# 配置网络缓冲区
+    # 配置网络缓冲区
 esxcli system settings advanced set --option=Net.TcpipHeapSize --value=32
 ```
 
 #### 网络队列优化
 
 ```bash
-# 配置网络队列深度
+    # 配置网络队列深度
 esxcli system settings advanced set --option=Net.TcpipHeapSize --value=32
 
-# 配置网络中断处理
+    # 配置网络中断处理
 esxcli system settings advanced set --option=Net.TcpipHeapSize --value=32
 ```
 
@@ -355,10 +355,10 @@ esxcli system settings advanced set --option=Net.TcpipHeapSize --value=32
 #### 网络性能统计
 
 ```bash
-# 查看网络统计
+    # 查看网络统计
 esxcli network stats get
 
-# 查看网络接口统计
+    # 查看网络接口统计
 esxcli network ip interface list
 ```
 
@@ -369,7 +369,7 @@ esxcli network ip interface list
 #### 虚拟机参数优化
 
 ```bash
-# 配置虚拟机参数
+    # 配置虚拟机参数
 esxcli vm process list
 esxcli vm process kill --type=force --world-id=12345
 ```
@@ -377,7 +377,7 @@ esxcli vm process kill --type=force --world-id=12345
 #### 虚拟机资源优化
 
 ```bash
-# 配置虚拟机资源限制
+    # 配置虚拟机资源限制
 esxcli system settings advanced set --option=VMkernel.Boot.execInstalledOnly --value=1
 ```
 
@@ -386,10 +386,10 @@ esxcli system settings advanced set --option=VMkernel.Boot.execInstalledOnly --v
 #### 虚拟机性能统计
 
 ```bash
-# 查看虚拟机性能
+    # 查看虚拟机性能
 esxcli vm process list
 
-# 查看虚拟机资源使用
+    # 查看虚拟机资源使用
 esxcli system stats vm get
 ```
 
@@ -400,7 +400,7 @@ esxcli system stats vm get
 #### 内核参数优化
 
 ```bash
-# 配置内核参数
+    # 配置内核参数
 esxcli system settings advanced set --option=VMkernel.Boot.execInstalledOnly --value=1
 esxcli system settings advanced set --option=VMkernel.Boot.hypervisor --value=1
 ```
@@ -408,7 +408,7 @@ esxcli system settings advanced set --option=VMkernel.Boot.hypervisor --value=1
 #### 系统服务优化
 
 ```bash
-# 配置系统服务
+    # 配置系统服务
 esxcli system settings advanced set --option=Config.HostAgent.log.level --value=info
 ```
 
@@ -417,10 +417,10 @@ esxcli system settings advanced set --option=Config.HostAgent.log.level --value=
 #### 系统性能统计
 
 ```bash
-# 查看系统性能
+    # 查看系统性能
 esxcli system stats system get
 
-# 查看系统资源使用
+    # 查看系统资源使用
 esxcli system stats resource get
 ```
 
@@ -454,7 +454,7 @@ esxcli system stats resource get
 #### 性能阈值设置
 
 ```bash
-# 配置性能阈值
+    # 配置性能阈值
 esxcli system settings advanced set --option=Config.HostAgent.log.level --value=info
 ```
 

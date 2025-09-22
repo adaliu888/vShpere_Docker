@@ -1,4 +1,4 @@
-# ESXi安装配置深度解析
+    # ESXi安装配置深度解析
 
 ## 目录
 
@@ -279,23 +279,23 @@
 #### USB安装
 
 ```bash
-# 1. 制作USB启动盘
-# 2. 配置BIOS/UEFI启动顺序
-# 3. 从USB启动安装程序
-# 4. 选择安装位置
-# 5. 配置网络设置
-# 6. 设置root密码
-# 7. 完成安装
+    # 1. 制作USB启动盘
+    # 2. 配置BIOS/UEFI启动顺序
+    # 3. 从USB启动安装程序
+    # 4. 选择安装位置
+    # 5. 配置网络设置
+    # 6. 设置root密码
+    # 7. 完成安装
 ```
 
 #### 网络安装
 
 ```bash
-# 1. 配置PXE服务器
-# 2. 配置DHCP服务器
-# 3. 配置TFTP服务器
-# 4. 从网络启动安装
-# 5. 自动安装配置
+    # 1. 配置PXE服务器
+    # 2. 配置DHCP服务器
+    # 3. 配置TFTP服务器
+    # 4. 从网络启动安装
+    # 5. 自动安装配置
 ```
 
 ### 2.2 安装步骤
@@ -324,16 +324,16 @@
 #### 主机配置
 
 ```bash
-# 配置主机名
+    # 配置主机名
 esxcli system hostname set --host=esxi-host-01
 
-# 配置网络
+    # 配置网络
 esxcli network ip interface ipv4 set --interface-name=vmk0 --type=static --ipv4=192.168.1.100 --netmask=255.255.255.0
 
-# 配置DNS
+    # 配置DNS
 esxcli network ip dns server add --server=8.8.8.8
 
-# 配置NTP
+    # 配置NTP
 esxcli system ntp set --enabled=true
 esxcli system ntp server add --server=pool.ntp.org
 ```
@@ -341,11 +341,11 @@ esxcli system ntp server add --server=pool.ntp.org
 #### 服务配置
 
 ```bash
-# 启用SSH
+    # 启用SSH
 vim-cmd hostsvc/enable_ssh
 vim-cmd hostsvc/start_ssh
 
-# 启用ESXi Shell
+    # 启用ESXi Shell
 vim-cmd hostsvc/enable_esx_shell
 vim-cmd hostsvc/start_esx_shell
 ```
@@ -355,10 +355,10 @@ vim-cmd hostsvc/start_esx_shell
 #### 时间配置
 
 ```bash
-# 设置时区
+    # 设置时区
 esxcli system timezone set --timezone=Asia/Shanghai
 
-# 同步时间
+    # 同步时间
 esxcli system ntp set --enabled=true
 esxcli system ntp server add --server=pool.ntp.org
 ```
@@ -366,7 +366,7 @@ esxcli system ntp server add --server=pool.ntp.org
 #### 日志配置
 
 ```bash
-# 配置日志级别
+    # 配置日志级别
 esxcli system syslog config set --loghost=192.168.1.10
 esxcli system syslog config set --logdir=/scratch/log
 ```
@@ -378,20 +378,20 @@ esxcli system syslog config set --logdir=/scratch/log
 #### 物理网卡配置
 
 ```bash
-# 查看网卡
+    # 查看网卡
 esxcli network nic list
 
-# 配置网卡
+    # 配置网卡
 esxcli network nic set --nic=vmnic0 --speed=1000 --duplex=full
 ```
 
 #### 虚拟交换机配置
 
 ```bash
-# 创建虚拟交换机
+    # 创建虚拟交换机
 esxcli network vswitch standard add --vswitch-name=vSwitch1
 
-# 配置端口组
+    # 配置端口组
 esxcli network vswitch standard portgroup add --portgroup-name=VM Network --vswitch-name=vSwitch1
 ```
 
@@ -400,10 +400,10 @@ esxcli network vswitch standard portgroup add --portgroup-name=VM Network --vswi
 #### 网络服务
 
 ```bash
-# 配置网络服务
+    # 配置网络服务
 esxcli network ip interface set --interface-name=vmk0 --enable-ipv6=false
 
-# 配置网络路由
+    # 配置网络路由
 esxcli network ip route ipv4 add --gateway=192.168.1.1 --network=0.0.0.0/0
 ```
 
@@ -414,20 +414,20 @@ esxcli network ip route ipv4 add --gateway=192.168.1.1 --network=0.0.0.0/0
 #### 存储设备管理
 
 ```bash
-# 查看存储设备
+    # 查看存储设备
 esxcli storage core device list
 
-# 配置存储路径
+    # 配置存储路径
 esxcli storage nmp satp rule add --satp=VMW_SATP_LOCAL --device=naa.xxx
 ```
 
 #### 数据存储配置
 
 ```bash
-# 创建数据存储
+    # 创建数据存储
 esxcli storage vmfs extent add --volume-label=datastore1 --device=naa.xxx
 
-# 配置数据存储
+    # 配置数据存储
 esxcli storage vmfs volume list
 ```
 
@@ -436,10 +436,10 @@ esxcli storage vmfs volume list
 #### 存储优化
 
 ```bash
-# 配置存储参数
+    # 配置存储参数
 esxcli system settings advanced set --option=Disk.DiskMaxIOSize --value=32768
 
-# 配置存储缓存
+    # 配置存储缓存
 esxcli system settings advanced set --option=Disk.UseDeviceReset --value=1
 ```
 
@@ -450,20 +450,20 @@ esxcli system settings advanced set --option=Disk.UseDeviceReset --value=1
 #### 用户管理
 
 ```bash
-# 创建本地用户
+    # 创建本地用户
 esxcli system account add --id=admin --password=password --role=Administrator
 
-# 配置域认证
+    # 配置域认证
 esxcli system domain join --domain=example.com --username=administrator --password=password
 ```
 
 #### 权限配置
 
 ```bash
-# 配置权限
+    # 配置权限
 esxcli system permission set --id=admin --role=Administrator
 
-# 配置安全策略
+    # 配置安全策略
 esxcli system settings advanced set --option=Security.PasswordQualityControl --value=similar=deny
 ```
 
@@ -472,10 +472,10 @@ esxcli system settings advanced set --option=Security.PasswordQualityControl --v
 #### 防火墙配置
 
 ```bash
-# 配置防火墙
+    # 配置防火墙
 esxcli network firewall set --enabled=true
 
-# 配置防火墙规则
+    # 配置防火墙规则
 esxcli network firewall ruleset set --ruleset-id=sshServer --enabled=true
 ```
 
@@ -486,10 +486,10 @@ esxcli network firewall ruleset set --ruleset-id=sshServer --enabled=true
 #### CPU优化
 
 ```bash
-# 配置CPU调度
+    # 配置CPU调度
 esxcli system settings advanced set --option=CPU.SchedAffinity --value=1
 
-# 配置CPU限制
+    # 配置CPU限制
 esxcli system settings advanced set --option=CPU.SchedLatency --value=20000
 ```
 
@@ -498,10 +498,10 @@ esxcli system settings advanced set --option=CPU.SchedLatency --value=20000
 #### 内存优化
 
 ```bash
-# 配置内存压缩
+    # 配置内存压缩
 esxcli system settings advanced set --option=Mem.MemZipEnable --value=1
 
-# 配置内存回收
+    # 配置内存回收
 esxcli system settings advanced set --option=Mem.MemEagerZero --value=1
 ```
 
@@ -512,10 +512,10 @@ esxcli system settings advanced set --option=Mem.MemEagerZero --value=1
 #### 管理服务
 
 ```bash
-# 配置管理服务
+    # 配置管理服务
 esxcli system settings advanced set --option=Config.HostAgent.plugins.solo.enableMob --value=true
 
-# 配置API服务
+    # 配置API服务
 esxcli system settings advanced set --option=Config.HostAgent.plugins.hostsvc.enableMob --value=true
 ```
 
@@ -524,10 +524,10 @@ esxcli system settings advanced set --option=Config.HostAgent.plugins.hostsvc.en
 #### 性能监控
 
 ```bash
-# 配置性能监控
+    # 配置性能监控
 esxcli system settings advanced set --option=Config.HostAgent.log.level --value=info
 
-# 配置监控服务
+    # 配置监控服务
 esxcli system settings advanced set --option=Config.HostAgent.plugins.vpxa.enableMob --value=true
 ```
 
@@ -554,16 +554,16 @@ esxcli system settings advanced set --option=Config.HostAgent.plugins.vpxa.enabl
 #### 诊断工具
 
 ```bash
-# 查看系统日志
+    # 查看系统日志
 tail -f /var/log/vmware/hostd.log
 
-# 查看硬件状态
+    # 查看硬件状态
 esxcli hardware health get
 
-# 查看网络状态
+    # 查看网络状态
 esxcli network ip interface list
 
-# 查看存储状态
+    # 查看存储状态
 esxcli storage core device list
 ```
 

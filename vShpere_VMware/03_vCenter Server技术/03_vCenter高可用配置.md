@@ -1,4 +1,4 @@
-# vCenter高可用配置深度解析
+    # vCenter高可用配置深度解析
 
 ## 目录
 
@@ -251,7 +251,7 @@
 #### 网络配置
 
 ```bash
-# 配置HA网络
+    # 配置HA网络
 vpxd_servicecfg ha set --ha-network=192.168.100.0/24
 vpxd_servicecfg ha set --data-network=192.168.101.0/24
 vpxd_servicecfg ha set --witness-network=192.168.102.0/24
@@ -291,15 +291,15 @@ vpxd_servicecfg ha set --witness-network=192.168.102.0/24
 #### 配置命令
 
 ```bash
-# 启用vCenter HA
+    # 启用vCenter HA
 vpxd_servicecfg ha set --enabled=true
 
-# 配置HA节点
+    # 配置HA节点
 vpxd_servicecfg ha set --active-node=vcenter1.example.com
 vpxd_servicecfg ha set --passive-node=vcenter2.example.com
 vpxd_servicecfg ha set --witness-node=vcenter3.example.com
 
-# 配置HA网络
+    # 配置HA网络
 vpxd_servicecfg ha set --ha-network=192.168.100.0/24
 vpxd_servicecfg ha set --data-network=192.168.101.0/24
 ```
@@ -318,7 +318,7 @@ vpxd_servicecfg ha set --data-network=192.168.101.0/24
 #### 数据库同步
 
 ```bash
-# 配置数据库复制
+    # 配置数据库复制
 vpxd_servicecfg database set --replication-enabled=true
 vpxd_servicecfg database set --primary-db=db1.example.com
 vpxd_servicecfg database set --secondary-db=db2.example.com
@@ -337,10 +337,10 @@ vpxd_servicecfg database set --witness-db=db3.example.com
 #### 手动切换
 
 ```bash
-# 手动切换数据库
+    # 手动切换数据库
 vpxd_servicecfg database failover --target=secondary
 
-# 查看数据库状态
+    # 查看数据库状态
 vpxd_servicecfg database status
 ```
 
@@ -358,7 +358,7 @@ vpxd_servicecfg database status
 #### 5.1.2 网络配置
 
 ```bash
-# 配置网络冗余
+    # 配置网络冗余
 vpxd_servicecfg network set --redundant-interfaces=true
 vpxd_servicecfg network set --primary-interface=eth0
 vpxd_servicecfg network set --secondary-interface=eth1
@@ -376,7 +376,7 @@ vpxd_servicecfg network set --secondary-interface=eth1
 #### 监控配置
 
 ```bash
-# 配置网络监控
+    # 配置网络监控
 vpxd_servicecfg network set --health-check-enabled=true
 vpxd_servicecfg network set --health-check-interval=30
 vpxd_servicecfg network set --health-check-timeout=10
@@ -396,7 +396,7 @@ vpxd_servicecfg network set --health-check-timeout=10
 #### 存储配置
 
 ```bash
-# 配置存储冗余
+    # 配置存储冗余
 vpxd_servicecfg storage set --redundant-storage=true
 vpxd_servicecfg storage set --primary-storage=/dev/sda1
 vpxd_servicecfg storage set --secondary-storage=/dev/sdb1
@@ -414,7 +414,7 @@ vpxd_servicecfg storage set --secondary-storage=/dev/sdb1
 #### 同步配置
 
 ```bash
-# 配置数据同步
+    # 配置数据同步
 vpxd_servicecfg storage set --sync-enabled=true
 vpxd_servicecfg storage set --sync-interval=60
 vpxd_servicecfg storage set --sync-method=realtime
@@ -434,13 +434,13 @@ vpxd_servicecfg storage set --sync-method=realtime
 #### 监控工具
 
 ```bash
-# 查看HA状态
+    # 查看HA状态
 vpxd_servicecfg ha status
 
-# 查看节点状态
+    # 查看节点状态
 vpxd_servicecfg ha nodes
 
-# 查看服务状态
+    # 查看服务状态
 vpxd_servicecfg ha services
 ```
 
@@ -456,13 +456,13 @@ vpxd_servicecfg ha services
 #### 维护命令
 
 ```bash
-# 执行HA检查
+    # 执行HA检查
 vpxd_servicecfg ha check
 
-# 查看HA日志
+    # 查看HA日志
 vpxd_servicecfg ha logs
 
-# 执行HA测试
+    # 执行HA测试
 vpxd_servicecfg ha test
 ```
 
@@ -498,13 +498,13 @@ vpxd_servicecfg ha test
 #### 处理命令
 
 ```bash
-# 故障检测
+    # 故障检测
 vpxd_servicecfg ha diagnose
 
-# 故障恢复
+    # 故障恢复
 vpxd_servicecfg ha recover
 
-# 服务重启
+    # 服务重启
 vpxd_servicecfg ha restart
 ```
 

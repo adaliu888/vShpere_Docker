@@ -109,7 +109,7 @@
     - [故障排除](#故障排除)
 
 
-# vRealize Automation技术详解
+    # vRealize Automation技术详解
 
 ## vRealize Automation概述
 
@@ -174,16 +174,16 @@ vRealize Automation (vRA) 是VMware的云自动化平台，提供自助服务、
 
 ```bash
 #!/bin/bash
-# vRA部署脚本
+    # vRA部署脚本
 
-# 1. 准备部署环境
+    # 1. 准备部署环境
 export VRA_OVA_PATH="/path/to/vra.ova"
 export VRA_HOSTNAME="vra.company.com"
 export VRA_IP="192.168.1.100"
 export VRA_GATEWAY="192.168.1.1"
 export VRA_DNS="8.8.8.8"
 
-# 2. 部署vRA Appliance
+    # 2. 部署vRA Appliance
 ovftool --acceptAllEulas --noSSLVerify \
   --name="vRealize-Automation" \
   --datastore="Datastore1" \
@@ -192,12 +192,12 @@ ovftool --acceptAllEulas --noSSLVerify \
   $VRA_OVA_PATH \
   vi://administrator@vcenter.company.com/DataCenter/host/Cluster
 
-# 3. 配置网络
+    # 3. 配置网络
 ssh root@$VRA_IP
 /opt/vmware/share/vami/vami_config_net
-# 配置IP、网关、DNS
+    # 配置IP、网关、DNS
 
-# 4. 启动服务
+    # 4. 启动服务
 systemctl start vrealize-automation
 systemctl enable vrealize-automation
 ```
@@ -205,7 +205,7 @@ systemctl enable vrealize-automation
 ### 初始配置
 
 ```powershell
-# vRA初始配置
+    # vRA初始配置
 function Initialize-vRA {
     param(
         [string]$vRAServer,
@@ -247,7 +247,7 @@ function Initialize-vRA {
 ### 基础蓝图
 
 ```yaml
-# 基础蓝图示例
+    # 基础蓝图示例
 name: "Web Application Blueprint"
 description: "Web应用基础蓝图"
 version: "1.0"
@@ -297,7 +297,7 @@ policies:
 ### 高级蓝图
 
 ```yaml
-# 高级蓝图示例
+    # 高级蓝图示例
 name: "Multi-Tier Application"
 description: "多层应用蓝图"
 version: "2.0"
@@ -387,7 +387,7 @@ policies:
 ### 资源策略
 
 ```powershell
-# 资源策略配置
+    # 资源策略配置
 function Set-vRAResourcePolicy {
     param(
         [string]$PolicyName,
@@ -435,7 +435,7 @@ function Set-vRAResourcePolicy {
 ### 审批策略
 
 ```powershell
-# 审批策略配置
+    # 审批策略配置
 function Set-vRAApprovalPolicy {
     param(
         [string]$PolicyName,
@@ -464,7 +464,7 @@ function Set-vRAApprovalPolicy {
 ### 自定义工作流
 
 ```powershell
-# 自定义工作流
+    # 自定义工作流
 function Create-vRAWorkflow {
     param(
         [string]$WorkflowName,
@@ -491,7 +491,7 @@ function Create-vRAWorkflow {
     New-vRAWorkflow -Config $workflowConfig
 }
 
-# 使用示例
+    # 使用示例
 Create-vRAWorkflow -WorkflowName "Application Deployment" -WorkflowType "Deployment" -WorkflowSteps {
     # 步骤1：环境准备
     Invoke-vRAStep -Name "Prepare Environment" -Action "Create Network"
@@ -510,7 +510,7 @@ Create-vRAWorkflow -WorkflowName "Application Deployment" -WorkflowType "Deploym
 ### 事件驱动工作流
 
 ```powershell
-# 事件驱动工作流
+    # 事件驱动工作流
 function Create-vRAEventWorkflow {
     param(
         [string]$EventType,
@@ -541,7 +541,7 @@ function Create-vRAEventWorkflow {
 ### vSphere集成
 
 ```powershell
-# vSphere集成配置
+    # vSphere集成配置
 function Configure-vSphereIntegration {
     param(
         [string]$vCenterServer,
@@ -576,7 +576,7 @@ function Configure-vSphereIntegration {
 ### 外部系统集成
 
 ```powershell
-# 外部系统集成
+    # 外部系统集成
 function Configure-ExternalIntegration {
     param(
         [string]$SystemType,
@@ -609,7 +609,7 @@ function Configure-ExternalIntegration {
 ### 服务监控
 
 ```powershell
-# 服务监控配置
+    # 服务监控配置
 function Start-vRAMonitoring {
     param(
         [string]$MonitoringScope,
@@ -638,7 +638,7 @@ function Start-vRAMonitoring {
 ### 使用报告
 
 ```powershell
-# 使用报告生成
+    # 使用报告生成
 function Generate-vRAUsageReport {
     param(
         [string]$ReportType,

@@ -1,4 +1,4 @@
-# DevOps容器化实践
+    # DevOps容器化实践
 
 ## 目录
 
@@ -264,7 +264,7 @@ pipeline {
 ### 3.2 GitLab CI配置
 
 ```yaml
-# .gitlab-ci.yml
+    # .gitlab-ci.yml
 stages:
   - build
   - test
@@ -319,7 +319,7 @@ deploy:
 ### 3.3 GitHub Actions
 
 ```yaml
-# .github/workflows/ci-cd.yml
+    # .github/workflows/ci-cd.yml
 name: CI/CD Pipeline
 
 on:
@@ -457,7 +457,7 @@ describe('User Management', () => {
 ### 5.1 蓝绿部署
 
 ```yaml
-# 蓝绿部署配置
+    # 蓝绿部署配置
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
@@ -494,7 +494,7 @@ spec:
 ### 5.2 金丝雀部署
 
 ```yaml
-# 金丝雀部署配置
+    # 金丝雀部署配置
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
@@ -532,7 +532,7 @@ spec:
 ### 5.3 自动回滚
 
 ```yaml
-# 自动回滚配置
+    # 自动回滚配置
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -562,7 +562,7 @@ data:
 ### 6.1 部署监控
 
 ```yaml
-# 部署监控配置
+    # 部署监控配置
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -596,7 +596,7 @@ data:
 ### 6.2 性能监控
 
 ```yaml
-# 性能监控配置
+    # 性能监控配置
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -632,7 +632,7 @@ data:
 ### 6.3 反馈机制
 
 ```yaml
-# 反馈机制配置
+    # 反馈机制配置
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -667,7 +667,7 @@ data:
 ### 7.1 代码扫描
 
 ```yaml
-# 代码扫描配置
+    # 代码扫描配置
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -701,7 +701,7 @@ data:
 ### 7.2 镜像扫描
 
 ```yaml
-# 镜像扫描配置
+    # 镜像扫描配置
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -735,7 +735,7 @@ data:
 ### 7.3 安全策略
 
 ```yaml
-# 安全策略配置
+    # 安全策略配置
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -771,7 +771,7 @@ data:
 ### 8.1 微服务CI/CD
 
 ```yaml
-# 微服务CI/CD配置
+    # 微服务CI/CD配置
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -830,7 +830,7 @@ data:
 ### 8.2 多环境部署
 
 ```yaml
-# 多环境部署配置
+    # 多环境部署配置
 apiVersion: v1
 kind: ConfigMap
 metadata:

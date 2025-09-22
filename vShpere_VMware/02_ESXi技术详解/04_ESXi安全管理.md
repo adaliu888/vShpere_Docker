@@ -1,4 +1,4 @@
-# ESXi安全管理深度解析
+    # ESXi安全管理深度解析
 
 ## 目录
 
@@ -293,33 +293,33 @@
 #### 本地用户管理
 
 ```bash
-# 创建本地用户
+    # 创建本地用户
 esxcli system account add --id=admin --password=password --role=Administrator
 
-# 修改用户密码
+    # 修改用户密码
 esxcli system account set --id=admin --password=newpassword
 
-# 删除用户
+    # 删除用户
 esxcli system account remove --id=admin
 ```
 
 #### 域认证配置
 
 ```bash
-# 加入域
+    # 加入域
 esxcli system domain join --domain=example.com --username=administrator --password=password
 
-# 离开域
+    # 离开域
 esxcli system domain leave --username=administrator --password=password
 ```
 
 #### LDAP认证配置
 
 ```bash
-# 配置LDAP服务器
+    # 配置LDAP服务器
 esxcli system ldap set --server=ldap.example.com --port=389
 
-# 配置LDAP认证
+    # 配置LDAP认证
 esxcli system ldap set --server=ldap.example.com --port=389 --username=cn=admin,dc=example,dc=com --password=password
 ```
 
@@ -328,20 +328,20 @@ esxcli system ldap set --server=ldap.example.com --port=389 --username=cn=admin,
 #### 角色管理
 
 ```bash
-# 查看角色
+    # 查看角色
 esxcli system permission list
 
-# 分配角色
+    # 分配角色
 esxcli system permission set --id=admin --role=Administrator
 
-# 移除权限
+    # 移除权限
 esxcli system permission remove --id=admin
 ```
 
 #### 权限配置
 
 ```bash
-# 配置权限策略
+    # 配置权限策略
 esxcli system settings advanced set --option=Security.PasswordQualityControl --value=similar=deny
 esxcli system settings advanced set --option=Security.AccountLockFailures --value=5
 esxcli system settings advanced set --option=Security.AccountUnlockTime --value=900
@@ -354,26 +354,26 @@ esxcli system settings advanced set --option=Security.AccountUnlockTime --value=
 #### 防火墙管理
 
 ```bash
-# 启用防火墙
+    # 启用防火墙
 esxcli network firewall set --enabled=true
 
-# 禁用防火墙
+    # 禁用防火墙
 esxcli network firewall set --enabled=false
 
-# 查看防火墙状态
+    # 查看防火墙状态
 esxcli network firewall get
 ```
 
 #### 防火墙规则配置
 
 ```bash
-# 启用SSH规则
+    # 启用SSH规则
 esxcli network firewall ruleset set --ruleset-id=sshServer --enabled=true
 
-# 启用vCenter规则
+    # 启用vCenter规则
 esxcli network firewall ruleset set --ruleset-id=vCenter --enabled=true
 
-# 配置自定义规则
+    # 配置自定义规则
 esxcli network firewall ruleset rule add --ruleset-id=custom --port=8080 --protocol=tcp --direction=inbound
 ```
 
@@ -382,17 +382,17 @@ esxcli network firewall ruleset rule add --ruleset-id=custom --port=8080 --proto
 #### 网络分段
 
 ```bash
-# 配置VLAN
+    # 配置VLAN
 esxcli network vswitch standard portgroup set --portgroup-name=VM Network --vlan-id=100
 
-# 配置网络隔离
+    # 配置网络隔离
 esxcli network vswitch standard set --vswitch-name=vSwitch1 --mtu=9000
 ```
 
 #### 网络安全策略
 
 ```bash
-# 配置网络安全参数
+    # 配置网络安全参数
 esxcli system settings advanced set --option=Net.TcpipHeapSize --value=32
 esxcli system settings advanced set --option=Net.TcpipHeapMax --value=1536
 ```
@@ -404,20 +404,20 @@ esxcli system settings advanced set --option=Net.TcpipHeapMax --value=1536
 #### 存储加密
 
 ```bash
-# 启用存储加密
+    # 启用存储加密
 esxcli storage vmfs encryption set --enabled=true
 
-# 配置加密密钥
+    # 配置加密密钥
 esxcli storage vmfs encryption key add --key-id=key1 --key=encryptionkey
 ```
 
 #### 传输加密
 
 ```bash
-# 配置TLS加密
+    # 配置TLS加密
 esxcli system settings advanced set --option=Config.HostAgent.plugins.solo.enableMob --value=true
 
-# 配置SSL证书
+    # 配置SSL证书
 esxcli system certificate install --certificate=cert.pem --private-key=key.pem
 ```
 
@@ -426,10 +426,10 @@ esxcli system certificate install --certificate=cert.pem --private-key=key.pem
 #### 数据完整性检查
 
 ```bash
-# 配置数据完整性检查
+    # 配置数据完整性检查
 esxcli system settings advanced set --option=Disk.EnableUUID --value=1
 
-# 配置数据校验
+    # 配置数据校验
 esxcli system settings advanced set --option=Disk.UseDeviceReset --value=1
 ```
 
@@ -440,7 +440,7 @@ esxcli system settings advanced set --option=Disk.UseDeviceReset --value=1
 #### 安全参数配置
 
 ```bash
-# 配置安全参数
+    # 配置安全参数
 esxcli system settings advanced set --option=Security.PasswordQualityControl --value=similar=deny
 esxcli system settings advanced set --option=Security.AccountLockFailures --value=5
 esxcli system settings advanced set --option=Security.AccountUnlockTime --value=900
@@ -449,7 +449,7 @@ esxcli system settings advanced set --option=Security.AccountUnlockTime --value=
 #### 系统服务安全
 
 ```bash
-# 配置服务安全
+    # 配置服务安全
 esxcli system settings advanced set --option=Config.HostAgent.log.level --value=info
 esxcli system settings advanced set --option=Config.HostAgent.plugins.solo.enableMob --value=true
 ```
@@ -459,20 +459,20 @@ esxcli system settings advanced set --option=Config.HostAgent.plugins.solo.enabl
 #### UEFI安全启动
 
 ```bash
-# 配置安全启动
+    # 配置安全启动
 esxcli system settings advanced set --option=VMkernel.Boot.execInstalledOnly --value=1
 
-# 配置安全启动参数
+    # 配置安全启动参数
 esxcli system settings advanced set --option=VMkernel.Boot.hypervisor --value=1
 ```
 
 #### TPM支持
 
 ```bash
-# 配置TPM支持
+    # 配置TPM支持
 esxcli system settings advanced set --option=Security.TPM --value=1
 
-# 配置TPM参数
+    # 配置TPM参数
 esxcli system settings advanced set --option=Security.TPM.Enabled --value=1
 ```
 
@@ -483,20 +483,20 @@ esxcli system settings advanced set --option=Security.TPM.Enabled --value=1
 #### 系统审计
 
 ```bash
-# 启用系统审计
+    # 启用系统审计
 esxcli system audit set --enabled=true
 
-# 配置审计日志
+    # 配置审计日志
 esxcli system audit set --enabled=true --log-dir=/scratch/log
 ```
 
 #### 安全事件监控
 
 ```bash
-# 配置安全事件监控
+    # 配置安全事件监控
 esxcli system settings advanced set --option=Config.HostAgent.log.level --value=info
 
-# 配置安全告警
+    # 配置安全告警
 esxcli system settings advanced set --option=Security.AccountLockFailures --value=5
 ```
 
@@ -523,17 +523,17 @@ esxcli system settings advanced set --option=Security.AccountLockFailures --valu
 #### 密码复杂度
 
 ```bash
-# 配置密码复杂度
+    # 配置密码复杂度
 esxcli system settings advanced set --option=Security.PasswordQualityControl --value=similar=deny
 
-# 配置密码长度
+    # 配置密码长度
 esxcli system settings advanced set --option=Security.PasswordMinLength --value=8
 ```
 
 #### 账户锁定策略
 
 ```bash
-# 配置账户锁定
+    # 配置账户锁定
 esxcli system settings advanced set --option=Security.AccountLockFailures --value=5
 esxcli system settings advanced set --option=Security.AccountUnlockTime --value=900
 ```
@@ -543,10 +543,10 @@ esxcli system settings advanced set --option=Security.AccountUnlockTime --value=
 #### 访问时间限制
 
 ```bash
-# 配置访问时间限制
+    # 配置访问时间限制
 esxcli system settings advanced set --option=Security.SessionTimeout --value=3600
 
-# 配置会话管理
+    # 配置会话管理
 esxcli system settings advanced set --option=Security.SessionMax --value=10
 ```
 
@@ -557,20 +557,20 @@ esxcli system settings advanced set --option=Security.SessionMax --value=10
 #### 异常检测
 
 ```bash
-# 配置异常检测
+    # 配置异常检测
 esxcli system settings advanced set --option=Security.AccountLockFailures --value=5
 
-# 配置安全告警
+    # 配置安全告警
 esxcli system settings advanced set --option=Config.HostAgent.log.level --value=info
 ```
 
 #### 安全事件分析
 
 ```bash
-# 查看安全日志
+    # 查看安全日志
 tail -f /var/log/vmware/hostd.log
 
-# 分析安全事件
+    # 分析安全事件
 esxcli system audit get
 ```
 

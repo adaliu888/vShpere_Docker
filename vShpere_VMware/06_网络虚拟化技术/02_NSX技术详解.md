@@ -1,4 +1,4 @@
-# NSX技术详解深度解析
+    # NSX技术详解深度解析
 
 ## 目录
 
@@ -143,10 +143,10 @@ NSX（Network Virtualization and Security Platform）是VMware开发的网络虚
 #### 硬件配置
 
 ```bash
-# 查看网络设备
+    # 查看网络设备
 esxcli network nic list
 
-# 配置网络设备
+    # 配置网络设备
 esxcli network nic set --nic=vmnic0 --speed=1000 --duplex=full
 ```
 
@@ -155,17 +155,17 @@ esxcli network nic set --nic=vmnic0 --speed=1000 --duplex=full
 #### NSX网络
 
 ```bash
-# 配置NSX网络
+    # 配置NSX网络
 esxcli network vswitch standard portgroup add --portgroup-name=NSX --vswitch-name=vSwitch0
 
-# 配置NSX IP
+    # 配置NSX IP
 esxcli network ip interface ipv4 set --interface-name=vmk1 --type=static --ipv4=192.168.100.10 --netmask=255.255.255.0
 ```
 
 #### 网络优化
 
 ```bash
-# 配置网络优化
+    # 配置网络优化
 esxcli system settings advanced set --option=Net.TcpipHeapSize --value=32
 esxcli system settings advanced set --option=Net.TcpipHeapMax --value=1536
 ```
@@ -175,20 +175,20 @@ esxcli system settings advanced set --option=Net.TcpipHeapMax --value=1536
 #### 启用NSX
 
 ```bash
-# 启用NSX
+    # 启用NSX
 esxcli nsx cluster join --cluster-uuid=cluster-uuid
 
-# 查看NSX状态
+    # 查看NSX状态
 esxcli nsx cluster get
 ```
 
 #### 配置网络策略
 
 ```bash
-# 创建网络策略
+    # 创建网络策略
 New-NsxNetworkPolicy -Name "NSX-Policy" -Description "NSX network policy"
 
-# 应用网络策略
+    # 应用网络策略
 Set-VM -VM "Web-Server-01" -NetworkPolicy "NSX-Policy"
 ```
 
@@ -199,26 +199,26 @@ Set-VM -VM "Web-Server-01" -NetworkPolicy "NSX-Policy"
 #### 网络设备管理
 
 ```bash
-# 查看网络设备
+    # 查看网络设备
 esxcli nsx network list
 
-# 添加网络设备
+    # 添加网络设备
 esxcli nsx network add --network=network1 --vlan=100
 
-# 移除网络设备
+    # 移除网络设备
 esxcli nsx network remove --network=network1
 ```
 
 #### 网络策略管理
 
 ```bash
-# 查看网络策略
+    # 查看网络策略
 Get-NsxNetworkPolicy
 
-# 创建网络策略
+    # 创建网络策略
 New-NsxNetworkPolicy -Name "Gold-Policy" -Description "Gold network policy"
 
-# 更新网络策略
+    # 更新网络策略
 Set-NsxNetworkPolicy -NetworkPolicy "Gold-Policy" -Description "Updated gold policy"
 ```
 
@@ -227,23 +227,23 @@ Set-NsxNetworkPolicy -NetworkPolicy "Gold-Policy" -Description "Updated gold pol
 #### 集群操作
 
 ```bash
-# 查看集群状态
+    # 查看集群状态
 esxcli nsx cluster get
 
-# 添加节点
+    # 添加节点
 esxcli nsx cluster join --cluster-uuid=cluster-uuid
 
-# 移除节点
+    # 移除节点
 esxcli nsx cluster leave
 ```
 
 #### 集群监控
 
 ```bash
-# 查看集群健康状态
+    # 查看集群健康状态
 esxcli nsx health get
 
-# 查看集群性能
+    # 查看集群性能
 esxcli nsx perf stats get
 ```
 
@@ -254,7 +254,7 @@ esxcli nsx perf stats get
 #### 网络配置优化
 
 ```bash
-# 配置网络参数
+    # 配置网络参数
 esxcli system settings advanced set --option=NSX.NetworkOptimization --value=true
 esxcli system settings advanced set --option=NSX.NetworkCaching --value=true
 ```
@@ -262,7 +262,7 @@ esxcli system settings advanced set --option=NSX.NetworkCaching --value=true
 #### 网络性能优化
 
 ```bash
-# 配置网络性能
+    # 配置网络性能
 esxcli system settings advanced set --option=NSX.NetworkPerformance --value=high
 esxcli system settings advanced set --option=NSX.NetworkLatency --value=low
 ```
@@ -272,7 +272,7 @@ esxcli system settings advanced set --option=NSX.NetworkLatency --value=low
 #### 安全配置优化
 
 ```bash
-# 配置安全参数
+    # 配置安全参数
 esxcli system settings advanced set --option=NSX.SecurityEnabled --value=true
 esxcli system settings advanced set --option=NSX.SecurityPolicy --value=strict
 ```
@@ -280,7 +280,7 @@ esxcli system settings advanced set --option=NSX.SecurityPolicy --value=strict
 #### 安全性能优化
 
 ```bash
-# 配置安全性能
+    # 配置安全性能
 esxcli system settings advanced set --option=NSX.SecurityPerformance --value=high
 esxcli system settings advanced set --option=NSX.SecurityLatency --value=low
 ```
@@ -299,13 +299,13 @@ esxcli system settings advanced set --option=NSX.SecurityLatency --value=low
 #### 监控工具
 
 ```bash
-# 查看性能统计
+    # 查看性能统计
 esxcli nsx perf stats get
 
-# 查看健康状态
+    # 查看健康状态
 esxcli nsx health get
 
-# 查看网络状态
+    # 查看网络状态
 esxcli nsx network list
 ```
 
@@ -314,20 +314,20 @@ esxcli nsx network list
 #### 健康检查
 
 ```bash
-# 执行健康检查
+    # 执行健康检查
 esxcli nsx health check run
 
-# 查看健康报告
+    # 查看健康报告
 esxcli nsx health check get
 ```
 
 #### 告警监控
 
 ```bash
-# 配置告警
+    # 配置告警
 esxcli system settings advanced set --option=NSX.HealthCheckInterval --value=300
 
-# 查看告警
+    # 查看告警
 esxcli nsx health get
 ```
 
@@ -354,23 +354,23 @@ esxcli nsx health get
 #### 诊断工具
 
 ```bash
-# 查看系统日志
+    # 查看系统日志
 tail -f /var/log/vmware/nsx-health.log
 
-# 查看网络状态
+    # 查看网络状态
 esxcli nsx network list
 
-# 查看集群状态
+    # 查看集群状态
 esxcli nsx cluster get
 ```
 
 #### 故障恢复
 
 ```bash
-# 恢复网络设备
+    # 恢复网络设备
 esxcli nsx network add --network=network1 --vlan=100
 
-# 恢复集群
+    # 恢复集群
 esxcli nsx cluster join --cluster-uuid=cluster-uuid
 ```
 

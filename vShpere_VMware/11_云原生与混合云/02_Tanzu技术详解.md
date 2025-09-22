@@ -1,216 +1,6 @@
-# vSphere with Tanzu技术详解
+    # vSphere with Tanzu技术详解
 
 ## 目录
-
-- [vSphere with Tanzu技术详解](#vsphere-with-tanzu技术详解)
-  - [1. Tanzu技术概述](#1-tanzu技术概述)
-    - [1.1 Tanzu产品家族](#11-tanzu产品家族)
-- [VMware Tanzu产品矩阵](#vmware-tanzu产品矩阵)
-    - [1.2 核心价值](#12-核心价值)
-      - [业务价值](#业务价值)
-      - [技术价值](#技术价值)
-  - [2. vSphere with Tanzu架构](#2-vsphere-with-tanzu架构)
-    - [2.1 整体架构](#21-整体架构)
-    - [2.2 核心组件](#22-核心组件)
-      - [控制平面组件](#控制平面组件)
-- [控制平面组件](#控制平面组件)
-      - [工作节点组件](#工作节点组件)
-- [工作节点组件](#工作节点组件)
-  - [3. Supervisor Cluster管理](#3-supervisor-cluster管理)
-    - [3.1 Supervisor Cluster概述](#31-supervisor-cluster概述)
-      - [功能特性](#功能特性)
-- [Supervisor Cluster功能特性](#supervisor-cluster功能特性)
-    - [3.2 部署配置](#32-部署配置)
-      - [部署要求](#部署要求)
-- [Supervisor Cluster部署要求](#supervisor-cluster部署要求)
-      - [部署步骤](#部署步骤)
-- [Supervisor Cluster部署步骤](#supervisor-cluster部署步骤)
-- [1. 启用vSphere with Tanzu](#1-启用vsphere-with-tanzu)
-- [2. 配置Tanzu网络](#2-配置tanzu网络)
-- [3. 创建Supervisor Cluster](#3-创建supervisor-cluster)
-- [4. 配置存储策略](#4-配置存储策略)
-- [5. 配置网络策略](#5-配置网络策略)
-- [6. 验证部署](#6-验证部署)
-- [示例：启用vSphere with Tanzu](#示例启用vsphere-with-tanzu)
-- [通过vCenter UI或PowerCLI执行](#通过vcenter-ui或powercli执行)
-    - [3.3 管理操作](#33-管理操作)
-      - [集群管理](#集群管理)
-- [Supervisor Cluster管理操作](#supervisor-cluster管理操作)
-  - [4. Tanzu Kubernetes Grid](#4-tanzu-kubernetes-grid)
-    - [4.1 TKG概述](#41-tkg概述)
-      - [产品特性](#产品特性)
-- [Tanzu Kubernetes Grid特性](#tanzu-kubernetes-grid特性)
-    - [4.2 集群类型](#42-集群类型)
-      - [集群类型对比](#集群类型对比)
-- [TKG集群类型](#tkg集群类型)
-    - [4.3 部署管理](#43-部署管理)
-      - [部署流程](#部署流程)
-- [TKG部署流程](#tkg部署流程)
-  - [5. 命名空间管理](#5-命名空间管理)
-    - [5.1 命名空间概念](#51-命名空间概念)
-      - [命名空间特性](#命名空间特性)
-- [命名空间特性](#命名空间特性)
-    - [5.2 命名空间配置](#52-命名空间配置)
-      - [配置示例](#配置示例)
-- [命名空间配置示例](#命名空间配置示例)
-    - [5.3 权限管理](#53-权限管理)
-      - [RBAC配置](#rbac配置)
-- [RBAC配置示例](#rbac配置示例)
-  - [6. 存储集成](#6-存储集成)
-    - [6.1 vSphere存储集成](#61-vsphere存储集成)
-      - [存储类型](#存储类型)
-- [vSphere存储类型](#vsphere存储类型)
-    - [6.2 存储策略](#62-存储策略)
-      - [存储策略配置](#存储策略配置)
-- [存储策略配置](#存储策略配置)
-    - [6.3 持久卷管理](#63-持久卷管理)
-      - [持久卷配置](#持久卷配置)
-- [持久卷配置示例](#持久卷配置示例)
-  - [7. 网络集成](#7-网络集成)
-    - [7.1 NSX-T集成](#71-nsx-t集成)
-      - [网络架构](#网络架构)
-    - [7.2 网络策略](#72-网络策略)
-      - [网络策略配置](#网络策略配置)
-- [网络策略配置示例](#网络策略配置示例)
-    - [7.3 服务网格集成](#73-服务网格集成)
-      - [Istio集成](#istio集成)
-- [Istio服务网格配置](#istio服务网格配置)
-  - [8. 安全与合规](#8-安全与合规)
-    - [8.1 安全架构](#81-安全架构)
-      - [安全层次](#安全层次)
-- [安全架构层次](#安全架构层次)
-    - [8.2 安全策略](#82-安全策略)
-      - [Pod安全策略](#pod安全策略)
-- [Pod安全策略配置](#pod安全策略配置)
-    - [8.3 合规管理](#83-合规管理)
-      - [合规检查](#合规检查)
-- [合规检查配置](#合规检查配置)
-  - [9. 监控与运维](#9-监控与运维)
-    - [9.1 监控架构](#91-监控架构)
-      - [监控组件](#监控组件)
-- [监控组件](#监控组件)
-    - [9.2 日志管理](#92-日志管理)
-      - [日志架构](#日志架构)
-- [日志管理架构](#日志管理架构)
-    - [9.3 运维自动化](#93-运维自动化)
-      - [自动化工具](#自动化工具)
-- [运维自动化工具](#运维自动化工具)
-  - [10. 最佳实践](#10-最佳实践)
-    - [10.1 设计原则](#101-设计原则)
-      - [云原生设计原则](#云原生设计原则)
-- [云原生设计原则](#云原生设计原则)
-    - [10.2 实施策略](#102-实施策略)
-      - [迁移策略](#迁移策略)
-- [迁移策略](#迁移策略)
-    - [10.3 运维最佳实践](#103-运维最佳实践)
-      - [运维策略](#运维策略)
-- [运维最佳实践](#运维最佳实践)
-  - [总结](#总结)
-
-- [vSphere with Tanzu技术详解](#vsphere-with-tanzu技术详解)
-  - [1. Tanzu技术概述](#1-tanzu技术概述)
-    - [1.1 Tanzu产品家族](#11-tanzu产品家族)
-- [VMware Tanzu产品矩阵](#vmware-tanzu产品矩阵)
-    - [1.2 核心价值](#12-核心价值)
-      - [业务价值](#业务价值)
-      - [技术价值](#技术价值)
-  - [2. vSphere with Tanzu架构](#2-vsphere-with-tanzu架构)
-    - [2.1 整体架构](#21-整体架构)
-    - [2.2 核心组件](#22-核心组件)
-      - [控制平面组件](#控制平面组件)
-- [控制平面组件](#控制平面组件)
-      - [工作节点组件](#工作节点组件)
-- [工作节点组件](#工作节点组件)
-  - [3. Supervisor Cluster管理](#3-supervisor-cluster管理)
-    - [3.1 Supervisor Cluster概述](#31-supervisor-cluster概述)
-      - [功能特性](#功能特性)
-- [Supervisor Cluster功能特性](#supervisor-cluster功能特性)
-    - [3.2 部署配置](#32-部署配置)
-      - [部署要求](#部署要求)
-- [Supervisor Cluster部署要求](#supervisor-cluster部署要求)
-      - [部署步骤](#部署步骤)
-- [Supervisor Cluster部署步骤](#supervisor-cluster部署步骤)
-- [1. 启用vSphere with Tanzu](#1-启用vsphere-with-tanzu)
-- [2. 配置Tanzu网络](#2-配置tanzu网络)
-- [3. 创建Supervisor Cluster](#3-创建supervisor-cluster)
-- [4. 配置存储策略](#4-配置存储策略)
-- [5. 配置网络策略](#5-配置网络策略)
-- [6. 验证部署](#6-验证部署)
-- [示例：启用vSphere with Tanzu](#示例启用vsphere-with-tanzu)
-- [通过vCenter UI或PowerCLI执行](#通过vcenter-ui或powercli执行)
-    - [3.3 管理操作](#33-管理操作)
-      - [集群管理](#集群管理)
-- [Supervisor Cluster管理操作](#supervisor-cluster管理操作)
-  - [4. Tanzu Kubernetes Grid](#4-tanzu-kubernetes-grid)
-    - [4.1 TKG概述](#41-tkg概述)
-      - [产品特性](#产品特性)
-- [Tanzu Kubernetes Grid特性](#tanzu-kubernetes-grid特性)
-    - [4.2 集群类型](#42-集群类型)
-      - [集群类型对比](#集群类型对比)
-- [TKG集群类型](#tkg集群类型)
-    - [4.3 部署管理](#43-部署管理)
-      - [部署流程](#部署流程)
-- [TKG部署流程](#tkg部署流程)
-  - [5. 命名空间管理](#5-命名空间管理)
-    - [5.1 命名空间概念](#51-命名空间概念)
-      - [命名空间特性](#命名空间特性)
-- [命名空间特性](#命名空间特性)
-    - [5.2 命名空间配置](#52-命名空间配置)
-      - [配置示例](#配置示例)
-- [命名空间配置示例](#命名空间配置示例)
-    - [5.3 权限管理](#53-权限管理)
-      - [RBAC配置](#rbac配置)
-- [RBAC配置示例](#rbac配置示例)
-  - [6. 存储集成](#6-存储集成)
-    - [6.1 vSphere存储集成](#61-vsphere存储集成)
-      - [存储类型](#存储类型)
-- [vSphere存储类型](#vsphere存储类型)
-    - [6.2 存储策略](#62-存储策略)
-      - [存储策略配置](#存储策略配置)
-- [存储策略配置](#存储策略配置)
-    - [6.3 持久卷管理](#63-持久卷管理)
-      - [持久卷配置](#持久卷配置)
-- [持久卷配置示例](#持久卷配置示例)
-  - [7. 网络集成](#7-网络集成)
-    - [7.1 NSX-T集成](#71-nsx-t集成)
-      - [网络架构](#网络架构)
-    - [7.2 网络策略](#72-网络策略)
-      - [网络策略配置](#网络策略配置)
-- [网络策略配置示例](#网络策略配置示例)
-    - [7.3 服务网格集成](#73-服务网格集成)
-      - [Istio集成](#istio集成)
-- [Istio服务网格配置](#istio服务网格配置)
-  - [8. 安全与合规](#8-安全与合规)
-    - [8.1 安全架构](#81-安全架构)
-      - [安全层次](#安全层次)
-- [安全架构层次](#安全架构层次)
-    - [8.2 安全策略](#82-安全策略)
-      - [Pod安全策略](#pod安全策略)
-- [Pod安全策略配置](#pod安全策略配置)
-    - [8.3 合规管理](#83-合规管理)
-      - [合规检查](#合规检查)
-- [合规检查配置](#合规检查配置)
-  - [9. 监控与运维](#9-监控与运维)
-    - [9.1 监控架构](#91-监控架构)
-      - [监控组件](#监控组件)
-- [监控组件](#监控组件)
-    - [9.2 日志管理](#92-日志管理)
-      - [日志架构](#日志架构)
-- [日志管理架构](#日志管理架构)
-    - [9.3 运维自动化](#93-运维自动化)
-      - [自动化工具](#自动化工具)
-- [运维自动化工具](#运维自动化工具)
-  - [10. 最佳实践](#10-最佳实践)
-    - [10.1 设计原则](#101-设计原则)
-      - [云原生设计原则](#云原生设计原则)
-- [云原生设计原则](#云原生设计原则)
-    - [10.2 实施策略](#102-实施策略)
-      - [迁移策略](#迁移策略)
-- [迁移策略](#迁移策略)
-    - [10.3 运维最佳实践](#103-运维最佳实践)
-      - [运维策略](#运维策略)
-- [运维最佳实践](#运维最佳实践)
-  - [总结](#总结)
 
 - [vSphere with Tanzu技术详解](#vsphere-with-tanzu技术详解)
   - [目录](#目录)
@@ -230,7 +20,7 @@
 ### 1.1 Tanzu产品家族
 
 ```yaml
-# VMware Tanzu产品矩阵
+    # VMware Tanzu产品矩阵
 tanzu_products:
   vsphere_with_tanzu:
     description: "vSphere原生Kubernetes支持"
@@ -313,7 +103,7 @@ tanzu_products:
 #### 控制平面组件
 
 ```yaml
-# 控制平面组件
+    # 控制平面组件
 control_plane_components:
   api_server:
     description: "Kubernetes API服务器"
@@ -351,7 +141,7 @@ control_plane_components:
 #### 工作节点组件
 
 ```yaml
-# 工作节点组件
+    # 工作节点组件
 worker_node_components:
   kubelet:
     description: "节点代理"
@@ -385,7 +175,7 @@ worker_node_components:
 #### 功能特性
 
 ```yaml
-# Supervisor Cluster功能特性
+    # Supervisor Cluster功能特性
 supervisor_cluster_features:
   kubernetes_api:
     description: "Kubernetes API支持"
@@ -417,7 +207,7 @@ supervisor_cluster_features:
 #### 部署要求
 
 ```yaml
-# Supervisor Cluster部署要求
+    # Supervisor Cluster部署要求
 deployment_requirements:
   hardware:
     description: "硬件要求"
@@ -447,16 +237,16 @@ deployment_requirements:
 #### 部署步骤
 
 ```bash
-# Supervisor Cluster部署步骤
-# 1. 启用vSphere with Tanzu
-# 2. 配置Tanzu网络
-# 3. 创建Supervisor Cluster
-# 4. 配置存储策略
-# 5. 配置网络策略
-# 6. 验证部署
+    # Supervisor Cluster部署步骤
+    # 1. 启用vSphere with Tanzu
+    # 2. 配置Tanzu网络
+    # 3. 创建Supervisor Cluster
+    # 4. 配置存储策略
+    # 5. 配置网络策略
+    # 6. 验证部署
 
-# 示例：启用vSphere with Tanzu
-# 通过vCenter UI或PowerCLI执行
+    # 示例：启用vSphere with Tanzu
+    # 通过vCenter UI或PowerCLI执行
 ```
 
 ### 3.3 管理操作
@@ -464,7 +254,7 @@ deployment_requirements:
 #### 集群管理
 
 ```yaml
-# Supervisor Cluster管理操作
+    # Supervisor Cluster管理操作
 cluster_management:
   cluster_creation:
     description: "集群创建"
@@ -499,7 +289,7 @@ cluster_management:
 #### 产品特性
 
 ```yaml
-# Tanzu Kubernetes Grid特性
+    # Tanzu Kubernetes Grid特性
 tkg_features:
   production_ready:
     description: "生产就绪"
@@ -531,7 +321,7 @@ tkg_features:
 #### 集群类型对比
 
 ```yaml
-# TKG集群类型
+    # TKG集群类型
 cluster_types:
   management_cluster:
     description: "管理集群"
@@ -566,7 +356,7 @@ cluster_types:
 #### 部署流程
 
 ```yaml
-# TKG部署流程
+    # TKG部署流程
 deployment_process:
   preparation:
     description: "准备阶段"
@@ -600,7 +390,7 @@ deployment_process:
 #### 命名空间特性
 
 ```yaml
-# 命名空间特性
+    # 命名空间特性
 namespace_features:
   resource_isolation:
     description: "资源隔离"
@@ -632,7 +422,7 @@ namespace_features:
 #### 配置示例
 
 ```yaml
-# 命名空间配置示例
+    # 命名空间配置示例
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -665,7 +455,7 @@ spec:
 #### RBAC配置
 
 ```yaml
-# RBAC配置示例
+    # RBAC配置示例
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -701,7 +491,7 @@ roleRef:
 #### 存储类型
 
 ```yaml
-# vSphere存储类型
+    # vSphere存储类型
 storage_types:
   vsan:
     description: "vSAN存储"
@@ -733,7 +523,7 @@ storage_types:
 #### 存储策略配置
 
 ```yaml
-# 存储策略配置
+    # 存储策略配置
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -752,7 +542,7 @@ volumeBindingMode: WaitForFirstConsumer
 #### 持久卷配置
 
 ```yaml
-# 持久卷配置示例
+    # 持久卷配置示例
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -816,7 +606,7 @@ spec:
 #### 网络策略配置
 
 ```yaml
-# 网络策略配置示例
+    # 网络策略配置示例
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -852,7 +642,7 @@ spec:
 #### Istio集成
 
 ```yaml
-# Istio服务网格配置
+    # Istio服务网格配置
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
@@ -902,7 +692,7 @@ spec:
 #### 安全层次
 
 ```yaml
-# 安全架构层次
+    # 安全架构层次
 security_layers:
   infrastructure_security:
     description: "基础设施安全"
@@ -934,7 +724,7 @@ security_layers:
 #### Pod安全策略
 
 ```yaml
-# Pod安全策略配置
+    # Pod安全策略配置
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
@@ -964,7 +754,7 @@ spec:
 #### 合规检查
 
 ```yaml
-# 合规检查配置
+    # 合规检查配置
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -999,7 +789,7 @@ data:
 #### 监控组件
 
 ```yaml
-# 监控组件
+    # 监控组件
 monitoring_components:
   prometheus:
     description: "指标收集"
@@ -1031,7 +821,7 @@ monitoring_components:
 #### 日志架构
 
 ```yaml
-# 日志管理架构
+    # 日志管理架构
 logging_architecture:
   collection:
     description: "日志收集"
@@ -1063,7 +853,7 @@ logging_architecture:
 #### 自动化工具
 
 ```yaml
-# 运维自动化工具
+    # 运维自动化工具
 automation_tools:
   argo_cd:
     description: "GitOps工具"
@@ -1097,7 +887,7 @@ automation_tools:
 #### 云原生设计原则
 
 ```yaml
-# 云原生设计原则
+    # 云原生设计原则
 design_principles:
   stateless:
     description: "无状态设计"
@@ -1129,7 +919,7 @@ design_principles:
 #### 迁移策略
 
 ```yaml
-# 迁移策略
+    # 迁移策略
 migration_strategy:
   assessment:
     description: "现状评估"
@@ -1161,7 +951,7 @@ migration_strategy:
 #### 运维策略
 
 ```yaml
-# 运维最佳实践
+    # 运维最佳实践
 operational_best_practices:
   monitoring:
     description: "监控策略"

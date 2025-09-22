@@ -1,4 +1,4 @@
-# vCenter Server管理深度解析
+    # vCenter Server管理深度解析
 
 ## 目录
 
@@ -658,13 +658,13 @@ vCenter Server是VMware vSphere套件的核心管理组件，提供集中化的�
 #### 安装步骤
 
 ```bash
-# 1. 准备安装环境
-# 2. 下载安装包
-# 3. 运行安装程序
-# 4. 配置数据库连接
-# 5. 配置网络设置
-# 6. 设置管理员账户
-# 7. 完成安装
+    # 1. 准备安装环境
+    # 2. 下载安装包
+    # 3. 运行安装程序
+    # 4. 配置数据库连接
+    # 5. 配置网络设置
+    # 6. 设置管理员账户
+    # 7. 完成安装
 ```
 
 ### 2.3 初始配置
@@ -672,22 +672,22 @@ vCenter Server是VMware vSphere套件的核心管理组件，提供集中化的�
 #### 基本配置
 
 ```bash
-# 配置主机名和IP
-# 配置DNS设置
-# 配置时间同步
-# 配置SSL证书
-# 配置数据库连接
-# 配置存储设置
+    # 配置主机名和IP
+    # 配置DNS设置
+    # 配置时间同步
+    # 配置SSL证书
+    # 配置数据库连接
+    # 配置存储设置
 ```
 
 #### 服务配置
 
 ```bash
-# 启动vCenter服务
+    # 启动vCenter服务
 service-control --start vpxd
 service-control --start vsphere-ui
 
-# 检查服务状态
+    # 检查服务状态
 service-control --status vpxd
 service-control --status vsphere-ui
 ```
@@ -707,19 +707,19 @@ service-control --status vsphere-ui
 #### 服务管理命令
 
 ```bash
-# 启动服务
+    # 启动服务
 service-control --start vpxd
 service-control --start vsphere-ui
 
-# 停止服务
+    # 停止服务
 service-control --stop vpxd
 service-control --stop vsphere-ui
 
-# 重启服务
+    # 重启服务
 service-control --restart vpxd
 service-control --restart vsphere-ui
 
-# 查看服务状态
+    # 查看服务状态
 service-control --status vpxd
 service-control --status vsphere-ui
 ```
@@ -729,20 +729,20 @@ service-control --status vsphere-ui
 #### 系统配置
 
 ```bash
-# 查看系统配置
+    # 查看系统配置
 vpxd_servicecfg system get
 
-# 配置系统参数
+    # 配置系统参数
 vpxd_servicecfg system set --option=config.vpxd.stats.maxQueryMetrics --value=256
 ```
 
 #### 数据库配置
 
 ```bash
-# 查看数据库配置
+    # 查看数据库配置
 vpxd_servicecfg database get
 
-# 配置数据库连接
+    # 配置数据库连接
 vpxd_servicecfg database set --host=db-server --port=5432 --database=vcdb
 ```
 
@@ -751,13 +751,13 @@ vpxd_servicecfg database set --host=db-server --port=5432 --database=vcdb
 #### 系统监控
 
 ```bash
-# 查看系统状态
+    # 查看系统状态
 vpxd_servicecfg system status
 
-# 查看性能统计
+    # 查看性能统计
 vpxd_servicecfg stats get
 
-# 查看日志
+    # 查看日志
 tail -f /var/log/vmware/vpxd/vpxd.log
 ```
 
@@ -776,10 +776,10 @@ tail -f /var/log/vmware/vpxd/vpxd.log
 #### 配置示例
 
 ```bash
-# 使用PowerCLI创建数据中心
+    # 使用PowerCLI创建数据中心
 New-Datacenter -Name "Production-DC" -Location (Get-Folder -Name "Datacenters")
 
-# 添加主机到数据中心
+    # 添加主机到数据中心
 Add-VMHost -Name "esxi01.example.com" -Location "Production-DC" -User "root" -Password "password"
 ```
 
@@ -795,13 +795,13 @@ Add-VMHost -Name "esxi01.example.com" -Location "Production-DC" -User "root" -Pa
 #### 集群管理命令
 
 ```bash
-# 创建集群
+    # 创建集群
 New-Cluster -Name "Production-Cluster" -Location "Production-DC"
 
-# 配置HA
+    # 配置HA
 Set-Cluster -Cluster "Production-Cluster" -HAEnabled $true
 
-# 配置DRS
+    # 配置DRS
 Set-Cluster -Cluster "Production-Cluster" -DrsEnabled $true -DrsAutomationLevel FullyAutomated
 ```
 
@@ -810,20 +810,20 @@ Set-Cluster -Cluster "Production-Cluster" -DrsEnabled $true -DrsAutomationLevel 
 #### 主机添加
 
 ```bash
-# 添加主机
+    # 添加主机
 Add-VMHost -Name "esxi02.example.com" -Location "Production-Cluster" -User "root" -Password "password"
 
-# 配置主机
+    # 配置主机
 Set-VMHost -VMHost "esxi02.example.com" -State "Connected"
 ```
 
 #### 主机配置
 
 ```bash
-# 配置主机网络
+    # 配置主机网络
 Get-VMHostNetworkAdapter -VMHost "esxi02.example.com"
 
-# 配置主机存储
+    # 配置主机存储
 Get-VMHostStorage -VMHost "esxi02.example.com"
 ```
 
@@ -841,10 +841,10 @@ Get-VMHostStorage -VMHost "esxi02.example.com"
 #### 创建示例
 
 ```bash
-# 从模板创建虚拟机
+    # 从模板创建虚拟机
 New-VM -Name "Web-Server-01" -Template "Windows-Server-2019" -VMHost "esxi01.example.com" -Datastore "datastore1"
 
-# 克隆虚拟机
+    # 克隆虚拟机
 New-VM -Name "Web-Server-02" -VM "Web-Server-01" -VMHost "esxi02.example.com"
 ```
 
@@ -853,20 +853,20 @@ New-VM -Name "Web-Server-02" -VM "Web-Server-01" -VMHost "esxi02.example.com"
 #### 硬件配置
 
 ```bash
-# 配置CPU
+    # 配置CPU
 Set-VM -VM "Web-Server-01" -NumCpu 4
 
-# 配置内存
+    # 配置内存
 Set-VM -VM "Web-Server-01" -MemoryGB 8
 
-# 添加硬盘
+    # 添加硬盘
 New-HardDisk -VM "Web-Server-01" -CapacityGB 100 -StorageFormat Thin
 ```
 
 #### 网络配置
 
 ```bash
-# 配置网络适配器
+    # 配置网络适配器
 Get-NetworkAdapter -VM "Web-Server-01"
 Set-NetworkAdapter -NetworkAdapter (Get-NetworkAdapter -VM "Web-Server-01") -NetworkName "VM Network"
 ```
@@ -876,23 +876,23 @@ Set-NetworkAdapter -NetworkAdapter (Get-NetworkAdapter -VM "Web-Server-01") -Net
 #### 电源操作
 
 ```bash
-# 启动虚拟机
+    # 启动虚拟机
 Start-VM -VM "Web-Server-01"
 
-# 关闭虚拟机
+    # 关闭虚拟机
 Stop-VM -VM "Web-Server-01" -Confirm:$false
 
-# 重启虚拟机
+    # 重启虚拟机
 Restart-VM -VM "Web-Server-01" -Confirm:$false
 ```
 
 #### 快照操作
 
 ```bash
-# 创建快照
+    # 创建快照
 New-Snapshot -VM "Web-Server-01" -Name "Before-Update" -Description "Snapshot before system update"
 
-# 恢复快照
+    # 恢复快照
 Set-VM -VM "Web-Server-01" -Snapshot (Get-Snapshot -VM "Web-Server-01" -Name "Before-Update")
 ```
 
@@ -910,13 +910,13 @@ Set-VM -VM "Web-Server-01" -Snapshot (Get-Snapshot -VM "Web-Server-01" -Name "Be
 #### 数据存储管理
 
 ```bash
-# 查看数据存储
+    # 查看数据存储
 Get-Datastore
 
-# 创建数据存储
+    # 创建数据存储
 New-Datastore -Name "datastore2" -VMHost "esxi01.example.com" -Path "/vmfs/volumes/datastore2"
 
-# 配置数据存储
+    # 配置数据存储
 Set-Datastore -Datastore "datastore1" -MaintenanceMode $false
 ```
 
@@ -925,10 +925,10 @@ Set-Datastore -Datastore "datastore1" -MaintenanceMode $false
 #### 存储策略配置
 
 ```bash
-# 创建存储策略
+    # 创建存储策略
 New-SpbmStoragePolicy -Name "Gold-Storage" -Description "High performance storage policy"
 
-# 应用存储策略
+    # 应用存储策略
 Set-VM -VM "Web-Server-01" -StoragePolicy "Gold-Storage"
 ```
 
@@ -937,10 +937,10 @@ Set-VM -VM "Web-Server-01" -StoragePolicy "Gold-Storage"
 #### 性能监控
 
 ```bash
-# 查看存储性能
+    # 查看存储性能
 Get-Stat -Entity "datastore1" -Stat "datastore.totalReadLatency.average"
 
-# 配置存储性能
+    # 配置存储性能
 Set-VMHostAdvancedConfiguration -VMHost "esxi01.example.com" -Name "Disk.DiskMaxIOSize" -Value 32768
 ```
 
@@ -951,23 +951,23 @@ Set-VMHostAdvancedConfiguration -VMHost "esxi01.example.com" -Name "Disk.DiskMax
 #### 虚拟交换机管理
 
 ```bash
-# 查看虚拟交换机
+    # 查看虚拟交换机
 Get-VirtualSwitch -VMHost "esxi01.example.com"
 
-# 创建虚拟交换机
+    # 创建虚拟交换机
 New-VirtualSwitch -VMHost "esxi01.example.com" -Name "vSwitch1" -NumPorts 64
 
-# 配置端口组
+    # 配置端口组
 New-VirtualPortGroup -VirtualSwitch "vSwitch1" -Name "VM Network" -VLanId 0
 ```
 
 #### 分布式交换机管理
 
 ```bash
-# 创建分布式交换机
+    # 创建分布式交换机
 New-VDSwitch -Name "dvSwitch1" -Location "Production-DC"
 
-# 添加主机到分布式交换机
+    # 添加主机到分布式交换机
 Add-VDSwitchVMHost -VDSwitch "dvSwitch1" -VMHost "esxi01.example.com"
 ```
 
@@ -976,10 +976,10 @@ Add-VDSwitchVMHost -VDSwitch "dvSwitch1" -VMHost "esxi01.example.com"
 #### 网络策略配置
 
 ```bash
-# 配置网络策略
+    # 配置网络策略
 Set-VDSwitch -VDSwitch "dvSwitch1" -Mtu 9000
 
-# 配置端口组策略
+    # 配置端口组策略
 Set-VDPortgroup -VDPortgroup "VM Network" -VlanId 100
 ```
 
@@ -988,10 +988,10 @@ Set-VDPortgroup -VDPortgroup "VM Network" -VlanId 100
 #### 性能优化
 
 ```bash
-# 配置网络性能
+    # 配置网络性能
 Set-VMHostAdvancedConfiguration -VMHost "esxi01.example.com" -Name "Net.TcpipHeapSize" -Value 32
 
-# 监控网络性能
+    # 监控网络性能
 Get-Stat -Entity "esxi01.example.com" -Stat "net.received.average"
 ```
 
@@ -1002,20 +1002,20 @@ Get-Stat -Entity "esxi01.example.com" -Stat "net.received.average"
 #### HA功能配置
 
 ```bash
-# 启用HA
+    # 启用HA
 Set-Cluster -Cluster "Production-Cluster" -HAEnabled $true
 
-# 配置HA参数
+    # 配置HA参数
 Set-Cluster -Cluster "Production-Cluster" -HAAdmissionControlEnabled $true -HAAdmissionControlPolicy (New-Object VMware.Vim.ClusterFailoverResourcesAdmissionControlPolicy)
 ```
 
 #### HA监控
 
 ```bash
-# 查看HA状态
+    # 查看HA状态
 Get-Cluster -Name "Production-Cluster" | Select-Object HAEnabled, HAAdmissionControlEnabled
 
-# 查看HA事件
+    # 查看HA事件
 Get-VIEvent -Entity "Production-Cluster" -Type "ClusterEvent"
 ```
 
@@ -1024,23 +1024,23 @@ Get-VIEvent -Entity "Production-Cluster" -Type "ClusterEvent"
 #### DRS功能配置
 
 ```bash
-# 启用DRS
+    # 启用DRS
 Set-Cluster -Cluster "Production-Cluster" -DrsEnabled $true
 
-# 配置DRS自动化级别
+    # 配置DRS自动化级别
 Set-Cluster -Cluster "Production-Cluster" -DrsAutomationLevel FullyAutomated
 
-# 配置DRS迁移阈值
+    # 配置DRS迁移阈值
 Set-Cluster -Cluster "Production-Cluster" -DrsMigrationThreshold 3
 ```
 
 #### DRS监控
 
 ```bash
-# 查看DRS状态
+    # 查看DRS状态
 Get-Cluster -Name "Production-Cluster" | Select-Object DrsEnabled, DrsAutomationLevel
 
-# 查看DRS建议
+    # 查看DRS建议
 Get-DrsRecommendation -Cluster "Production-Cluster"
 ```
 
@@ -1049,10 +1049,10 @@ Get-DrsRecommendation -Cluster "Production-Cluster"
 #### 容灾设置
 
 ```bash
-# 配置容灾
+    # 配置容灾
 Set-VM -VM "Web-Server-01" -DRSEnabled $true
 
-# 配置容灾策略
+    # 配置容灾策略
 Set-VM -VM "Web-Server-01" -DRSAutomationLevel FullyAutomated
 ```
 
@@ -1063,23 +1063,23 @@ Set-VM -VM "Web-Server-01" -DRSAutomationLevel FullyAutomated
 #### 用户创建
 
 ```bash
-# 创建本地用户
+    # 创建本地用户
 New-VIUser -Name "admin" -Password "password" -Description "Administrator user"
 
-# 配置域用户
+    # 配置域用户
 Set-VMHostAuthentication -VMHost "esxi01.example.com" -Domain "example.com" -User "administrator" -Password "password"
 ```
 
 #### 用户管理
 
 ```bash
-# 查看用户
+    # 查看用户
 Get-VIUser
 
-# 修改用户
+    # 修改用户
 Set-VIUser -User "admin" -Password "newpassword"
 
-# 删除用户
+    # 删除用户
 Remove-VIUser -User "admin" -Confirm:$false
 ```
 
@@ -1088,20 +1088,20 @@ Remove-VIUser -User "admin" -Confirm:$false
 #### 角色管理
 
 ```bash
-# 创建角色
+    # 创建角色
 New-VIRole -Name "VM-Admin" -Privilege (Get-VIPrivilege -Name "VirtualMachine.*")
 
-# 分配角色
+    # 分配角色
 New-VIPermission -Entity "Production-DC" -Principal "admin" -Role "VM-Admin"
 ```
 
 #### 权限配置
 
 ```bash
-# 查看权限
+    # 查看权限
 Get-VIPermission -Entity "Production-DC"
 
-# 修改权限
+    # 修改权限
 Set-VIPermission -Permission (Get-VIPermission -Entity "Production-DC" -Principal "admin") -Role "ReadOnly"
 ```
 
@@ -1110,10 +1110,10 @@ Set-VIPermission -Permission (Get-VIPermission -Entity "Production-DC" -Principa
 #### 安全配置
 
 ```bash
-# 配置安全策略
+    # 配置安全策略
 Set-VMHostAdvancedConfiguration -VMHost "esxi01.example.com" -Name "Security.PasswordQualityControl" -Value "similar=deny"
 
-# 配置审计日志
+    # 配置审计日志
 Set-VMHostAdvancedConfiguration -VMHost "esxi01.example.com" -Name "Config.HostAgent.log.level" -Value "info"
 ```
 
@@ -1124,10 +1124,10 @@ Set-VMHostAdvancedConfiguration -VMHost "esxi01.example.com" -Name "Config.HostA
 #### 监控设置
 
 ```bash
-# 配置性能监控
+    # 配置性能监控
 Set-StatInterval -Interval 300 -Name "5min"
 
-# 配置性能统计
+    # 配置性能统计
 Set-VMHostAdvancedConfiguration -VMHost "esxi01.example.com" -Name "Config.HostAgent.plugins.solo.enableMob" -Value $true
 ```
 
@@ -1136,10 +1136,10 @@ Set-VMHostAdvancedConfiguration -VMHost "esxi01.example.com" -Name "Config.HostA
 #### 性能数据收集
 
 ```bash
-# 收集性能数据
+    # 收集性能数据
 Get-Stat -Entity "esxi01.example.com" -Stat "cpu.usage.average" -Start (Get-Date).AddHours(-1)
 
-# 分析性能趋势
+    # 分析性能趋势
 Get-Stat -Entity "Web-Server-01" -Stat "mem.usage.average" -Realtime
 ```
 
@@ -1148,10 +1148,10 @@ Get-Stat -Entity "Web-Server-01" -Stat "mem.usage.average" -Realtime
 #### 性能调优
 
 ```bash
-# 优化CPU性能
+    # 优化CPU性能
 Set-VMHostAdvancedConfiguration -VMHost "esxi01.example.com" -Name "CPU.SchedAffinity" -Value 1
 
-# 优化内存性能
+    # 优化内存性能
 Set-VMHostAdvancedConfiguration -VMHost "esxi01.example.com" -Name "Mem.MemEagerZero" -Value 1
 ```
 
@@ -1169,10 +1169,10 @@ Set-VMHostAdvancedConfiguration -VMHost "esxi01.example.com" -Name "Mem.MemEager
 #### 备份配置
 
 ```bash
-# 配置自动备份
+    # 配置自动备份
 Set-VMHostAdvancedConfiguration -VMHost "esxi01.example.com" -Name "Config.HostAgent.plugins.solo.enableMob" -Value $true
 
-# 执行配置备份
+    # 执行配置备份
 Export-VMHostProfile -VMHost "esxi01.example.com" -FilePath "esxi01-profile.xml"
 ```
 
@@ -1181,10 +1181,10 @@ Export-VMHostProfile -VMHost "esxi01.example.com" -FilePath "esxi01-profile.xml"
 #### 备份操作
 
 ```bash
-# 执行虚拟机备份
+    # 执行虚拟机备份
 New-Snapshot -VM "Web-Server-01" -Name "Backup-$(Get-Date -Format 'yyyyMMdd')" -Description "Daily backup"
 
-# 导出虚拟机
+    # 导出虚拟机
 Export-VM -VM "Web-Server-01" -Destination "C:\Backup\"
 ```
 
@@ -1193,11 +1193,11 @@ Export-VM -VM "Web-Server-01" -Destination "C:\Backup\"
 #### 恢复步骤
 
 ```bash
-# 1. 停止相关服务
-# 2. 恢复配置文件
-# 3. 恢复数据库
-# 4. 启动服务
-# 5. 验证恢复结果
+    # 1. 停止相关服务
+    # 2. 恢复配置文件
+    # 3. 恢复数据库
+    # 4. 启动服务
+    # 5. 验证恢复结果
 ```
 
 ## 12. 故障诊断
@@ -1214,11 +1214,11 @@ Export-VM -VM "Web-Server-01" -Destination "C:\Backup\"
 #### 检测方法
 
 ```bash
-# 检查服务状态
+    # 检查服务状态
 service-control --status vpxd
 service-control --status vsphere-ui
 
-# 检查日志
+    # 检查日志
 tail -f /var/log/vmware/vpxd/vpxd.log
 tail -f /var/log/vmware/vsphere-ui/vsphere-ui.log
 ```

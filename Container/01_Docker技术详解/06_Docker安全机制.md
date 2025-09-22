@@ -1,450 +1,6 @@
-# Docker安全机制深度解析
+    # Docker安全机制深度解析
 
 ## 目录
-
-- [Docker安全机制深度解析](#docker安全机制深度解析)
-  - [1. 隔离与权限模型](#1-隔离与权限模型)
-    - [1.1 命名空间隔离](#11-命名空间隔离)
-      - [命名空间类型](#命名空间类型)
-      - [命名空间配置](#命名空间配置)
-- [查看容器命名空间](#查看容器命名空间)
-- [使用特定命名空间](#使用特定命名空间)
-- [禁用用户命名空间](#禁用用户命名空间)
-      - [命名空间安全](#命名空间安全)
-- [检查命名空间配置](#检查命名空间配置)
-- [验证隔离效果](#验证隔离效果)
-    - [1.2 控制组限制](#12-控制组限制)
-      - [cgroups配置](#cgroups配置)
-- [设置CPU限制](#设置cpu限制)
-- [设置内存限制](#设置内存限制)
-- [设置I/O限制](#设置io限制)
-      - [cgroups安全](#cgroups安全)
-- [查看cgroups配置](#查看cgroups配置)
-- [验证资源限制](#验证资源限制)
-    - [1.3 能力控制](#13-能力控制)
-      - [能力管理](#能力管理)
-- [添加能力](#添加能力)
-- [删除能力](#删除能力)
-- [查看能力](#查看能力)
-      - [安全能力配置](#安全能力配置)
-- [最小能力配置](#最小能力配置)
-    - [1.4 系统调用过滤](#14-系统调用过滤)
-      - [seccomp配置](#seccomp配置)
-- [使用默认seccomp配置](#使用默认seccomp配置)
-- [禁用seccomp](#禁用seccomp)
-- [使用自定义seccomp配置](#使用自定义seccomp配置)
-      - [自定义seccomp配置](#自定义seccomp配置)
-    - [1.5 强制访问控制](#15-强制访问控制)
-      - [SELinux配置](#selinux配置)
-- [启用SELinux](#启用selinux)
-- [查看SELinux状态](#查看selinux状态)
-- [使用SELinux标签](#使用selinux标签)
-      - [AppArmor配置](#apparmor配置)
-- [查看AppArmor状态](#查看apparmor状态)
-- [使用AppArmor配置](#使用apparmor配置)
-      - [自定义AppArmor配置](#自定义apparmor配置)
-- [创建AppArmor配置文件](#创建apparmor配置文件)
-- [加载AppArmor配置](#加载apparmor配置)
-- [使用自定义配置](#使用自定义配置)
-  - [2. 镜像与供应链安全](#2-镜像与供应链安全)
-    - [2.1 镜像签名验证](#21-镜像签名验证)
-      - [Docker Content Trust](#docker-content-trust)
-- [启用内容信任](#启用内容信任)
-- [推送签名镜像](#推送签名镜像)
-- [拉取签名镜像](#拉取签名镜像)
-      - [镜像签名配置](#镜像签名配置)
-- [配置Notary服务器](#配置notary服务器)
-- [初始化Notary](#初始化notary)
-- [添加签名](#添加签名)
-- [发布签名](#发布签名)
-    - [2.2 供应链安全](#22-供应链安全)
-      - [SBOM生成](#sbom生成)
-- [使用syft生成SBOM](#使用syft生成sbom)
-- [使用trivy扫描](#使用trivy扫描)
-      - [供应链验证](#供应链验证)
-- [验证镜像完整性](#验证镜像完整性)
-- [检查镜像历史](#检查镜像历史)
-- [验证镜像签名](#验证镜像签名)
-    - [2.3 漏洞扫描](#23-漏洞扫描)
-      - [集成扫描工具](#集成扫描工具)
-- [使用Trivy扫描](#使用trivy扫描)
-- [使用Clair扫描](#使用clair扫描)
-- [使用Anchore扫描](#使用anchore扫描)
-      - [CI/CD集成](#cicd集成)
-- [GitHub Actions示例](#github-actions示例)
-    - [2.4 安全策略](#24-安全策略)
-      - [镜像安全策略](#镜像安全策略)
-- [安全策略示例](#安全策略示例)
-  - [3. 运行时与网络安全](#3-运行时与网络安全)
-    - [3.1 运行时安全](#31-运行时安全)
-      - [只读根文件系统](#只读根文件系统)
-- [使用只读根文件系统](#使用只读根文件系统)
-      - [用户权限控制](#用户权限控制)
-- [使用非root用户](#使用非root用户)
-- [创建专用用户](#创建专用用户)
-      - [资源限制](#资源限制)
-- [设置资源限制](#设置资源限制)
-    - [3.2 网络安全](#32-网络安全)
-      - [网络隔离](#网络隔离)
-- [使用自定义网络](#使用自定义网络)
-- [运行容器](#运行容器)
-      - [端口限制](#端口限制)
-- [限制端口暴露](#限制端口暴露)
-- [使用随机端口](#使用随机端口)
-      - [网络策略](#网络策略)
-- [禁用容器间通信](#禁用容器间通信)
-    - [3.3 资源限制](#33-资源限制)
-      - [内存限制](#内存限制)
-- [设置内存限制](#设置内存限制)
-- [设置内存预留](#设置内存预留)
-      - [CPU限制](#cpu限制)
-- [设置CPU限制](#设置cpu限制)
-- [设置CPU亲和性](#设置cpu亲和性)
-    - [3.4 监控审计](#34-监控审计)
-      - [审计日志](#审计日志)
-- [启用审计日志](#启用审计日志)
-      - [监控配置](#监控配置)
-- [配置监控](#配置监控)
-  - [4. Rootless 与沙箱运行时](#4-rootless-与沙箱运行时)
-    - [4.1 Rootless模式](#41-rootless模式)
-      - [Rootless配置](#rootless配置)
-- [安装Rootless Docker](#安装rootless-docker)
-- [设置环境变量](#设置环境变量)
-- [验证Rootless模式](#验证rootless模式)
-      - [Rootless特性](#rootless特性)
-    - [4.2 沙箱运行时](#42-沙箱运行时)
-      - [Kata Containers](#kata-containers)
-- [安装Kata Containers](#安装kata-containers)
-- [配置Kata运行时](#配置kata运行时)
-      - [gVisor](#gvisor)
-- [安装gVisor](#安装gvisor)
-- [配置gVisor运行时](#配置gvisor运行时)
-    - [4.3 安全边界](#43-安全边界)
-      - [隔离级别对比](#隔离级别对比)
-    - [4.4 性能权衡](#44-性能权衡)
-      - [性能测试](#性能测试)
-- [测试不同运行时性能](#测试不同运行时性能)
-  - [5. 安全基线与合规](#5-安全基线与合规)
-    - [5.1 安全基线](#51-安全基线)
-      - [基础安全配置](#基础安全配置)
-- [配置Docker安全选项](#配置docker安全选项)
-      - [系统安全配置](#系统安全配置)
-- [配置系统安全参数](#配置系统安全参数)
-    - [5.2 合规要求](#52-合规要求)
-      - [CIS Docker基准](#cis-docker基准)
-- [安装CIS基准检查工具](#安装cis基准检查工具)
-- [运行CIS基准检查](#运行cis基准检查)
-      - [合规检查脚本](#合规检查脚本)
-- [合规检查脚本](#合规检查脚本)
-- [检查Docker版本](#检查docker版本)
-- [检查Docker配置](#检查docker配置)
-- [检查容器配置](#检查容器配置)
-- [检查镜像安全](#检查镜像安全)
-    - [5.3 审计日志](#53-审计日志)
-      - [日志配置](#日志配置)
-- [配置审计日志](#配置审计日志)
-      - [日志分析](#日志分析)
-- [分析Docker日志](#分析docker日志)
-- [分析系统日志](#分析系统日志)
-    - [5.4 密钥管理](#54-密钥管理)
-      - [密钥存储](#密钥存储)
-- [使用Docker Secrets](#使用docker-secrets)
-- [使用密钥](#使用密钥)
-      - [密钥轮换](#密钥轮换)
-- [创建新密钥](#创建新密钥)
-- [更新服务](#更新服务)
-  - [6. 故障与应急响应](#6-故障与应急响应)
-    - [6.1 安全事件检测](#61-安全事件检测)
-      - [异常检测](#异常检测)
-- [安全事件检测脚本](#安全事件检测脚本)
-- [检查异常容器](#检查异常容器)
-- [检查异常网络连接](#检查异常网络连接)
-- [检查异常进程](#检查异常进程)
-      - [入侵检测](#入侵检测)
-- [检查文件完整性](#检查文件完整性)
-- [检查网络异常](#检查网络异常)
-- [检查系统调用](#检查系统调用)
-    - [6.2 应急响应流程](#62-应急响应流程)
-      - [响应步骤](#响应步骤)
-      - [应急脚本](#应急脚本)
-- [应急响应脚本](#应急响应脚本)
-- [1. 隔离容器](#1-隔离容器)
-- [2. 保存证据](#2-保存证据)
-- [3. 分析容器](#3-分析容器)
-    - [6.3 证据保全](#63-证据保全)
-      - [证据收集](#证据收集)
-- [收集容器证据](#收集容器证据)
-- [收集系统证据](#收集系统证据)
-      - [证据分析](#证据分析)
-- [分析容器文件系统](#分析容器文件系统)
-- [分析日志](#分析日志)
-- [分析网络连接](#分析网络连接)
-    - [6.4 恢复策略](#64-恢复策略)
-      - [系统恢复](#系统恢复)
-- [停止所有容器](#停止所有容器)
-- [清理受感染的容器](#清理受感染的容器)
-- [重新部署](#重新部署)
-      - [数据恢复](#数据恢复)
-- [从备份恢复数据](#从备份恢复数据)
-  - [7. 最佳实践与工具](#7-最佳实践与工具)
-    - [7.1 安全最佳实践](#71-安全最佳实践)
-      - [容器安全原则](#容器安全原则)
-      - [安全配置模板](#安全配置模板)
-- [安全Dockerfile模板](#安全dockerfile模板)
-- [创建非root用户](#创建非root用户)
-- [设置工作目录](#设置工作目录)
-- [复制应用文件](#复制应用文件)
-- [切换到非root用户](#切换到非root用户)
-- [设置健康检查](#设置健康检查)
-- [启动应用](#启动应用)
-    - [7.2 安全工具](#72-安全工具)
-      - [安全扫描工具](#安全扫描工具)
-- [安装Trivy](#安装trivy)
-- [扫描镜像](#扫描镜像)
-- [扫描文件系统](#扫描文件系统)
-      - [安全监控工具](#安全监控工具)
-- [安装Falco](#安装falco)
-- [启动Falco](#启动falco)
-    - [7.3 加固脚本](#73-加固脚本)
-      - [系统加固脚本](#系统加固脚本)
-- [Docker系统加固脚本](#docker系统加固脚本)
-- [1. 配置Docker安全选项](#1-配置docker安全选项)
-- [2. 配置系统安全参数](#2-配置系统安全参数)
-- [Docker安全参数](#docker安全参数)
-- [3. 应用配置](#3-应用配置)
-    - [7.4 监控告警](#74-监控告警)
-      - [安全监控脚本](#安全监控脚本)
-- [安全监控脚本](#安全监控脚本)
-- [检查异常容器](#检查异常容器)
-- [检查异常网络连接](#检查异常网络连接)
-- [检查异常进程](#检查异常进程)
-  - [版本差异说明](#版本差异说明)
-  - [参考资源](#参考资源)
-
-- [Docker安全机制深度解析](#docker安全机制深度解析)
-  - [1. 隔离与权限模型](#1-隔离与权限模型)
-    - [1.1 命名空间隔离](#11-命名空间隔离)
-      - [命名空间类型](#命名空间类型)
-      - [命名空间配置](#命名空间配置)
-- [查看容器命名空间](#查看容器命名空间)
-- [使用特定命名空间](#使用特定命名空间)
-- [禁用用户命名空间](#禁用用户命名空间)
-      - [命名空间安全](#命名空间安全)
-- [检查命名空间配置](#检查命名空间配置)
-- [验证隔离效果](#验证隔离效果)
-    - [1.2 控制组限制](#12-控制组限制)
-      - [cgroups配置](#cgroups配置)
-- [设置CPU限制](#设置cpu限制)
-- [设置内存限制](#设置内存限制)
-- [设置I/O限制](#设置io限制)
-      - [cgroups安全](#cgroups安全)
-- [查看cgroups配置](#查看cgroups配置)
-- [验证资源限制](#验证资源限制)
-    - [1.3 能力控制](#13-能力控制)
-      - [能力管理](#能力管理)
-- [添加能力](#添加能力)
-- [删除能力](#删除能力)
-- [查看能力](#查看能力)
-      - [安全能力配置](#安全能力配置)
-- [最小能力配置](#最小能力配置)
-    - [1.4 系统调用过滤](#14-系统调用过滤)
-      - [seccomp配置](#seccomp配置)
-- [使用默认seccomp配置](#使用默认seccomp配置)
-- [禁用seccomp](#禁用seccomp)
-- [使用自定义seccomp配置](#使用自定义seccomp配置)
-      - [自定义seccomp配置](#自定义seccomp配置)
-    - [1.5 强制访问控制](#15-强制访问控制)
-      - [SELinux配置](#selinux配置)
-- [启用SELinux](#启用selinux)
-- [查看SELinux状态](#查看selinux状态)
-- [使用SELinux标签](#使用selinux标签)
-      - [AppArmor配置](#apparmor配置)
-- [查看AppArmor状态](#查看apparmor状态)
-- [使用AppArmor配置](#使用apparmor配置)
-      - [自定义AppArmor配置](#自定义apparmor配置)
-- [创建AppArmor配置文件](#创建apparmor配置文件)
-- [允许访问网络](#允许访问网络)
-- [允许访问文件系统](#允许访问文件系统)
-- [拒绝其他访问](#拒绝其他访问)
-- [加载AppArmor配置](#加载apparmor配置)
-- [使用自定义配置](#使用自定义配置)
-  - [2. 镜像与供应链安全](#2-镜像与供应链安全)
-    - [2.1 镜像签名验证](#21-镜像签名验证)
-      - [Docker Content Trust](#docker-content-trust)
-- [启用内容信任](#启用内容信任)
-- [推送签名镜像](#推送签名镜像)
-- [拉取签名镜像](#拉取签名镜像)
-      - [镜像签名配置](#镜像签名配置)
-- [配置Notary服务器](#配置notary服务器)
-- [初始化Notary](#初始化notary)
-- [添加签名](#添加签名)
-- [发布签名](#发布签名)
-    - [2.2 供应链安全](#22-供应链安全)
-      - [SBOM生成](#sbom生成)
-- [使用syft生成SBOM](#使用syft生成sbom)
-- [使用trivy扫描](#使用trivy扫描)
-      - [供应链验证](#供应链验证)
-- [验证镜像完整性](#验证镜像完整性)
-- [检查镜像历史](#检查镜像历史)
-- [验证镜像签名](#验证镜像签名)
-    - [2.3 漏洞扫描](#23-漏洞扫描)
-      - [集成扫描工具](#集成扫描工具)
-- [使用Trivy扫描](#使用trivy扫描)
-- [使用Clair扫描](#使用clair扫描)
-- [使用Anchore扫描](#使用anchore扫描)
-      - [CI/CD集成](#cicd集成)
-- [GitHub Actions示例](#github-actions示例)
-    - [2.4 安全策略](#24-安全策略)
-      - [镜像安全策略](#镜像安全策略)
-- [安全策略示例](#安全策略示例)
-  - [3. 运行时与网络安全](#3-运行时与网络安全)
-    - [3.1 运行时安全](#31-运行时安全)
-      - [只读根文件系统](#只读根文件系统)
-- [使用只读根文件系统](#使用只读根文件系统)
-      - [用户权限控制](#用户权限控制)
-- [使用非root用户](#使用非root用户)
-- [创建专用用户](#创建专用用户)
-      - [资源限制](#资源限制)
-- [设置资源限制](#设置资源限制)
-    - [3.2 网络安全](#32-网络安全)
-      - [网络隔离](#网络隔离)
-- [使用自定义网络](#使用自定义网络)
-- [运行容器](#运行容器)
-      - [端口限制](#端口限制)
-- [限制端口暴露](#限制端口暴露)
-- [使用随机端口](#使用随机端口)
-      - [网络策略](#网络策略)
-- [禁用容器间通信](#禁用容器间通信)
-    - [3.3 资源限制](#33-资源限制)
-      - [内存限制](#内存限制)
-- [设置内存限制](#设置内存限制)
-- [设置内存预留](#设置内存预留)
-      - [CPU限制](#cpu限制)
-- [设置CPU限制](#设置cpu限制)
-- [设置CPU亲和性](#设置cpu亲和性)
-    - [3.4 监控审计](#34-监控审计)
-      - [审计日志](#审计日志)
-- [启用审计日志](#启用审计日志)
-      - [监控配置](#监控配置)
-- [配置监控](#配置监控)
-  - [4. Rootless 与沙箱运行时](#4-rootless-与沙箱运行时)
-    - [4.1 Rootless模式](#41-rootless模式)
-      - [Rootless配置](#rootless配置)
-- [安装Rootless Docker](#安装rootless-docker)
-- [设置环境变量](#设置环境变量)
-- [验证Rootless模式](#验证rootless模式)
-      - [Rootless特性](#rootless特性)
-    - [4.2 沙箱运行时](#42-沙箱运行时)
-      - [Kata Containers](#kata-containers)
-- [安装Kata Containers](#安装kata-containers)
-- [配置Kata运行时](#配置kata运行时)
-      - [gVisor](#gvisor)
-- [安装gVisor](#安装gvisor)
-- [配置gVisor运行时](#配置gvisor运行时)
-    - [4.3 安全边界](#43-安全边界)
-      - [隔离级别对比](#隔离级别对比)
-    - [4.4 性能权衡](#44-性能权衡)
-      - [性能测试](#性能测试)
-- [测试不同运行时性能](#测试不同运行时性能)
-  - [5. 安全基线与合规](#5-安全基线与合规)
-    - [5.1 安全基线](#51-安全基线)
-      - [基础安全配置](#基础安全配置)
-- [配置Docker安全选项](#配置docker安全选项)
-      - [系统安全配置](#系统安全配置)
-- [配置系统安全参数](#配置系统安全参数)
-    - [5.2 合规要求](#52-合规要求)
-      - [CIS Docker基准](#cis-docker基准)
-- [安装CIS基准检查工具](#安装cis基准检查工具)
-- [运行CIS基准检查](#运行cis基准检查)
-      - [合规检查脚本](#合规检查脚本)
-- [合规检查脚本](#合规检查脚本)
-- [检查Docker版本](#检查docker版本)
-- [检查Docker配置](#检查docker配置)
-- [检查容器配置](#检查容器配置)
-- [检查镜像安全](#检查镜像安全)
-    - [5.3 审计日志](#53-审计日志)
-      - [日志配置](#日志配置)
-- [配置审计日志](#配置审计日志)
-      - [日志分析](#日志分析)
-- [分析Docker日志](#分析docker日志)
-- [分析系统日志](#分析系统日志)
-    - [5.4 密钥管理](#54-密钥管理)
-      - [密钥存储](#密钥存储)
-- [使用Docker Secrets](#使用docker-secrets)
-- [使用密钥](#使用密钥)
-      - [密钥轮换](#密钥轮换)
-- [创建新密钥](#创建新密钥)
-- [更新服务](#更新服务)
-  - [6. 故障与应急响应](#6-故障与应急响应)
-    - [6.1 安全事件检测](#61-安全事件检测)
-      - [异常检测](#异常检测)
-- [安全事件检测脚本](#安全事件检测脚本)
-- [检查异常容器](#检查异常容器)
-- [检查异常网络连接](#检查异常网络连接)
-- [检查异常进程](#检查异常进程)
-      - [入侵检测](#入侵检测)
-- [检查文件完整性](#检查文件完整性)
-- [检查网络异常](#检查网络异常)
-- [检查系统调用](#检查系统调用)
-    - [6.2 应急响应流程](#62-应急响应流程)
-      - [响应步骤](#响应步骤)
-      - [应急脚本](#应急脚本)
-- [应急响应脚本](#应急响应脚本)
-- [1. 隔离容器](#1-隔离容器)
-- [2. 保存证据](#2-保存证据)
-- [3. 分析容器](#3-分析容器)
-    - [6.3 证据保全](#63-证据保全)
-      - [证据收集](#证据收集)
-- [收集容器证据](#收集容器证据)
-- [收集系统证据](#收集系统证据)
-      - [证据分析](#证据分析)
-- [分析容器文件系统](#分析容器文件系统)
-- [分析日志](#分析日志)
-- [分析网络连接](#分析网络连接)
-    - [6.4 恢复策略](#64-恢复策略)
-      - [系统恢复](#系统恢复)
-- [停止所有容器](#停止所有容器)
-- [清理受感染的容器](#清理受感染的容器)
-- [重新部署](#重新部署)
-      - [数据恢复](#数据恢复)
-- [从备份恢复数据](#从备份恢复数据)
-  - [7. 最佳实践与工具](#7-最佳实践与工具)
-    - [7.1 安全最佳实践](#71-安全最佳实践)
-      - [容器安全原则](#容器安全原则)
-      - [安全配置模板](#安全配置模板)
-- [安全Dockerfile模板](#安全dockerfile模板)
-- [创建非root用户](#创建非root用户)
-- [设置工作目录](#设置工作目录)
-- [复制应用文件](#复制应用文件)
-- [切换到非root用户](#切换到非root用户)
-- [设置健康检查](#设置健康检查)
-- [启动应用](#启动应用)
-    - [7.2 安全工具](#72-安全工具)
-      - [安全扫描工具](#安全扫描工具)
-- [安装Trivy](#安装trivy)
-- [扫描镜像](#扫描镜像)
-- [扫描文件系统](#扫描文件系统)
-      - [安全监控工具](#安全监控工具)
-- [安装Falco](#安装falco)
-- [启动Falco](#启动falco)
-    - [7.3 加固脚本](#73-加固脚本)
-      - [系统加固脚本](#系统加固脚本)
-- [Docker系统加固脚本](#docker系统加固脚本)
-- [1. 配置Docker安全选项](#1-配置docker安全选项)
-- [2. 配置系统安全参数](#2-配置系统安全参数)
-- [Docker安全参数](#docker安全参数)
-- [3. 应用配置](#3-应用配置)
-    - [7.4 监控告警](#74-监控告警)
-      - [安全监控脚本](#安全监控脚本)
-- [安全监控脚本](#安全监控脚本)
-- [检查异常容器](#检查异常容器)
-- [发送告警](#发送告警)
-- [检查异常网络连接](#检查异常网络连接)
-- [发送告警](#发送告警)
-- [检查异常进程](#检查异常进程)
-- [发送告警](#发送告警)
-  - [版本差异说明](#版本差异说明)
-  - [参考资源](#参考资源)
 
 - [Docker安全机制深度解析](#docker安全机制深度解析)
   - [目录](#目录)
@@ -503,27 +59,27 @@ Docker使用Linux命名空间提供容器隔离：
 #### 命名空间配置
 
 ```bash
-# 查看容器命名空间
+    # 查看容器命名空间
 docker inspect container_name | grep -A 10 "Namespaces"
 
-# 使用特定命名空间
+    # 使用特定命名空间
 docker run -d \
   --pid=host \
   --network=host \
   --uts=host \
   nginx:latest
 
-# 禁用用户命名空间
+    # 禁用用户命名空间
 docker run -d --userns=host nginx:latest
 ```
 
 #### 命名空间安全
 
 ```bash
-# 检查命名空间配置
+    # 检查命名空间配置
 docker run --rm --privileged alpine:latest nsenter -t 1 -m -u -i -n -p ps aux
 
-# 验证隔离效果
+    # 验证隔离效果
 docker run --rm alpine:latest ps aux
 ```
 
@@ -532,13 +88,13 @@ docker run --rm alpine:latest ps aux
 #### cgroups配置
 
 ```bash
-# 设置CPU限制
+    # 设置CPU限制
 docker run -d --cpus="1.5" nginx:latest
 
-# 设置内存限制
+    # 设置内存限制
 docker run -d --memory=512m nginx:latest
 
-# 设置I/O限制
+    # 设置I/O限制
 docker run -d \
   --device-read-bps /dev/sda:1mb \
   --device-write-bps /dev/sda:1mb \
@@ -548,10 +104,10 @@ docker run -d \
 #### cgroups安全
 
 ```bash
-# 查看cgroups配置
+    # 查看cgroups配置
 docker inspect container_name | grep -A 10 "Cgroup"
 
-# 验证资源限制
+    # 验证资源限制
 docker stats container_name
 ```
 
@@ -560,20 +116,20 @@ docker stats container_name
 #### 能力管理
 
 ```bash
-# 添加能力
+    # 添加能力
 docker run -d --cap-add=NET_ADMIN nginx:latest
 
-# 删除能力
+    # 删除能力
 docker run -d --cap-drop=ALL --cap-add=NET_BIND_SERVICE nginx:latest
 
-# 查看能力
+    # 查看能力
 docker inspect container_name | grep -A 5 "CapAdd\|CapDrop"
 ```
 
 #### 安全能力配置
 
 ```bash
-# 最小能力配置
+    # 最小能力配置
 docker run -d \
   --cap-drop=ALL \
   --cap-add=CHOWN \
@@ -587,13 +143,13 @@ docker run -d \
 #### seccomp配置
 
 ```bash
-# 使用默认seccomp配置
+    # 使用默认seccomp配置
 docker run -d --security-opt seccomp=default nginx:latest
 
-# 禁用seccomp
+    # 禁用seccomp
 docker run -d --security-opt seccomp=unconfined nginx:latest
 
-# 使用自定义seccomp配置
+    # 使用自定义seccomp配置
 docker run -d --security-opt seccomp=seccomp-profile.json nginx:latest
 ```
 
@@ -922,13 +478,13 @@ docker run -d --security-opt seccomp=seccomp-profile.json nginx:latest
 #### SELinux配置
 
 ```bash
-# 启用SELinux
+    # 启用SELinux
 setenforce 1
 
-# 查看SELinux状态
+    # 查看SELinux状态
 sestatus
 
-# 使用SELinux标签
+    # 使用SELinux标签
 docker run -d \
   --security-opt label:type:container_t \
   nginx:latest
@@ -937,10 +493,10 @@ docker run -d \
 #### AppArmor配置
 
 ```bash
-# 查看AppArmor状态
+    # 查看AppArmor状态
 aa-status
 
-# 使用AppArmor配置
+    # 使用AppArmor配置
 docker run -d \
   --security-opt apparmor=docker-default \
   nginx:latest
@@ -949,7 +505,7 @@ docker run -d \
 #### 自定义AppArmor配置
 
 ```bash
-# 创建AppArmor配置文件
+    # 创建AppArmor配置文件
 cat > /etc/apparmor.d/docker-web << EOF
 #include <tunables/global>
 
@@ -969,10 +525,10 @@ profile docker-web flags=(attach_disconnected,mediate_deleted) {
 }
 EOF
 
-# 加载AppArmor配置
+    # 加载AppArmor配置
 apparmor_parser -r /etc/apparmor.d/docker-web
 
-# 使用自定义配置
+    # 使用自定义配置
 docker run -d \
   --security-opt apparmor=docker-web \
   nginx:latest
@@ -985,29 +541,29 @@ docker run -d \
 #### Docker Content Trust
 
 ```bash
-# 启用内容信任
+    # 启用内容信任
 export DOCKER_CONTENT_TRUST=1
 
-# 推送签名镜像
+    # 推送签名镜像
 docker push myregistry/myapp:latest
 
-# 拉取签名镜像
+    # 拉取签名镜像
 docker pull myregistry/myapp:latest
 ```
 
 #### 镜像签名配置
 
 ```bash
-# 配置Notary服务器
+    # 配置Notary服务器
 export DOCKER_CONTENT_TRUST_SERVER=https://notary.docker.io
 
-# 初始化Notary
+    # 初始化Notary
 notary init myregistry/myapp
 
-# 添加签名
+    # 添加签名
 notary add myregistry/myapp latest myapp.tar
 
-# 发布签名
+    # 发布签名
 notary publish myregistry/myapp
 ```
 
@@ -1016,23 +572,23 @@ notary publish myregistry/myapp
 #### SBOM生成
 
 ```bash
-# 使用syft生成SBOM
+    # 使用syft生成SBOM
 syft myapp:latest -o spdx-json > sbom.json
 
-# 使用trivy扫描
+    # 使用trivy扫描
 trivy image --format json myapp:latest > scan.json
 ```
 
 #### 供应链验证
 
 ```bash
-# 验证镜像完整性
+    # 验证镜像完整性
 docker trust inspect myregistry/myapp:latest
 
-# 检查镜像历史
+    # 检查镜像历史
 docker history myapp:latest
 
-# 验证镜像签名
+    # 验证镜像签名
 docker trust verify myregistry/myapp:latest
 ```
 
@@ -1041,13 +597,13 @@ docker trust verify myregistry/myapp:latest
 #### 集成扫描工具
 
 ```bash
-# 使用Trivy扫描
+    # 使用Trivy扫描
 trivy image --severity HIGH,CRITICAL myapp:latest
 
-# 使用Clair扫描
+    # 使用Clair扫描
 clair-scanner --ip 192.168.1.100 myapp:latest
 
-# 使用Anchore扫描
+    # 使用Anchore扫描
 anchore-cli image add myapp:latest
 anchore-cli image vuln myapp:latest all
 ```
@@ -1055,7 +611,7 @@ anchore-cli image vuln myapp:latest all
 #### CI/CD集成
 
 ```yaml
-# GitHub Actions示例
+    # GitHub Actions示例
 - name: Scan image
   uses: aquasecurity/trivy-action@master
   with:
@@ -1069,7 +625,7 @@ anchore-cli image vuln myapp:latest all
 #### 镜像安全策略
 
 ```yaml
-# 安全策略示例
+    # 安全策略示例
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -1098,7 +654,7 @@ data:
 #### 只读根文件系统
 
 ```bash
-# 使用只读根文件系统
+    # 使用只读根文件系统
 docker run -d \
   --read-only \
   --tmpfs /tmp \
@@ -1109,12 +665,12 @@ docker run -d \
 #### 用户权限控制
 
 ```bash
-# 使用非root用户
+    # 使用非root用户
 docker run -d \
   --user 1000:1000 \
   nginx:latest
 
-# 创建专用用户
+    # 创建专用用户
 docker run -d \
   --user $(id -u):$(id -g) \
   nginx:latest
@@ -1123,7 +679,7 @@ docker run -d \
 #### 资源限制
 
 ```bash
-# 设置资源限制
+    # 设置资源限制
 docker run -d \
   --memory=512m \
   --cpus=1.0 \
@@ -1136,10 +692,10 @@ docker run -d \
 #### 网络隔离
 
 ```bash
-# 使用自定义网络
+    # 使用自定义网络
 docker network create --driver bridge secure-network
 
-# 运行容器
+    # 运行容器
 docker run -d \
   --network secure-network \
   nginx:latest
@@ -1148,19 +704,19 @@ docker run -d \
 #### 端口限制
 
 ```bash
-# 限制端口暴露
+    # 限制端口暴露
 docker run -d \
   -p 127.0.0.1:8080:80 \
   nginx:latest
 
-# 使用随机端口
+    # 使用随机端口
 docker run -d -P nginx:latest
 ```
 
 #### 网络策略
 
 ```bash
-# 禁用容器间通信
+    # 禁用容器间通信
 docker network create \
   --driver bridge \
   --opt com.docker.network.bridge.enable_icc=false \
@@ -1172,13 +728,13 @@ docker network create \
 #### 内存限制
 
 ```bash
-# 设置内存限制
+    # 设置内存限制
 docker run -d \
   --memory=512m \
   --memory-swap=1g \
   nginx:latest
 
-# 设置内存预留
+    # 设置内存预留
 docker run -d \
   --memory-reservation=256m \
   nginx:latest
@@ -1187,13 +743,13 @@ docker run -d \
 #### CPU限制
 
 ```bash
-# 设置CPU限制
+    # 设置CPU限制
 docker run -d \
   --cpus="1.5" \
   --cpu-shares=512 \
   nginx:latest
 
-# 设置CPU亲和性
+    # 设置CPU亲和性
 docker run -d \
   --cpuset-cpus="0,1" \
   nginx:latest
@@ -1204,7 +760,7 @@ docker run -d \
 #### 审计日志
 
 ```bash
-# 启用审计日志
+    # 启用审计日志
 docker run -d \
   --log-driver=json-file \
   --log-opt max-size=10m \
@@ -1215,7 +771,7 @@ docker run -d \
 #### 监控配置
 
 ```bash
-# 配置监控
+    # 配置监控
 docker run -d \
   --restart=unless-stopped \
   --health-cmd="curl -f http://localhost/ || exit 1" \
@@ -1230,13 +786,13 @@ docker run -d \
 #### Rootless配置
 
 ```bash
-# 安装Rootless Docker
+    # 安装Rootless Docker
 dockerd-rootless-setuptool.sh install
 
-# 设置环境变量
+    # 设置环境变量
 export DOCKER_HOST=unix:///run/user/$(id -u)/docker.sock
 
-# 验证Rootless模式
+    # 验证Rootless模式
 docker info | grep -i rootless
 ```
 
@@ -1252,11 +808,11 @@ docker info | grep -i rootless
 #### Kata Containers
 
 ```bash
-# 安装Kata Containers
+    # 安装Kata Containers
 curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
 
-# 配置Kata运行时
+    # 配置Kata运行时
 cat > /etc/docker/daemon.json << EOF
 {
   "runtimes": {
@@ -1271,12 +827,12 @@ EOF
 #### gVisor
 
 ```bash
-# 安装gVisor
+    # 安装gVisor
 curl -fsSL https://gvisor.dev/archive.key | sudo apt-key add -
 echo "deb https://storage.googleapis.com/gvisor/releases release main" | sudo tee /etc/apt/sources.list.d/gvisor.list
 sudo apt-get update && sudo apt-get install -y runsc
 
-# 配置gVisor运行时
+    # 配置gVisor运行时
 cat > /etc/docker/daemon.json << EOF
 {
   "runtimes": {
@@ -1303,7 +859,7 @@ EOF
 #### 性能测试
 
 ```bash
-# 测试不同运行时性能
+    # 测试不同运行时性能
 docker run --rm --runtime=runc alpine:latest time dd if=/dev/zero of=/tmp/test bs=1M count=1000
 docker run --rm --runtime=kata alpine:latest time dd if=/dev/zero of=/tmp/test bs=1M count=1000
 docker run --rm --runtime=runsc alpine:latest time dd if=/dev/zero of=/tmp/test bs=1M count=1000
@@ -1316,7 +872,7 @@ docker run --rm --runtime=runsc alpine:latest time dd if=/dev/zero of=/tmp/test 
 #### 基础安全配置
 
 ```bash
-# 配置Docker安全选项
+    # 配置Docker安全选项
 cat > /etc/docker/daemon.json << EOF
 {
   "storage-driver": "overlay2",
@@ -1336,7 +892,7 @@ EOF
 #### 系统安全配置
 
 ```bash
-# 配置系统安全参数
+    # 配置系统安全参数
 echo 'net.ipv4.ip_forward = 0' >> /etc/sysctl.conf
 echo 'net.ipv4.conf.all.send_redirects = 0' >> /etc/sysctl.conf
 echo 'net.ipv4.conf.default.send_redirects = 0' >> /etc/sysctl.conf
@@ -1350,10 +906,10 @@ sysctl -p
 #### CIS Docker基准
 
 ```bash
-# 安装CIS基准检查工具
+    # 安装CIS基准检查工具
 pip install docker-bench-security
 
-# 运行CIS基准检查
+    # 运行CIS基准检查
 docker-bench-security
 ```
 
@@ -1361,23 +917,23 @@ docker-bench-security
 
 ```bash
 #!/bin/bash
-# 合规检查脚本
+    # 合规检查脚本
 
 echo "=== Docker安全合规检查 ==="
 
-# 检查Docker版本
+    # 检查Docker版本
 echo "Docker版本:"
 docker version
 
-# 检查Docker配置
+    # 检查Docker配置
 echo "Docker配置:"
 docker info | grep -E "(Storage Driver|Logging Driver|Cgroup Driver)"
 
-# 检查容器配置
+    # 检查容器配置
 echo "容器安全配置:"
 docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
 
-# 检查镜像安全
+    # 检查镜像安全
 echo "镜像安全:"
 docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
 ```
@@ -1387,7 +943,7 @@ docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
 #### 日志配置
 
 ```bash
-# 配置审计日志
+    # 配置审计日志
 cat > /etc/docker/daemon.json << EOF
 {
   "log-driver": "json-file",
@@ -1403,10 +959,10 @@ EOF
 #### 日志分析
 
 ```bash
-# 分析Docker日志
+    # 分析Docker日志
 docker logs container_name 2>&1 | grep -E "(ERROR|WARN|CRITICAL)"
 
-# 分析系统日志
+    # 分析系统日志
 journalctl -u docker.service | grep -E "(ERROR|WARN|CRITICAL)"
 ```
 
@@ -1415,10 +971,10 @@ journalctl -u docker.service | grep -E "(ERROR|WARN|CRITICAL)"
 #### 密钥存储
 
 ```bash
-# 使用Docker Secrets
+    # 使用Docker Secrets
 echo "mysecret" | docker secret create my_secret -
 
-# 使用密钥
+    # 使用密钥
 docker service create \
   --secret my_secret \
   --name web \
@@ -1428,10 +984,10 @@ docker service create \
 #### 密钥轮换
 
 ```bash
-# 创建新密钥
+    # 创建新密钥
 echo "newsecret" | docker secret create my_secret_v2 -
 
-# 更新服务
+    # 更新服务
 docker service update \
   --secret-rm my_secret \
   --secret-add my_secret_v2 \
@@ -1446,17 +1002,17 @@ docker service update \
 
 ```bash
 #!/bin/bash
-# 安全事件检测脚本
+    # 安全事件检测脚本
 
-# 检查异常容器
+    # 检查异常容器
 echo "检查异常容器:"
 docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" | grep -v "Up"
 
-# 检查异常网络连接
+    # 检查异常网络连接
 echo "检查异常网络连接:"
 docker exec container_name netstat -an | grep ESTABLISHED
 
-# 检查异常进程
+    # 检查异常进程
 echo "检查异常进程:"
 docker exec container_name ps aux | grep -v "PID"
 ```
@@ -1464,13 +1020,13 @@ docker exec container_name ps aux | grep -v "PID"
 #### 入侵检测
 
 ```bash
-# 检查文件完整性
+    # 检查文件完整性
 docker exec container_name find / -type f -newer /tmp/baseline -exec ls -la {} \;
 
-# 检查网络异常
+    # 检查网络异常
 docker exec container_name netstat -an | grep -E "(LISTEN|ESTABLISHED)"
 
-# 检查系统调用
+    # 检查系统调用
 docker exec container_name strace -p 1
 ```
 
@@ -1488,7 +1044,7 @@ docker exec container_name strace -p 1
 
 ```bash
 #!/bin/bash
-# 应急响应脚本
+    # 应急响应脚本
 
 CONTAINER_NAME=$1
 
@@ -1499,17 +1055,17 @@ fi
 
 echo "=== 应急响应开始 ==="
 
-# 1. 隔离容器
+    # 1. 隔离容器
 echo "1. 隔离容器:"
 docker stop $CONTAINER_NAME
 docker network disconnect bridge $CONTAINER_NAME
 
-# 2. 保存证据
+    # 2. 保存证据
 echo "2. 保存证据:"
 docker export $CONTAINER_NAME > ${CONTAINER_NAME}_evidence.tar
 docker logs $CONTAINER_NAME > ${CONTAINER_NAME}_logs.txt
 
-# 3. 分析容器
+    # 3. 分析容器
 echo "3. 分析容器:"
 docker inspect $CONTAINER_NAME > ${CONTAINER_NAME}_inspect.json
 
@@ -1521,12 +1077,12 @@ echo "=== 应急响应完成 ==="
 #### 证据收集
 
 ```bash
-# 收集容器证据
+    # 收集容器证据
 docker export container_name > container_evidence.tar
 docker logs container_name > container_logs.txt
 docker inspect container_name > container_inspect.json
 
-# 收集系统证据
+    # 收集系统证据
 dmesg > system_dmesg.txt
 journalctl -u docker.service > docker_service_logs.txt
 ```
@@ -1534,13 +1090,13 @@ journalctl -u docker.service > docker_service_logs.txt
 #### 证据分析
 
 ```bash
-# 分析容器文件系统
+    # 分析容器文件系统
 tar -tf container_evidence.tar | grep -E "(bin|sbin|usr|etc)"
 
-# 分析日志
+    # 分析日志
 grep -E "(ERROR|WARN|CRITICAL)" container_logs.txt
 
-# 分析网络连接
+    # 分析网络连接
 grep -E "(ESTABLISHED|LISTEN)" container_logs.txt
 ```
 
@@ -1549,20 +1105,20 @@ grep -E "(ESTABLISHED|LISTEN)" container_logs.txt
 #### 系统恢复
 
 ```bash
-# 停止所有容器
+    # 停止所有容器
 docker stop $(docker ps -q)
 
-# 清理受感染的容器
+    # 清理受感染的容器
 docker rm $(docker ps -aq)
 
-# 重新部署
+    # 重新部署
 docker-compose up -d
 ```
 
 #### 数据恢复
 
 ```bash
-# 从备份恢复数据
+    # 从备份恢复数据
 docker run --rm \
   -v my-volume:/data \
   -v /backup:/backup \
@@ -1584,26 +1140,26 @@ docker run --rm \
 #### 安全配置模板
 
 ```dockerfile
-# 安全Dockerfile模板
+    # 安全Dockerfile模板
 FROM alpine:latest
 
-# 创建非root用户
+    # 创建非root用户
 RUN adduser -D -s /bin/sh appuser
 
-# 设置工作目录
+    # 设置工作目录
 WORKDIR /app
 
-# 复制应用文件
+    # 复制应用文件
 COPY --chown=appuser:appuser . /app
 
-# 切换到非root用户
+    # 切换到非root用户
 USER appuser
 
-# 设置健康检查
+    # 设置健康检查
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD curl -f http://localhost/ || exit 1
 
-# 启动应用
+    # 启动应用
 CMD ["/app/myapp"]
 ```
 
@@ -1612,25 +1168,25 @@ CMD ["/app/myapp"]
 #### 安全扫描工具
 
 ```bash
-# 安装Trivy
+    # 安装Trivy
 curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
 
-# 扫描镜像
+    # 扫描镜像
 trivy image nginx:latest
 
-# 扫描文件系统
+    # 扫描文件系统
 trivy fs /path/to/directory
 ```
 
 #### 安全监控工具
 
 ```bash
-# 安装Falco
+    # 安装Falco
 curl -s https://falco.org/repo/falcosecurity-3672BA8F.asc | apt-key add -
 echo "deb https://download.falco.org/packages/deb stable main" | tee -a /etc/apt/sources.list.d/falcosecurity.list
 apt-get update && apt-get install -y falco
 
-# 启动Falco
+    # 启动Falco
 systemctl start falco
 ```
 
@@ -1640,11 +1196,11 @@ systemctl start falco
 
 ```bash
 #!/bin/bash
-# Docker系统加固脚本
+    # Docker系统加固脚本
 
 echo "=== Docker系统加固开始 ==="
 
-# 1. 配置Docker安全选项
+    # 1. 配置Docker安全选项
 cat > /etc/docker/daemon.json << EOF
 {
   "storage-driver": "overlay2",
@@ -1660,9 +1216,9 @@ cat > /etc/docker/daemon.json << EOF
 }
 EOF
 
-# 2. 配置系统安全参数
+    # 2. 配置系统安全参数
 cat >> /etc/sysctl.conf << EOF
-# Docker安全参数
+    # Docker安全参数
 net.ipv4.ip_forward = 0
 net.ipv4.conf.all.send_redirects = 0
 net.ipv4.conf.default.send_redirects = 0
@@ -1670,7 +1226,7 @@ net.ipv4.conf.all.accept_redirects = 0
 net.ipv4.conf.default.accept_redirects = 0
 EOF
 
-# 3. 应用配置
+    # 3. 应用配置
 sysctl -p
 systemctl restart docker
 
@@ -1683,23 +1239,23 @@ echo "=== Docker系统加固完成 ==="
 
 ```bash
 #!/bin/bash
-# 安全监控脚本
+    # 安全监控脚本
 
-# 检查异常容器
+    # 检查异常容器
 ABNORMAL_CONTAINERS=$(docker ps --format "{{.Names}}" | grep -v "Up")
 if [ ! -z "$ABNORMAL_CONTAINERS" ]; then
     echo "发现异常容器: $ABNORMAL_CONTAINERS"
     # 发送告警
 fi
 
-# 检查异常网络连接
+    # 检查异常网络连接
 ABNORMAL_CONNECTIONS=$(docker exec container_name netstat -an | grep -E "(ESTABLISHED|LISTEN)" | wc -l)
 if [ $ABNORMAL_CONNECTIONS -gt 100 ]; then
     echo "发现异常网络连接: $ABNORMAL_CONNECTIONS"
     # 发送告警
 fi
 
-# 检查异常进程
+    # 检查异常进程
 ABNORMAL_PROCESSES=$(docker exec container_name ps aux | grep -v "PID" | wc -l)
 if [ $ABNORMAL_PROCESSES -gt 50 ]; then
     echo "发现异常进程: $ABNORMAL_PROCESSES"

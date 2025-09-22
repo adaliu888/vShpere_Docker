@@ -1,4 +1,4 @@
-# CNCF标准详解
+    # CNCF标准详解
 
 ## 概述
 
@@ -241,7 +241,7 @@ graph TB
 ### 标准演进
 
 ```yaml
-# CNCF标准版本演进
+    # CNCF标准版本演进
 cncf_standards:
   kubernetes:
     v1.25: "2022-08-23"
@@ -267,7 +267,7 @@ cncf_standards:
 #### 资源定义
 
 ```yaml
-# Pod标准定义
+    # Pod标准定义
 apiVersion: v1
 kind: Pod
 metadata:
@@ -308,7 +308,7 @@ spec:
 #### 服务定义
 
 ```yaml
-# Service标准定义
+    # Service标准定义
 apiVersion: v1
 kind: Service
 metadata:
@@ -331,7 +331,7 @@ spec:
 #### 节点选择
 
 ```yaml
-# NodeSelector标准
+    # NodeSelector标准
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -357,7 +357,7 @@ spec:
 #### 亲和性规则
 
 ```yaml
-# Affinity标准
+    # Affinity标准
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -402,7 +402,7 @@ spec:
 #### 网络策略
 
 ```yaml
-# NetworkPolicy标准
+    # NetworkPolicy标准
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -445,7 +445,7 @@ spec:
 #### Ingress标准
 
 ```yaml
-# Ingress标准
+    # Ingress标准
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -478,7 +478,7 @@ spec:
 #### 流量分割
 
 ```yaml
-# TrafficSplit标准
+    # TrafficSplit标准
 apiVersion: split.smi-spec.io/v1alpha4
 kind: TrafficSplit
 metadata:
@@ -496,7 +496,7 @@ spec:
 #### 流量访问控制
 
 ```yaml
-# TrafficAccessControl标准
+    # TrafficAccessControl标准
 apiVersion: access.smi-spec.io/v1alpha3
 kind: TrafficTarget
 metadata:
@@ -534,7 +534,7 @@ spec:
 #### 流量规范
 
 ```yaml
-# TrafficSpec标准
+    # TrafficSpec标准
 apiVersion: specs.smi-spec.io/v1alpha4
 kind: TCPRoute
 metadata:
@@ -552,7 +552,7 @@ spec:
 #### 虚拟服务
 
 ```yaml
-# VirtualService标准
+    # VirtualService标准
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
@@ -585,7 +585,7 @@ spec:
 #### 目标规则
 
 ```yaml
-# DestinationRule标准
+    # DestinationRule标准
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
@@ -615,7 +615,7 @@ spec:
 #### 指标定义
 
 ```yaml
-# ServiceMonitor标准
+    # ServiceMonitor标准
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -637,7 +637,7 @@ spec:
 #### 告警规则
 
 ```yaml
-# PrometheusRule标准
+    # PrometheusRule标准
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
@@ -672,7 +672,7 @@ spec:
 #### 指标配置
 
 ```yaml
-# OpenTelemetryCollector标准
+    # OpenTelemetryCollector标准
 apiVersion: opentelemetry.io/v1alpha1
 kind: OpenTelemetryCollector
 metadata:
@@ -717,7 +717,7 @@ spec:
 #### Pod安全策略
 
 ```yaml
-# PodSecurityPolicy标准
+    # PodSecurityPolicy标准
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
@@ -745,7 +745,7 @@ spec:
 #### Pod安全标准1
 
 ```yaml
-# PodSecurityStandard标准
+    # PodSecurityStandard标准
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -761,7 +761,7 @@ metadata:
 #### 默认拒绝策略
 
 ```yaml
-# 默认拒绝所有入站流量
+    # 默认拒绝所有入站流量
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -773,7 +773,7 @@ spec:
   - Ingress
   ingress: []
 ---
-# 默认拒绝所有出站流量
+    # 默认拒绝所有出站流量
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -793,7 +793,7 @@ spec:
 #### 存储类定义
 
 ```yaml
-# StorageClass标准
+    # StorageClass标准
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -812,7 +812,7 @@ volumeBindingMode: WaitForFirstConsumer
 #### 持久卷声明
 
 ```yaml
-# PersistentVolumeClaim标准
+    # PersistentVolumeClaim标准
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -832,7 +832,7 @@ spec:
 #### CSI驱动配置
 
 ```yaml
-# CSIDriver标准
+    # CSIDriver标准
 apiVersion: storage.k8s.io/v1
 kind: CSIDriver
 metadata:
@@ -882,7 +882,7 @@ spec:
 #### 网关配置
 
 ```yaml
-# Gateway标准
+    # Gateway标准
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
@@ -918,7 +918,7 @@ spec:
 #### 命名规范
 
 ```yaml
-# 资源命名标准
+    # 资源命名标准
 naming_conventions:
   namespaces:
     pattern: "^(dev|staging|prod)-[a-z0-9-]+$"
@@ -944,7 +944,7 @@ naming_conventions:
 #### 标签规范
 
 ```yaml
-# 标签标准
+    # 标签标准
 label_standards:
   required_labels:
     app: "应用名称"
@@ -965,7 +965,7 @@ label_standards:
 #### 安全基线
 
 ```yaml
-# 安全基线配置
+    # 安全基线配置
 security_baseline:
   pod_security:
     runAsNonRoot: true
@@ -991,7 +991,7 @@ security_baseline:
 #### 监控指标
 
 ```yaml
-# 监控指标标准
+    # 监控指标标准
 monitoring_metrics:
   application_metrics:
     - name: "http_requests_total"

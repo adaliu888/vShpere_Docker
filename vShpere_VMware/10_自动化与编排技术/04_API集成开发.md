@@ -55,7 +55,7 @@
   - [延伸阅读](#延伸阅读)
 
 
-# 04 API 集成开发（vCenter REST/SDK）
+    # 04 API 集成开发（vCenter REST/SDK）
 
 ## 扩展目标（vSphere Automation）
 
@@ -72,7 +72,7 @@
 ### cURL（示例）
 
 ```bash
-# 用户名/密码认证（实验环境示例）
+    # 用户名/密码认证（实验环境示例）
 curl -k -X POST \
   -H "Content-Type: application/json" \
   -d '{"user_name":"administrator@vsphere.local","password":"<pass>"}' \
@@ -103,11 +103,11 @@ $dcs | ConvertTo-Json -Depth 5 | Out-File datacenters.json -Encoding utf8
 ## 典型查询
 
 ```bash
-# 主机列表
+    # 主机列表
 curl -k -H "vmware-api-session-id: <sid>" \
   https://vcenter.example.com/api/vcenter/host
 
-# 虚拟机简表
+    # 虚拟机简表
 curl -k -H "vmware-api-session-id: <sid>" \
   https://vcenter.example.com/api/vcenter/vm
 ```
@@ -118,12 +118,12 @@ curl -k -H "vmware-api-session-id: <sid>" \
 $date = Get-Date -Format 'yyyy-MM-dd'
 New-Item -ItemType Directory -Force -Path "artifacts/$date" | Out-Null
 
-# 导出 VM 列表
+    # 导出 VM 列表
 $vms = Invoke-RestMethod -Method Get -Uri "$base/api/vcenter/vm" -Headers $headers -SkipCertificateCheck
 $vms | ConvertTo-Json -Depth 6 | Set-Content "artifacts/$date/vms.json"
 Get-FileHash "artifacts/$date/vms.json" | Select Hash | Set-Content "artifacts/$date/vms.json.sha256"
 
-# 生成 manifest
+    # 生成 manifest
 $manifest = [pscustomobject]@{
   generatedAt   = (Get-Date).ToString('s')
   source        = 'vCenter REST'
@@ -157,7 +157,7 @@ $manifest | Set-Content "artifacts/$date/manifest.json"
 > 实际部署请使用安全存储管理 Token/凭据；以下示例为演示用。
 
 ```bash
-# 获取 Session（示意）
+    # 获取 Session（示意）
 curl -k -X POST https://vcenter.example.com/api/session
 ```
 
@@ -182,11 +182,11 @@ Get-FileHash -Algorithm SHA256 vc_events.json | Select Hash | Set-Content vc_eve
 ## 查询主机与虚拟机（REST 示例）
 
 ```powershell
-# 主机
+    # 主机
 $hosts = Invoke-RestMethod -Method GET -Uri "$vc/api/vcenter/host" -Headers $headers -SkipCertificateCheck
 $hosts | ConvertTo-Json -Depth 5 | Set-Content hosts_rest.json
 
-# 虚拟机
+    # 虚拟机
 $vms = Invoke-RestMethod -Method GET -Uri "$vc/api/vcenter/vm" -Headers $headers -SkipCertificateCheck
 $vms | ConvertTo-Json -Depth 5 | Set-Content vms_rest.json
 ```

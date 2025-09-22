@@ -1,4 +1,4 @@
-# CI/CD集成支持与自动化验证
+    # CI/CD集成支持与自动化验证
 
 ## 摘要
 
@@ -336,7 +336,7 @@ if (require.main === module) {
 ### 3.1 GitLab CI配置
 
 ```yaml
-# .gitlab-ci.yml
+    # .gitlab-ci.yml
 stages:
   - build
   - test
@@ -347,7 +347,7 @@ variables:
   NODE_VERSION: "18"
   SMT_SOLVER_PATH: "/usr/local/bin"
 
-# 构建阶段
+    # 构建阶段
 build:
   stage: build
   image: node:18-alpine
@@ -359,7 +359,7 @@ build:
       - dist/
     expire_in: 1 hour
 
-# 测试阶段
+    # 测试阶段
 test:
   stage: test
   image: node:18-alpine
@@ -373,7 +373,7 @@ test:
         coverage_format: cobertura
         path: coverage/cobertura-coverage.xml
 
-# 语义验证阶段
+    # 语义验证阶段
 semantic-validation:
   stage: semantic-validation
   image: ubuntu:22.04
@@ -396,7 +396,7 @@ semantic-validation:
       junit: validation-results/junit.xml
   allow_failure: false
 
-# 部署阶段
+    # 部署阶段
 deploy:
   stage: deploy
   image: alpine:latest
@@ -411,22 +411,22 @@ deploy:
 
 ```bash
 #!/bin/bash
-# scripts/gitlab-semantic-validation.sh
+    # scripts/gitlab-semantic-validation.sh
 
 set -e
 
 echo "开始语义模型验证..."
 
-# 配置参数
+    # 配置参数
 MODELS_DIR="${MODELS_DIR:-semantic-models}"
 SOLVERS="${SOLVERS:-z3,cvc5}"
 TIMEOUT="${TIMEOUT:-300}"
 OUTPUT_DIR="${OUTPUT_DIR:-validation-results}"
 
-# 创建输出目录
+    # 创建输出目录
 mkdir -p "$OUTPUT_DIR"
 
-# 验证语义模型
+    # 验证语义模型
 semantic-validator validate \
   --models "$MODELS_DIR" \
   --solvers "$SOLVERS" \
@@ -434,7 +434,7 @@ semantic-validator validate \
   --output "$OUTPUT_DIR" \
   --format json,junit,html
 
-# 检查验证结果
+    # 检查验证结果
 if [ -f "$OUTPUT_DIR/summary.json" ]; then
   FAILED_COUNT=$(jq '.failed' "$OUTPUT_DIR/summary.json")
   if [ "$FAILED_COUNT" -gt 0 ]; then
@@ -929,7 +929,7 @@ export class ValidationMetrics {
 ### 6.2 告警规则配置
 
 ```yaml
-# monitoring/alerts.yml
+    # monitoring/alerts.yml
 groups:
   - name: semantic-validation
     rules:
@@ -966,7 +966,7 @@ groups:
 ### 7.1 Docker Compose配置
 
 ```yaml
-# docker-compose.yml
+    # docker-compose.yml
 version: '3.8'
 
 services:
@@ -1021,7 +1021,7 @@ networks:
 ### 7.2 Kubernetes部署配置
 
 ```yaml
-# k8s/deployment.yaml
+    # k8s/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
