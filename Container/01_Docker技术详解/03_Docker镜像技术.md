@@ -1,5 +1,7 @@
 # Docker镜像技术深度解析
 
+> 版本锚点与供应链证据（新增）：本文涉及 Docker/OCI/Registry 等版本统一参考《2025年技术标准最终对齐报告.md》。镜像供应链证据（SBOM/签名/attestations、扫描报告）建议归档至 `artifacts/YYYY-MM-DD/images/` 并生成 `manifest.json` 与 `*.sha256`，便于审计与追溯。
+
 ## 目录
 
 - [Docker镜像技术深度解析](#docker镜像技术深度解析)

@@ -1,5 +1,7 @@
 # WebAssembly技术详解
 
+> 版本锚点（新增）：本模块涉及 WebAssembly/WASI/运行时版本统一参考《2025年技术标准最终对齐报告.md》。如需更新版本，请仅维护该报告并保持本文锚链接引用。
+
 ## 目录
 
 - [WebAssembly技术详解](#webassembly技术详解)

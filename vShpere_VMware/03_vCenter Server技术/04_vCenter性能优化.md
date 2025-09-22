@@ -1,5 +1,7 @@
 # vCenter性能优化深度解析
 
+> 性能证据结构（新增）：本文涉及 vCenter 版本请统一参考《2025年技术标准最终对齐报告.md》。优化前后对比数据与报表请归档至 `artifacts/YYYY-MM-DD/perf/`，包含原始指标（CSV/JSON）、聚合图表（PNG/SVG）、`manifest.json` 与 `*.sha256`，便于审计与回溯。
+
 ## 目录
 
 - [vCenter性能优化深度解析](#vcenter性能优化深度解析)

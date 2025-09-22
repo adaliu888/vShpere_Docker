@@ -1,5 +1,7 @@
 # Kubernetes编排技术详解
 
+> 版本锚点与 Artifacts（新增）：本文涉及 Kubernetes/OCI 等版本请统一参考《2025年技术标准最终对齐报告.md》。与编排相关的基线/事件/策略等证据请在文末“Artifacts 索引”说明的结构中留存。
+
 ## 目录
 
 - [Kubernetes编排技术详解](#kubernetes编排技术详解)
@@ -43,6 +45,14 @@
     - [10.3 安全编排](#103-安全编排)
     - [10.4 监控编排](#104-监控编排)
   - [总结](#总结)
+
+## Artifacts 索引（新增）
+
+- 目录建议：`artifacts/YYYY-MM-DD/` 下按领域分层：
+  - cluster/（manifests、RBAC、Quota、PSA）
+  - runtime/（policies、audit、events、admission 报告）
+  - images/（sbom、signatures、attestations）
+- 锚点：统一参见《2025年技术标准最终对齐报告.md》与 `vShpere_VMware/09_安全与合规管理/Artifacts_Index.md`。
 
 ## 1. Kubernetes编排概述
 

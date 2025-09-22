@@ -1,5 +1,7 @@
 # Docker安全机制深度解析
 
+> 版本锚点与证据落盘（新增）：本文涉及 Docker/OCI/运行时版本请统一参考《2025年技术标准最终对齐报告.md》。与安全相关的扫描/签名/审计输出建议按照 `vShpere_VMware/09_安全与合规管理/Artifacts_Index.md` 的目录结构归档到 `artifacts/`，并生成 `manifest.json` 与 `*.sha256`。
+
 ## 目录
 
 - [Docker安全机制深度解析](#docker安全机制深度解析)
