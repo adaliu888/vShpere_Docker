@@ -3,6 +3,7 @@
 ## 目录
 
 - [promote](#promote)
+  - [目录](#目录)
   - [目标（Objectives）](#目标objectives)
   - [范围（Scope）](#范围scope)
   - [目录映射（Where to put what）](#目录映射where-to-put-what)
@@ -12,6 +13,8 @@
   - [质量门槛（Quality Gates）](#质量门槛quality-gates)
     - [验收标准（Definition of Done）](#验收标准definition-of-done)
   - [贡献规则（Contribution）](#贡献规则contribution)
+  - [对标与引用（References \& Mapping）](#对标与引用references--mapping)
+  - [发布与版本化（Release \& Versioning）](#发布与版本化release--versioning)
 
 主题：虚拟化与容器化的原理、架构与应用
 

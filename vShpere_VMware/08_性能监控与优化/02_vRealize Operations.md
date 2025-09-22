@@ -2,7 +2,8 @@
 
 ## 目录
 
-- [vRealize Operations / Aria Operations 指标与KPI（最小可用）](#vrealize-operations-aria-operations-指标与kpi最小可用)
+- [vRealize Operations / Aria Operations 指标与KPI（最小可用）](#vrealize-operations--aria-operations-指标与kpi最小可用)
+  - [目录](#目录)
   - [1. 目标](#1-目标)
   - [2. 指标分类（建议）](#2-指标分类建议)
   - [3. KPI/SLO（样例）](#3-kpislo样例)
