@@ -49,11 +49,7 @@ Container/10_WebAssembly技术详解/
 ├── README.md                    # WebAssembly技术总览
 ├── 01_WebAssembly架构原理.md    # WebAssembly架构深度解析
 ├── 02_WebAssembly运行时技术.md  # WebAssembly运行时详解
-├── 03_WebAssembly安全机制.md    # WebAssembly安全技术
-├── 04_WebAssembly性能优化.md    # WebAssembly性能调优
-├── 05_WebAssembly容器集成.md    # WebAssembly与容器技术集成
-├── 06_WebAssembly边缘计算.md    # WebAssembly边缘计算应用
-└── 07_WebAssembly最佳实践.md    # WebAssembly最佳实践指南
+└── 03_WebAssembly安全机制.md    # WebAssembly安全技术
 ```
 
 ## 技术覆盖范围
@@ -181,22 +177,6 @@ Container/10_WebAssembly技术详解/
 **03_WebAssembly安全机制.md**：
 
 - ✅ 完整内容，包含沙箱隔离、权限控制、内存安全、类型安全
-
-**04_WebAssembly性能优化.md**：
-
-- ✅ 完整内容，包含优化算法、JIT编译、AOT编译、基准测试
-
-**05_WebAssembly容器集成.md**：
-
-- ✅ 完整内容，包含容器集成、混合部署、编排管理、最佳实践
-
-**06_WebAssembly边缘计算.md**：
-
-- ✅ 完整内容，包含边缘部署、边缘编排、边缘优化、边缘安全
-
-**07_WebAssembly最佳实践.md**：
-
-- ✅ 完整内容，包含开发实践、部署实践、运维实践、安全实践
 
 ## 技术亮点
 
